@@ -35,3 +35,49 @@ const PREVIEW_FX: Record<string, number> = { USD: 83.5, EUR: 90.2, GBP: 105.7, A
 export function previewFxRate(currency: string): number {
   return PREVIEW_FX[currency.toUpperCase()] ?? 83.0;
 }
+
+import type { FemaBucket } from './types';
+
+export function femaBucket(daysToDue: number): FemaBucket {
+  if (daysToDue <= 0) return 'overdue';
+  if (daysToDue <= 30) return 'critical';
+  if (daysToDue <= 60) return 'urgent';
+  if (daysToDue <= 90) return 'watch';
+  return 'ontrack';
+}
+
+/** 0..1 progress through the 1-year FEMA realisation window. */
+export function agingProgress(daysToDue: number): number {
+  return Math.min(1, Math.max(0, (365 - daysToDue) / 365));
+}
+
+export const FEMA_BUCKETS: Record<FemaBucket, { label: string; tone: string; bar: string; dot: string }> = {
+  overdue:  { label: 'Overdue',  tone: 'text-red-700 bg-red-50 border-red-200',       bar: 'bg-red-500',    dot: 'bg-red-500' },
+  critical: { label: 'Critical', tone: 'text-red-700 bg-red-50 border-red-200',       bar: 'bg-red-500',    dot: 'bg-red-500' },
+  urgent:   { label: 'Urgent',   tone: 'text-amber-700 bg-amber-50 border-amber-200', bar: 'bg-amber-500',  dot: 'bg-amber-500' },
+  watch:    { label: 'Watch',    tone: 'text-blue-700 bg-blue-50 border-blue-200',    bar: 'bg-blue-500',   dot: 'bg-blue-500' },
+  ontrack:  { label: 'On track', tone: 'text-brand-700 bg-brand-50 border-brand-200', bar: 'bg-brand-500',  dot: 'bg-brand-500' },
+};
+
+// ── Domestic GST (client-side mirror for the live preview) ──
+export interface GstPreview {
+  taxType: 'IGST' | 'CGST_SGST';
+  intra: boolean;
+  cgst: number; sgst: number; igst: number;
+  taxTotal: number; grandTotal: number;
+}
+
+export function computeGstPreview(
+  lines: { lineTotal: number; gstRate: number }[],
+  supplierState: string | null,
+  clientState: string | null,
+): GstPreview {
+  const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
+  const tax = lines.reduce((s, l) => s + (l.lineTotal * l.gstRate) / 100, 0);
+  const intra = Boolean(supplierState && clientState && supplierState === clientState);
+  if (intra) {
+    const half = tax / 2;
+    return { taxType: 'CGST_SGST', intra, cgst: half, sgst: tax - half, igst: 0, taxTotal: tax, grandTotal: subtotal + tax };
+  }
+  return { taxType: 'IGST', intra, cgst: 0, sgst: 0, igst: tax, taxTotal: tax, grandTotal: subtotal + tax };
+}

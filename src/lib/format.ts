@@ -17,7 +17,8 @@ export function formatDate(iso: string | null | undefined): string {
   return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-export function daysUntil(iso: string): number {
+export function daysUntil(iso: string | null | undefined): number {
+  if (!iso) return Number.POSITIVE_INFINITY; // domestic invoices have no FEMA deadline
   const due = new Date(`${iso}T00:00:00Z`).getTime();
   return Math.ceil((due - Date.now()) / (1000 * 60 * 60 * 24));
 }

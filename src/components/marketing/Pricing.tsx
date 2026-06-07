@@ -22,9 +22,10 @@ export function Pricing() {
         <div className="mt-12 grid gap-5 lg:grid-cols-3 items-start">
           {PLANS.map((p, i) => (
             <Reveal key={p.name} delay={i * 90}>
+              <div className={cn('relative h-full', p.highlight && 'gborder shadow-glow')}>
               <div className={cn(
                 'relative rounded-3xl p-7 h-full',
-                p.highlight ? 'bg-gradient-to-b from-ink to-[#16202b] text-white shadow-glow ring-1 ring-brand-500/30' : 'card',
+                p.highlight ? 'bg-gradient-to-b from-ink to-[#0f1620] text-white bg-noise overflow-hidden' : 'card',
               )}>
                 {p.highlight && <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge bg-brand-500 text-white shadow">Most popular</span>}
                 <p className={cn('text-sm', p.highlight ? 'text-brand-200' : 'text-ink-muted')}>{p.tag}</p>
@@ -43,6 +44,7 @@ export function Pricing() {
                 <Link href="/register" className={cn('mt-7 w-full', p.highlight ? 'btn-primary' : 'btn-secondary')}>
                   Get started <ArrowRight className="h-4 w-4" />
                 </Link>
+              </div>
               </div>
             </Reveal>
           ))}

@@ -90,7 +90,7 @@ export default function InvoicesPage() {
                   const atRiskRow = inv.status !== 'paid' && d <= 90;
                   return (
                     <TR key={inv.id} onClick={() => { window.location.href = `/invoices/${inv.id}`; }}>
-                      <TD><span className="font-mono text-[13px] text-ink">{inv.number}</span></TD>
+                      <TD><div className="flex items-center gap-2"><span className="font-mono text-[13px] text-ink">{inv.number}</span><span className={cn('h-1.5 w-1.5 rounded-full', inv.type === 'domestic' ? 'bg-blue-500' : 'bg-brand-500')} title={inv.type === 'domestic' ? 'Domestic GST' : 'Export'} /></div></TD>
                       <TD>{formatDate(inv.invoiceDate)}</TD>
                       <TD><span className="font-mono text-xs text-ink-muted">{inv.financialYear}</span></TD>
                       <TD><span className="font-medium">{inv.currency} {parseFloat(inv.subtotal).toLocaleString()}</span><span className="text-ink-faint text-xs block">{formatMoney(inv.inrEquivalent)}</span></TD>

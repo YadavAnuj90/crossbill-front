@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard, Users, FileText, FileBarChart, Building2, UsersRound, Settings, Sparkles,
+  LayoutDashboard, Users, FileText, FileBarChart, Building2, UsersRound, Settings, Sparkles, CalendarClock,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useAuth } from '@/lib/auth-context';
@@ -10,6 +10,7 @@ import { useAuth } from '@/lib/auth-context';
 const NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/invoices', label: 'Invoices', icon: FileText },
+  { href: '/fema', label: 'FEMA tracker', icon: CalendarClock },
   { href: '/clients', label: 'Clients', icon: Users },
   { href: '/reports', label: 'Filing & reports', icon: FileBarChart },
   { href: '/team', label: 'Team', icon: UsersRound },

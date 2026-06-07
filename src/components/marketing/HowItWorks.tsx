@@ -1,10 +1,10 @@
 import { Reveal } from '@/components/motion/Reveal';
 
 const STEPS = [
-  { n: '01', t: 'Add your foreign client', d: 'Name, country and address. That’s the whole setup.' },
-  { n: '02', t: 'Create an export invoice', d: 'Compliance fields fill themselves; numbering stays gapless per FY.' },
-  { n: '03', t: 'Mark paid + attach FIRC', d: 'Capture the bank remittance proof as export evidence.' },
-  { n: '04', t: 'Export for filing', d: 'A clean GSTR-1 6A statement and bundle for your CA.' },
+  { n: '01', t: 'Add your client', d: 'Foreign or Indian — a country, or a GSTIN & state. That’s the setup.' },
+  { n: '02', t: 'Create the invoice', d: 'Export or GST is auto-detected; compliance fields fill themselves, numbering stays gapless.' },
+  { n: '03', t: 'Mark paid + attach proof', d: 'FIRC evidence for exports, or a simple paid status for domestic.' },
+  { n: '04', t: 'Export for filing', d: 'GSTR-ready statements and a clean document bundle for your CA.' },
 ];
 
 export function HowItWorks() {
@@ -13,7 +13,7 @@ export function HowItWorks() {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="text-center max-w-2xl mx-auto">
           <span className="badge bg-paper text-ink-muted border border-paper-border mb-4">One core loop</span>
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-ink">From “got paid in USD” to “filed &amp; clean”</h2>
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-ink">From “got paid” to “filed &amp; clean”</h2>
           <p className="mt-3 text-ink-muted text-lg">Four steps. Under a minute. No CA babysitting every invoice.</p>
         </Reveal>
 

@@ -7,9 +7,9 @@ import { ToastProvider } from '@/lib/toast-context';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'Crossbill — Export invoicing & GST/FEMA compliance',
+  title: 'Crossbill — Invoicing & GST/FEMA compliance for Indian businesses',
   description:
-    'Correct USD export invoicing and GST/FEMA compliance, built for Indian developers and agencies billing foreign clients.',
+    'Correct invoices for foreign (export) and Indian (GST) clients — CGST/SGST/IGST, LUT export declarations, FX capture and FEMA tracking, automatically. Built for Indian developers and agencies.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

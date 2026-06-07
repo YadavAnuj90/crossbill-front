@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
   ArrowLeft, Download, CheckCircle2, ShieldCheck, Globe, CalendarClock, RefreshCw, Coins,
+  Wallet, FileCheck2, Plus, Building2, MapPin, Receipt,
 } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
-import type { Invoice } from '@/lib/types';
+import type { Invoice, Remittance } from '@/lib/types';
+import { stateNameOf } from '@/lib/types';
 import { formatMoney, formatDate, daysUntil } from '@/lib/format';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';
@@ -16,24 +18,22 @@ import { StatusBadge, Badge } from '@/components/ui/Badge';
 import { PageLoader } from '@/components/ui/Spinner';
 import { Table, THead, TH, TR, TD } from '@/components/ui/Table';
 import { Reveal } from '@/components/motion/Reveal';
+import { RecordPaymentModal } from '@/components/invoices/RecordPaymentModal';
 
 export default function InvoiceDetailPage() {
   const params = useParams<{ id: string }>();
   const id = params.id;
   const { notify } = useToast();
   const [inv, setInv] = useState<Invoice | null>(null);
+  const [remittances, setRemittances] = useState<Remittance[]>([]);
   const [busy, setBusy] = useState(false);
+  const [payOpen, setPayOpen] = useState(false);
 
-  const load = useCallback(() => { api.invoices.get(id).then(setInv).catch(() => notify('error', 'Invoice not found')); }, [id, notify]);
+  const load = useCallback(() => {
+    api.invoices.get(id).then(setInv).catch(() => notify('error', 'Invoice not found'));
+    api.remittances.listForInvoice(id).then(setRemittances).catch(() => {});
+  }, [id, notify]);
   useEffect(() => { load(); }, [load]);
-
-  async function markPaid() {
-    if (!inv) return;
-    setBusy(true);
-    try { const u = await api.invoices.updateStatus(inv.id, 'paid'); setInv(u); notify('success', 'Marked as paid'); }
-    catch (err) { notify('error', err instanceof Error ? err.message : 'Could not update'); }
-    finally { setBusy(false); }
-  }
 
   async function getPdf() {
     if (!inv) return;
@@ -43,21 +43,32 @@ export default function InvoiceDetailPage() {
     finally { setBusy(false); }
   }
 
+  async function markPaid() {
+    if (!inv) return;
+    setBusy(true);
+    try { const u = await api.invoices.updateStatus(inv.id, 'paid'); setInv(u); notify('success', 'Marked as paid'); }
+    catch (err) { notify('error', err instanceof Error ? err.message : 'Could not update'); }
+    finally { setBusy(false); }
+  }
+
   if (!inv) return <PageLoader />;
 
-  const d = daysUntil(inv.femaDueDate);
-  const atRisk = inv.status !== 'paid' && d <= 90;
+  const domestic = inv.type === 'domestic';
+  const d = inv.femaDueDate ? daysUntil(inv.femaDueDate) : 0;
+  const atRisk = !domestic && inv.status !== 'paid' && d <= 90;
 
   return (
     <div>
       <Link href="/invoices" className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink mb-4 transition-colors"><ArrowLeft className="h-4 w-4" /> Invoices</Link>
       <PageHeader
-        eyebrow={`FY ${inv.financialYear}`}
+        eyebrow={`FY ${inv.financialYear} · ${domestic ? 'Domestic GST' : 'Export'}`}
         title={inv.number}
         subtitle={`Raised ${formatDate(inv.invoiceDate)}`}
         action={
           <div className="flex items-center gap-2">
-            {inv.status !== 'paid' && <Button variant="secondary" onClick={markPaid} loading={busy}><CheckCircle2 className="h-4 w-4" /> Mark paid</Button>}
+            {inv.status !== 'paid' && (domestic
+              ? <Button variant="secondary" onClick={markPaid} loading={busy}><CheckCircle2 className="h-4 w-4" /> Mark paid</Button>
+              : <Button variant="secondary" onClick={() => setPayOpen(true)}><Wallet className="h-4 w-4" /> Record payment</Button>)}
             <Button onClick={getPdf} loading={busy}><Download className="h-4 w-4" /> Download PDF</Button>
           </div>
         }
@@ -65,53 +76,118 @@ export default function InvoiceDetailPage() {
 
       <div className="flex items-center gap-2 mb-6">
         <StatusBadge status={inv.status} />
+        {domestic ? <Badge tone="blue"><Building2 className="h-3.5 w-3.5" /> {inv.taxType === 'CGST_SGST' ? 'CGST + SGST' : 'IGST'}</Badge> : <Badge tone="green"><Globe className="h-3.5 w-3.5" /> Export · 0% IGST</Badge>}
         {atRisk && <Badge tone="red"><CalendarClock className="h-3.5 w-3.5" /> FEMA due in {d} days</Badge>}
         {!inv.pdfUrl && <Badge tone="amber"><RefreshCw className="h-3.5 w-3.5" /> PDF generating</Badge>}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-        <Reveal>
-          <Card>
-            <CardHeader title="Line items" />
-            <Table>
-              <THead><TH>Description</TH><TH>SAC</TH><TH className="text-right">Qty</TH><TH className="text-right">Unit</TH><TH className="text-right">Total</TH></THead>
-              <tbody>
-                {inv.items?.map((it, i) => (
-                  <TR key={it.id ?? i}>
-                    <TD className="text-ink">{it.description}</TD>
-                    <TD><span className="font-mono text-xs">{it.sacCode}</span></TD>
-                    <TD className="text-right">{it.quantity}</TD>
-                    <TD className="text-right">{inv.currency} {parseFloat(it.unitAmount).toLocaleString()}</TD>
-                    <TD className="text-right font-medium">{inv.currency} {parseFloat(it.lineTotal).toLocaleString()}</TD>
-                  </TR>
-                ))}
-              </tbody>
-            </Table>
-            <CardBody className="border-t border-paper-border">
-              <div className="ml-auto w-full max-w-xs space-y-2">
-                <div className="flex justify-between text-sm"><span className="text-ink-muted">Subtotal</span><span className="font-medium">{inv.currency} {parseFloat(inv.subtotal).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>
-                <div className="flex justify-between text-sm"><span className="text-ink-muted">FX rate ({inv.fxRateSource})</span><span className="font-mono">{parseFloat(inv.fxRate).toFixed(4)}</span></div>
-                <div className="flex justify-between border-t border-paper-border pt-2"><span className="text-ink-muted text-sm">INR equivalent</span><span className="font-semibold text-ink">{formatMoney(inv.inrEquivalent)}</span></div>
-              </div>
-            </CardBody>
-          </Card>
-        </Reveal>
+        <div className="space-y-6">
+          <Reveal>
+            <Card>
+              <CardHeader title="Line items" />
+              <Table>
+                <THead><TH>Description</TH><TH>{domestic ? 'HSN/SAC' : 'SAC'}</TH><TH className="text-right">Qty</TH><TH className="text-right">Unit</TH>{domestic && <TH className="text-right">GST</TH>}<TH className="text-right">Total</TH></THead>
+                <tbody>
+                  {inv.items?.map((it, i) => (
+                    <TR key={it.id ?? i}>
+                      <TD className="text-ink">{it.description}</TD>
+                      <TD><span className="font-mono text-xs">{it.sacCode}</span></TD>
+                      <TD className="text-right">{it.quantity}</TD>
+                      <TD className="text-right">{inv.currency} {parseFloat(it.unitAmount).toLocaleString()}</TD>
+                      {domestic && <TD className="text-right">{it.gstRate}%</TD>}
+                      <TD className="text-right font-medium">{inv.currency} {parseFloat(it.lineTotal).toLocaleString()}</TD>
+                    </TR>
+                  ))}
+                </tbody>
+              </Table>
+              <CardBody className="border-t border-paper-border">
+                <div className="ml-auto w-full max-w-xs space-y-2">
+                  <div className="flex justify-between text-sm"><span className="text-ink-muted">{domestic ? 'Taxable value' : 'Subtotal'}</span><span className="font-medium">{inv.currency} {parseFloat(inv.subtotal).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>
+                  {domestic ? (
+                    <>
+                      {inv.taxType === 'CGST_SGST' ? (
+                        <>
+                          <div className="flex justify-between text-sm"><span className="text-ink-muted">CGST</span><span className="font-mono">₹{parseFloat(inv.cgstAmount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>
+                          <div className="flex justify-between text-sm"><span className="text-ink-muted">SGST</span><span className="font-mono">₹{parseFloat(inv.sgstAmount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>
+                        </>
+                      ) : (
+                        <div className="flex justify-between text-sm"><span className="text-ink-muted">IGST</span><span className="font-mono">₹{parseFloat(inv.igstAmount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>
+                      )}
+                      <div className="flex justify-between border-t border-paper-border pt-2"><span className="text-ink-muted text-sm">Grand total</span><span className="font-semibold text-ink">{formatMoney(inv.grandTotal)}</span></div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex justify-between text-sm"><span className="text-ink-muted">FX rate ({inv.fxRateSource})</span><span className="font-mono">{parseFloat(inv.fxRate).toFixed(4)}</span></div>
+                      <div className="flex justify-between border-t border-paper-border pt-2"><span className="text-ink-muted text-sm">INR equivalent</span><span className="font-semibold text-ink">{formatMoney(inv.inrEquivalent)}</span></div>
+                    </>
+                  )}
+                </div>
+              </CardBody>
+            </Card>
+          </Reveal>
 
+          {/* Payments (export only — FIRC evidence) */}
+          {!domestic && (
+            <Reveal delay={60}>
+              <Card>
+                <CardHeader title="Payments & FIRC" subtitle="Foreign inward remittances recorded against this invoice."
+                  action={inv.status !== 'paid' ? <button onClick={() => setPayOpen(true)} className="btn-ghost text-sm py-1.5"><Plus className="h-4 w-4" /> Record</button> : undefined} />
+                {remittances.length === 0 ? (
+                  <CardBody className="text-center py-8">
+                    <span className="grid h-11 w-11 mx-auto place-items-center rounded-2xl bg-paper text-ink-faint mb-3"><Wallet className="h-5 w-5" /></span>
+                    <p className="text-sm text-ink-muted">No payment recorded yet.</p>
+                    {inv.status !== 'paid' && <Button variant="secondary" className="mt-4" onClick={() => setPayOpen(true)}><Wallet className="h-4 w-4" /> Record payment</Button>}
+                  </CardBody>
+                ) : (
+                  <Table>
+                    <THead><TH>Received</TH><TH>Amount</TH><TH>Purpose</TH><TH className="text-right">FIRC</TH></THead>
+                    <tbody>
+                      {remittances.map((r) => (
+                        <TR key={r.id}>
+                          <TD>{formatDate(r.receivedDate)}</TD>
+                          <TD className="font-medium">{r.currency} {parseFloat(r.amountReceived).toLocaleString()}</TD>
+                          <TD><span className="font-mono text-xs">{r.purposeCode}</span></TD>
+                          <TD className="text-right">{r.fircDocUrl ? <a href={api.remittances.fircUrl(r.id)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm text-brand-700 hover:underline"><FileCheck2 className="h-4 w-4" /> View</a> : <span className="text-xs text-ink-faint">—</span>}</TD>
+                        </TR>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
+              </Card>
+            </Reveal>
+          )}
+        </div>
+
+        {/* Compliance side card */}
         <Reveal delay={80}>
           <Card className="h-fit overflow-hidden">
-            <div className="bg-gradient-to-br from-brand-600 to-brand-700 px-5 py-4 flex items-center gap-2.5">
-              <ShieldCheck className="h-5 w-5 text-white" />
-              <div><p className="text-sm font-semibold text-white">Compliance</p><p className="text-xs text-brand-100">Auto-filled &amp; locked on this invoice</p></div>
+            <div className={`px-5 py-4 flex items-center gap-2.5 ${domestic ? 'bg-gradient-to-br from-blue-600 to-blue-700' : 'bg-gradient-to-br from-brand-600 to-brand-700'}`}>
+              {domestic ? <Receipt className="h-5 w-5 text-white" /> : <ShieldCheck className="h-5 w-5 text-white" />}
+              <div><p className="text-sm font-semibold text-white">{domestic ? 'GST details' : 'Export compliance'}</p><p className="text-xs text-white/70">Auto-filled &amp; locked</p></div>
             </div>
             <CardBody className="space-y-4 text-sm">
-              <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> Place of supply</p><p className="text-ink-soft mt-0.5">{inv.placeOfSupply}</p></div>
-              <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Export declaration</p><p className="text-ink-soft mt-0.5 leading-snug">{inv.declarationText}</p></div>
-              <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><Coins className="h-3.5 w-3.5" /> Rate captured</p><p className="text-ink-soft mt-0.5 font-mono">1 {inv.currency} = ₹{parseFloat(inv.fxRate).toFixed(4)} · {formatDate(inv.fxRateDate)}</p></div>
-              <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><CalendarClock className="h-3.5 w-3.5" /> FEMA realisation due</p><p className={`mt-0.5 ${atRisk ? 'text-red-600 font-medium' : 'text-ink-soft'}`}>{formatDate(inv.femaDueDate)}</p></div>
+              {domestic ? (
+                <>
+                  <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Place of supply</p><p className="text-ink-soft mt-0.5">{stateNameOf(inv.placeOfSupplyState)} ({inv.placeOfSupplyState})</p></div>
+                  <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Supply type</p><p className="text-ink-soft mt-0.5">{inv.taxType === 'CGST_SGST' ? 'Intra-state — CGST + SGST' : 'Inter-state — IGST'}</p></div>
+                  <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><Coins className="h-3.5 w-3.5" /> Total GST</p><p className="text-ink-soft mt-0.5 font-mono">₹{parseFloat(inv.taxTotal).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p></div>
+                  <div><p className="text-xs text-ink-faint">Note</p><p className="text-ink-soft mt-0.5 leading-snug">{inv.declarationText}</p></div>
+                </>
+              ) : (
+                <>
+                  <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> Place of supply</p><p className="text-ink-soft mt-0.5">{inv.placeOfSupply}</p></div>
+                  <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Export declaration</p><p className="text-ink-soft mt-0.5 leading-snug">{inv.declarationText}</p></div>
+                  <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><Coins className="h-3.5 w-3.5" /> Rate captured</p><p className="text-ink-soft mt-0.5 font-mono">1 {inv.currency} = ₹{parseFloat(inv.fxRate).toFixed(4)} · {formatDate(inv.fxRateDate)}</p></div>
+                  <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><CalendarClock className="h-3.5 w-3.5" /> FEMA realisation due</p><p className={`mt-0.5 ${atRisk ? 'text-red-600 font-medium' : 'text-ink-soft'}`}>{inv.femaDueDate ? formatDate(inv.femaDueDate) : '—'}{inv.status !== 'paid' && inv.femaDueDate && <span className="text-ink-faint"> · {d > 0 ? `${d} days left` : 'overdue'}</span>}</p></div>
+                </>
+              )}
             </CardBody>
           </Card>
         </Reveal>
       </div>
+
+      {!domestic && <RecordPaymentModal invoice={inv} open={payOpen} onClose={() => setPayOpen(false)} onRecorded={load} />}
     </div>
   );
 }

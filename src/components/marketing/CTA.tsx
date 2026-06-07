@@ -8,16 +8,16 @@ export function CTA() {
     <section className="pb-24">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
-          <div className="relative overflow-hidden rounded-3xl bg-ink px-6 py-16 text-center sm:px-12">
+          <div className="relative overflow-hidden rounded-3xl bg-ink px-6 py-16 text-center sm:px-12 bg-noise">
             <Aurora />
             <div className="absolute inset-0 bg-grid-light mask-fade-b opacity-30" />
             <div className="relative mx-auto max-w-2xl">
               <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white leading-tight">
-                Stop babysitting export paperwork
+One app for <span className="text-gradient-vivid animate-gradient-x">every invoice</span> you raise
               </h2>
               <p className="mt-4 text-white/65 text-lg">
-                A huge group of Indian service exporters just became eligible for tax-free foreign revenue.
-                Claim it correctly — in under a minute.
+Bill a US client in USD or an Indian client in INR — Crossbill gets the GST, FEMA and export
+                paperwork right, automatically. In under a minute.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link href="/register" className="btn-primary px-6 py-3.5 text-[15px]">Get started free <ArrowRight className="h-4 w-4" /></Link>

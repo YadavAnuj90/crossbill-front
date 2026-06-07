@@ -6,6 +6,7 @@
 
 import type {
   Profile, Client, Invoice, Paginated, CreateInvoiceInput, CreateClientInput,
+  Remittance, CreateRemittanceInput, AgingInvoice,
 } from './types';
 
 const BASE = '/api/v1';
@@ -141,6 +142,7 @@ export const clients = {
 export const invoices = {
   list: (page = 1, limit = 50) =>
     request<Paginated<Invoice>>(`/invoices?page=${page}&limit=${limit}`),
+  femaAging: () => request<AgingInvoice[]>('/invoices/fema/aging'),
   get: (id: string) => request<Invoice>(`/invoices/${id}`),
   create: (input: CreateInvoiceInput) =>
     request<Invoice>('/invoices', { method: 'POST', body: JSON.stringify(input) }),
@@ -149,11 +151,36 @@ export const invoices = {
   pdf: (id: string) => request<{ url: string; status: string }>(`/invoices/${id}/pdf`),
 };
 
+// ─────────────────────────── Remittances / FIRC ───────────────────────────
+export const remittances = {
+  create: (input: CreateRemittanceInput) =>
+    request<Remittance>('/remittances', { method: 'POST', body: JSON.stringify(input) }),
+  listForInvoice: (invoiceId: string) =>
+    request<Remittance[]>(`/remittances?invoiceId=${invoiceId}`),
+  async uploadFirc(remittanceId: string, file: File): Promise<Remittance> {
+    const form = new FormData();
+    form.append('firc', file);
+    // No Content-Type header: the browser sets the multipart boundary.
+    const res = await fetch(`${BASE}/remittances/${remittanceId}/firc`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+      body: form,
+    });
+    const json = await res.json();
+    if (!res.ok || json.success === false) {
+      throw new ApiError(res.status, json.error?.message || 'FIRC upload failed', json);
+    }
+    return json.data as Remittance;
+  },
+  fircUrl: (remittanceId: string) => `${BASE}/remittances/${remittanceId}/firc`,
+};
+
 // ─────────────────────────── Reports ───────────────────────────
 export const reports = {
   gstr6a: (financialYear: string) =>
     request<{ url: string }>(`/reports/gstr-6a?financialYear=${encodeURIComponent(financialYear)}`),
 };
 
-const api = { auth, profile, clients, invoices, reports, setAccessToken, getAccessToken, ApiError };
+const api = { auth, profile, clients, invoices, remittances, reports, setAccessToken, getAccessToken, ApiError };
 export default api;

@@ -2,96 +2,132 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
-  FileText, Clock, IndianRupee, AlertTriangle, Plus, ArrowRight, Users,
+  FileText, Clock, IndianRupee, AlertTriangle, Plus, ArrowRight, ShieldCheck, ArrowUpRight, Users, CalendarDays,
 } from 'lucide-react';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import type { Invoice } from '@/lib/types';
 import { formatMoney, formatDate, daysUntil } from '@/lib/format';
-import { PageHeader } from '@/components/layout/PageHeader';
+import { financialYearOf } from '@/lib/compliance';
 import { ComplianceBanner } from '@/components/layout/ComplianceBanner';
 import { StatCard } from '@/components/dashboard/StatCard';
-import { Card, CardHeader } from '@/components/ui/Card';
+import { Onboarding } from '@/components/dashboard/Onboarding';
+import { CardHeader } from '@/components/ui/Card';
 import { StatusBadge } from '@/components/ui/Badge';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { EmptyState } from '@/components/ui/EmptyState';
 import { Table, THead, TH, TR, TD } from '@/components/ui/Table';
+import { Reveal } from '@/components/motion/Reveal';
+import { Aurora } from '@/components/motion/Aurora';
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const [invoices, setInvoices] = useState<Invoice[] | null>(null);
+  const [clientCount, setClientCount] = useState<number | null>(null);
 
   useEffect(() => {
     api.invoices.list(1, 100).then((p) => setInvoices(p.items)).catch(() => setInvoices([]));
+    api.clients.list(1, 1).then((p) => setClientCount(p.meta.total)).catch(() => setClientCount(0));
   }, []);
 
   const unpaid = (invoices ?? []).filter((i) => i.status !== 'paid');
   const inrOutstanding = unpaid.reduce((s, i) => s + parseFloat(i.inrEquivalent || '0'), 0);
   const atRisk = unpaid.filter((i) => daysUntil(i.femaDueDate) <= 90);
+  const firstName = user?.legalName?.split(' ')[0] || user?.email?.split('@')[0] || 'there';
+  const isEmpty = invoices !== null && invoices.length === 0;
+  const today = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
 
   return (
     <div>
-      <PageHeader
-        title={`Welcome${user?.legalName ? `, ${user.legalName.split(' ')[0]}` : ''}`}
-        subtitle="Here’s the state of your export invoicing and compliance."
-        action={<Link href="/invoices/new" className="btn-primary"><Plus className="h-4 w-4" /> New invoice</Link>}
-      />
+      {/* Hero header */}
+      <Reveal>
+        <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-ink to-[#16202b] px-6 py-8 sm:px-9 mb-6 shadow-lift">
+          <Aurora className="opacity-70" />
+          <div className="absolute inset-0 bg-grid-light mask-fade-b opacity-25" />
+          <div className="relative flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="badge bg-white/10 text-brand-200"><ShieldCheck className="h-3.5 w-3.5" /> Export-compliant invoicing</span>
+                <span className="badge bg-white/5 text-white/55"><CalendarDays className="h-3.5 w-3.5" /> {today} · FY {financialYearOf(new Date())}</span>
+              </div>
+              <h1 className="text-2xl sm:text-[30px] font-semibold tracking-tight text-white">Welcome back, {firstName}</h1>
+              <p className="mt-1.5 text-sm text-white/60 max-w-md">Here’s the state of your export invoicing and FEMA compliance.</p>
+            </div>
+            <Link href="/invoices/new" className="btn-primary px-5 py-3 text-[15px] shrink-0 self-start sm:self-auto">
+              <Plus className="h-4 w-4" /> New invoice
+            </Link>
+          </div>
+        </div>
+      </Reveal>
 
       <ComplianceBanner user={user} />
 
+      {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-        <StatCard label="Total invoices" value={invoices ? invoices.length : <Skeleton className="h-7 w-12" />} icon={<FileText className="h-5 w-5" />} />
-        <StatCard label="Unpaid" value={invoices ? unpaid.length : <Skeleton className="h-7 w-12" />} icon={<Clock className="h-5 w-5" />} tone="amber" />
-        <StatCard label="Outstanding (INR)" value={invoices ? formatMoney(inrOutstanding) : <Skeleton className="h-7 w-24" />} icon={<IndianRupee className="h-5 w-5" />} />
-        <StatCard label="FEMA at risk" value={invoices ? atRisk.length : <Skeleton className="h-7 w-12" />} icon={<AlertTriangle className="h-5 w-5" />} tone={atRisk.length ? 'red' : 'gray'} hint="≤ 90 days to realisation" />
+        {[
+          { label: 'Total invoices', value: invoices ? invoices.length : <Skeleton className="h-7 w-12" />, icon: <FileText />, tone: 'brand' as const },
+          { label: 'Unpaid', value: invoices ? unpaid.length : <Skeleton className="h-7 w-12" />, icon: <Clock />, tone: 'amber' as const, hint: invoices ? `${unpaid.length} awaiting payment` : undefined },
+          { label: 'Outstanding (INR)', value: invoices ? formatMoney(inrOutstanding) : <Skeleton className="h-7 w-24" />, icon: <IndianRupee />, tone: 'blue' as const },
+          { label: 'FEMA at risk', value: invoices ? atRisk.length : <Skeleton className="h-7 w-12" />, icon: <AlertTriangle />, tone: (atRisk.length ? 'red' : 'gray') as 'red' | 'gray', hint: '≤ 90 days to realisation' },
+        ].map((s, i) => (
+          <Reveal key={s.label} delay={i * 70}>
+            <StatCard label={s.label} value={s.value} icon={s.icon} tone={s.tone} hint={s.hint} />
+          </Reveal>
+        ))}
       </div>
 
-      <Card>
-        <CardHeader
-          title="Recent invoices"
-          action={<Link href="/invoices" className="text-sm text-brand-700 font-medium hover:underline flex items-center gap-1">View all <ArrowRight className="h-3.5 w-3.5" /></Link>}
-        />
-        {invoices === null ? (
-          <div className="p-5 space-y-3">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
-        ) : invoices.length === 0 ? (
-          <EmptyState
-            icon={<FileText className="h-6 w-6" />}
-            title="No invoices yet"
-            description="Create your first compliant export invoice — the declaration, SAC and INR equivalent fill themselves."
-            action={<Link href="/invoices/new" className="btn-primary"><Plus className="h-4 w-4" /> New invoice</Link>}
-          />
+      {/* Onboarding (empty) OR recent invoices */}
+      <Reveal delay={80}>
+        {isEmpty ? (
+          <Onboarding user={user} hasClients={(clientCount ?? 0) > 0} hasInvoices={false} />
         ) : (
-          <Table>
-            <THead><TH>Number</TH><TH>Date</TH><TH>Amount</TH><TH>FEMA due</TH><TH className="text-right">Status</TH></THead>
-            <tbody>
-              {invoices.slice(0, 6).map((inv) => {
-                const d = daysUntil(inv.femaDueDate);
-                return (
-                  <TR key={inv.id}>
-                    <TD><Link href={`/invoices/${inv.id}`} className="font-mono text-[13px] text-ink hover:text-brand-700">{inv.number}</Link></TD>
-                    <TD>{formatDate(inv.invoiceDate)}</TD>
-                    <TD><span className="font-medium">{inv.currency} {parseFloat(inv.subtotal).toLocaleString()}</span><span className="text-ink-faint text-xs block">{formatMoney(inv.inrEquivalent)}</span></TD>
-                    <TD>{inv.status === 'paid' ? <span className="text-ink-faint">—</span> : <span className={d <= 90 ? 'text-red-600 font-medium' : ''}>{formatDate(inv.femaDueDate)}</span>}</TD>
-                    <TD className="text-right"><StatusBadge status={inv.status} /></TD>
-                  </TR>
-                );
-              })}
-            </tbody>
-          </Table>
+          <div className="card overflow-hidden">
+            <CardHeader
+              title="Recent invoices"
+              action={<Link href="/invoices" className="text-sm text-brand-700 font-medium hover:underline flex items-center gap-1">View all <ArrowRight className="h-3.5 w-3.5" /></Link>}
+            />
+            {invoices === null ? (
+              <div className="p-5 space-y-3">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
+            ) : (
+              <Table>
+                <THead><TH>Number</TH><TH>Date</TH><TH>Amount</TH><TH>FEMA due</TH><TH className="text-right">Status</TH></THead>
+                <tbody>
+                  {invoices.slice(0, 6).map((inv) => {
+                    const d = daysUntil(inv.femaDueDate);
+                    return (
+                      <TR key={inv.id} onClick={() => { window.location.href = `/invoices/${inv.id}`; }}>
+                        <TD><span className="font-mono text-[13px] text-ink">{inv.number}</span></TD>
+                        <TD>{formatDate(inv.invoiceDate)}</TD>
+                        <TD><span className="font-medium">{inv.currency} {parseFloat(inv.subtotal).toLocaleString()}</span><span className="text-ink-faint text-xs block">{formatMoney(inv.inrEquivalent)}</span></TD>
+                        <TD>{inv.status === 'paid' ? <span className="text-ink-faint">—</span> : <span className={d <= 90 ? 'text-red-600 font-medium' : ''}>{formatDate(inv.femaDueDate)}</span>}</TD>
+                        <TD className="text-right"><StatusBadge status={inv.status} /></TD>
+                      </TR>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            )}
+          </div>
         )}
-      </Card>
+      </Reveal>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <Link href="/clients" className="card p-5 flex items-center gap-4 hover:shadow-lift transition-shadow">
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600"><Users className="h-5 w-5" /></span>
-          <div><h3 className="font-medium text-ink">Manage clients</h3><p className="text-sm text-ink-muted">Add the foreign clients you bill.</p></div>
-          <ArrowRight className="h-4 w-4 text-ink-faint ml-auto" />
-        </Link>
-        <Link href="/reports" className="card p-5 flex items-center gap-4 hover:shadow-lift transition-shadow">
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600"><FileText className="h-5 w-5" /></span>
-          <div><h3 className="font-medium text-ink">Export for filing</h3><p className="text-sm text-ink-muted">GSTR-1 6A statement for your CA.</p></div>
-          <ArrowRight className="h-4 w-4 text-ink-faint ml-auto" />
-        </Link>
+      {/* Quick links */}
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        {[
+          { href: '/clients', title: 'Manage clients', desc: 'Your foreign billing contacts', icon: <Users className="h-5 w-5" /> },
+          { href: '/reports', title: 'Filing & reports', desc: 'GSTR-1 6A for your CA', icon: <FileText className="h-5 w-5" /> },
+          { href: '/profile', title: 'Business profile', desc: 'GSTIN, LUT & bank details', icon: <ShieldCheck className="h-5 w-5" /> },
+        ].map((q, i) => (
+          <Reveal key={q.href} delay={i * 70}>
+            <Link href={q.href} className="card card-hover group p-5 flex items-center gap-4">
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-black/5 transition group-hover:scale-105">{q.icon}</span>
+              <div className="min-w-0">
+                <h3 className="font-medium text-ink truncate">{q.title}</h3>
+                <p className="text-sm text-ink-muted truncate">{q.desc}</p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 text-ink-faint ml-auto shrink-0 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          </Reveal>
+        ))}
       </div>
     </div>
   );

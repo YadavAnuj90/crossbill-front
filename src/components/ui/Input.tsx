@@ -2,7 +2,7 @@
 import { InputHTMLAttributes, forwardRef, ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
   label?: string;
   hint?: string;
   error?: string;

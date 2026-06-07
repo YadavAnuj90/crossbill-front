@@ -14,6 +14,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Table, THead, TH, TR, TD } from '@/components/ui/Table';
+import { Reveal } from '@/components/motion/Reveal';
 
 const emptyForm: CreateClientInput = { name: '', email: '', address: '', country: '' };
 
@@ -61,38 +62,42 @@ export default function ClientsPage() {
   return (
     <div>
       <PageHeader
+        eyebrow="Workspace"
         title="Clients"
         subtitle="The foreign clients you bill. Place of supply is always outside India."
+        icon={<Users className="h-5 w-5" />}
         action={<Button onClick={openCreate}><Plus className="h-4 w-4" /> Add client</Button>}
       />
 
-      <Card>
-        {clients === null ? (
-          <div className="p-5 space-y-3">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
-        ) : clients.length === 0 ? (
-          <EmptyState icon={<Users className="h-6 w-6" />} title="No clients yet" description="Add a foreign client to start raising export invoices." action={<Button onClick={openCreate}><Plus className="h-4 w-4" /> Add client</Button>} />
-        ) : (
-          <Table>
-            <THead><TH>Client</TH><TH>Country</TH><TH>Email</TH><TH>Added</TH><TH /></THead>
-            <tbody>
-              {clients.map((c) => (
-                <TR key={c.id}>
-                  <TD><div className="flex items-center gap-3"><Avatar name={c.name} /><span className="font-medium text-ink">{c.name}</span></div></TD>
-                  <TD><span className="inline-flex items-center gap-1.5">{flagEmoji(c.country)} {countryName(c.country)}</span></TD>
-                  <TD>{c.email || <span className="text-ink-faint">—</span>}</TD>
-                  <TD>{formatDate(c.createdAt)}</TD>
-                  <TD>
-                    <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => openEdit(c)} className="btn-ghost p-2"><Pencil className="h-4 w-4" /></button>
-                      <button onClick={() => onDelete(c)} className="btn-ghost p-2 text-red-500 hover:bg-red-50"><Trash2 className="h-4 w-4" /></button>
-                    </div>
-                  </TD>
-                </TR>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Card>
+      <Reveal>
+        <Card>
+          {clients === null ? (
+            <div className="p-5 space-y-3">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
+          ) : clients.length === 0 ? (
+            <EmptyState icon={<Users className="h-6 w-6" />} title="No clients yet" description="Add a foreign client to start raising export invoices." action={<Button onClick={openCreate}><Plus className="h-4 w-4" /> Add client</Button>} />
+          ) : (
+            <Table>
+              <THead><TH>Client</TH><TH>Country</TH><TH>Email</TH><TH>Added</TH><TH /></THead>
+              <tbody>
+                {clients.map((c) => (
+                  <TR key={c.id}>
+                    <TD><div className="flex items-center gap-3"><Avatar name={c.name} /><span className="font-medium text-ink">{c.name}</span></div></TD>
+                    <TD><span className="inline-flex items-center gap-1.5">{flagEmoji(c.country)} {countryName(c.country)}</span></TD>
+                    <TD>{c.email || <span className="text-ink-faint">—</span>}</TD>
+                    <TD>{formatDate(c.createdAt)}</TD>
+                    <TD>
+                      <div className="flex items-center justify-end gap-1">
+                        <button onClick={() => openEdit(c)} className="btn-ghost p-2"><Pencil className="h-4 w-4" /></button>
+                        <button onClick={() => onDelete(c)} className="btn-ghost p-2 text-red-500 hover:bg-red-50"><Trash2 className="h-4 w-4" /></button>
+                      </div>
+                    </TD>
+                  </TR>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Card>
+      </Reveal>
 
       <Modal
         open={open}

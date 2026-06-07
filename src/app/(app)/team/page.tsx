@@ -11,6 +11,7 @@ import { Select } from '@/components/ui/Select';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Avatar } from '@/components/ui/Avatar';
+import { Reveal } from '@/components/motion/Reveal';
 
 const ROLE_INFO: Record<Role, { icon: React.ReactNode; desc: string }> = {
   OWNER: { icon: <Crown className="h-3.5 w-3.5" />, desc: 'Full access incl. billing' },
@@ -33,36 +34,38 @@ export default function TeamPage() {
 
   return (
     <div>
-      <PageHeader title="Team" subtitle="Invite teammates, or give your CA scoped read-only access." />
-
+      <PageHeader eyebrow="Workspace" title="Team" subtitle="Invite teammates, or give your CA scoped read-only access." icon={<UsersRound className="h-5 w-5" />} />
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <Card>
-          <CardHeader title="Members" />
-          <CardBody className="space-y-1">
-            <div className="flex items-center gap-3 py-3">
-              <Avatar name={user?.legalName || user?.email || '?'} className="h-9 w-9" />
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-ink truncate">{user?.legalName || 'You'}</p>
-                <p className="text-xs text-ink-muted truncate">{user?.email}</p>
+        <Reveal>
+          <Card>
+            <CardHeader title="Members" />
+            <CardBody className="space-y-1">
+              <div className="flex items-center gap-3 py-3">
+                <Avatar name={user?.legalName || user?.email || '?'} className="h-9 w-9" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-ink truncate">{user?.legalName || 'You'}</p>
+                  <p className="text-xs text-ink-muted truncate">{user?.email}</p>
+                </div>
+                <Badge tone="green">{ROLE_INFO[(user?.role as Role) || 'OWNER']?.icon}{user?.role || 'OWNER'}</Badge>
               </div>
-              <Badge tone="green">{ROLE_INFO[(user?.role as Role) || 'OWNER']?.icon}{user?.role || 'OWNER'}</Badge>
-            </div>
-            <p className="text-sm text-ink-faint pt-2 border-t border-paper-border">Additional members and CA invites unlock on the Agency plan.</p>
-          </CardBody>
-        </Card>
-
-        <Card className="h-fit">
-          <CardHeader title="Invite someone" />
-          <CardBody>
-            <form onSubmit={invite} className="space-y-4">
-              <Input label="Email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="teammate@studio.com" prefix={<Mail className="h-4 w-4" />} />
-              <Select label="Role" value={role} onChange={(e) => setRole(e.target.value as Role)}>
-                {(Object.keys(ROLE_INFO) as Role[]).filter((r) => r !== 'OWNER').map((r) => <option key={r} value={r}>{r} — {ROLE_INFO[r].desc}</option>)}
-              </Select>
-              <Button type="submit" className="w-full"><UsersRound className="h-4 w-4" /> Send invite</Button>
-            </form>
-          </CardBody>
-        </Card>
+              <p className="text-sm text-ink-faint pt-2 border-t border-paper-border">Additional members and CA invites unlock on the Agency plan.</p>
+            </CardBody>
+          </Card>
+        </Reveal>
+        <Reveal delay={80}>
+          <Card className="h-fit">
+            <CardHeader title="Invite someone" />
+            <CardBody>
+              <form onSubmit={invite} className="space-y-4">
+                <Input label="Email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="teammate@studio.com" prefix={<Mail className="h-4 w-4" />} />
+                <Select label="Role" value={role} onChange={(e) => setRole(e.target.value as Role)}>
+                  {(Object.keys(ROLE_INFO) as Role[]).filter((r) => r !== 'OWNER').map((r) => <option key={r} value={r}>{r} — {ROLE_INFO[r].desc}</option>)}
+                </Select>
+                <Button type="submit" className="w-full"><UsersRound className="h-4 w-4" /> Send invite</Button>
+              </form>
+            </CardBody>
+          </Card>
+        </Reveal>
       </div>
     </div>
   );

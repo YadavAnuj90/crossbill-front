@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import {
   ArrowRight, Target, ShieldCheck, Sparkles, MapPin, Heart, Zap, Linkedin, Twitter,
-  Quote, Rocket, Users,
+  Quote, Rocket, Users, Flag, Code2, Building2, Globe, TrendingUp,
 } from 'lucide-react';
 import { LandingNav } from '@/components/marketing/LandingNav';
 import { LandingFooter } from '@/components/marketing/LandingFooter';
@@ -19,6 +19,13 @@ const VALUES = [
   { icon: ShieldCheck, title: 'Compliance you can trust', body: 'Templates and tax logic built to be audit-ready, reviewed against the law, never guessed.' },
   { icon: Zap, title: 'Fast & delightful', body: 'A compliant invoice in under a minute. Software should feel effortless, even when the rules aren’t.' },
   { icon: MapPin, title: 'India-first', body: 'Built in India, for Indian developers and agencies billing the world — and now, billing India too.' },
+];
+
+const TIMELINE = [
+  { icon: Flag, tag: 'Mar 2026', title: 'The rules changed', body: 'The Finance Act deleted Section 13(8)(b) of the IGST Act — turning a huge class of Indian services into zero-rated exports. A massive group became eligible for tax-free foreign revenue overnight.' },
+  { icon: Code2, tag: 'The spark', title: 'We’d felt the pain', body: 'Raising USD invoices, chasing FIRC proofs, tracking FEMA deadlines, emailing a CA to double-check everything. So we built the tool we wished existed.' },
+  { icon: Globe, tag: 'Crossbill', title: 'Export, done right', body: 'Auto-filled export declarations, captured exchange rates, FEMA aging, and one-click GSTR-1 6A — the compliance trail, automatic.' },
+  { icon: Building2, tag: 'Today', title: 'Export + domestic', body: 'Crossbill now handles both sides — export invoices for foreign clients and domestic GST invoices for Indian ones — with the hard tax logic computed for you.' },
 ];
 
 const FOUNDERS = [
@@ -59,39 +66,54 @@ export default function AboutPage() {
               and agencies to invoice anyone, anywhere, and stay GST &amp; FEMA compliant without thinking about it.
             </p>
           </Reveal>
+          <Reveal delay={240}>
+            <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/register" className="btn-primary px-6 py-3.5 text-[15px] shadow-glow">Start free <ArrowRight className="h-4 w-4" /></Link>
+              <Link href="/contact" className="btn-glass px-6 py-3.5 text-[15px]">Get in touch</Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* Story */}
-      <section className="relative py-24">
-        <div className="mx-auto max-w-3xl px-5">
+      {/* Mission strip */}
+      <section className="py-20">
+        <div className="mx-auto max-w-4xl px-5 text-center">
           <Reveal>
+            <p className="eyebrow mb-4">Our mission</p>
+            <p className="text-2xl sm:text-3xl font-medium tracking-tight text-ink leading-snug">
+              To make compliance something Indian businesses <span className="text-gradient-brand">rely on, never worry about</span> —
+              so every developer and agency can bill the world with confidence.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Story timeline */}
+      <section className="py-20 bg-white/50 border-y border-paper-border/70">
+        <div className="mx-auto max-w-5xl px-5">
+          <Reveal className="max-w-2xl">
             <span className="badge bg-brand-50 text-brand-700 mb-4">Our story</span>
             <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-ink">Born from a real, recurring pain</h2>
           </Reveal>
-          <div className="mt-6 space-y-5 text-ink-muted text-lg leading-relaxed">
-            <Reveal delay={60}><p>
-              In March 2026, the Finance Act deleted Section 13(8)(b) of the IGST Act — turning a huge class
-              of Indian IT, agency and freelancer services into <span className="text-ink font-medium">zero-rated exports</span>.
-              Overnight, a massive group of service exporters became eligible for tax-free foreign revenue. Most didn’t
-              know the rules, and the paperwork to claim the benefit was fiddly and unforgiving.
-            </p></Reveal>
-            <Reveal delay={120}><p>
-              We’d lived that pain ourselves — raising USD invoices, chasing FIRC proofs, tracking FEMA deadlines,
-              and emailing a CA to double-check every detail. So we built the tool we wished existed: one that gets
-              the export declaration, exchange rate, SAC code and compliance trail right, automatically.
-            </p></Reveal>
-            <Reveal delay={180}><p>
-              Today Crossbill handles both sides of the business — <span className="text-ink font-medium">export invoices</span> for
-              foreign clients and <span className="text-ink font-medium">domestic GST invoices</span> for Indian ones — with the
-              hard tax logic computed for you. The goal never changes: make compliance something you rely on, never worry about.
-            </p></Reveal>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2">
+            {TIMELINE.map((t, i) => (
+              <Reveal key={t.title} delay={i * 70}>
+                <div className="card card-hover relative h-full p-6">
+                  <div className="flex items-center justify-between">
+                    <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-brand-50 to-brand-100 text-brand-600 ring-1 ring-brand-200/50"><t.icon className="h-5 w-5" /></span>
+                    <span className="badge bg-paper text-ink-muted border border-paper-border">{t.tag}</span>
+                  </div>
+                  <h3 className="mt-4 font-semibold text-ink">{t.title}</h3>
+                  <p className="mt-2 text-sm text-ink-muted leading-relaxed">{t.body}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="pb-8">
+      <section className="py-20">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal>
             <div className="gborder shadow-glow">
@@ -102,7 +124,7 @@ export default function AboutPage() {
                     { v: 2, suffix: '-in-1', l: 'Export + domestic GST' },
                     { v: 60, suffix: 's', l: 'To a compliant invoice' },
                     { v: 100, suffix: '%', l: 'Focused on one job' },
-                    { v: 1, suffix: '', l: 'Mission: zero compliance worry' },
+                    { v: 0, suffix: ' worry', l: 'Compliance you rely on' },
                   ].map((s) => (
                     <div key={s.l}>
                       <div className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-vivid tabular-nums">
@@ -119,7 +141,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="py-24">
+      <section className="py-20">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal className="max-w-2xl">
             <span className="badge bg-brand-50 text-brand-700 mb-4">What we believe</span>
@@ -168,15 +190,10 @@ export default function AboutPage() {
                         <p className="text-xs text-ink-faint mt-0.5">Anujali Technologies Pvt. Ltd.</p>
                       </div>
                     </div>
-
                     <p className="mt-5 text-sm text-ink-muted leading-relaxed">{f.bio}</p>
-
                     <div className="mt-5 flex flex-wrap gap-2">
-                      {f.focus.map((t) => (
-                        <span key={t} className="badge bg-paper text-ink-muted border border-paper-border">{t}</span>
-                      ))}
+                      {f.focus.map((t) => <span key={t} className="badge bg-paper text-ink-muted border border-paper-border">{t}</span>)}
                     </div>
-
                     <div className="mt-6 flex items-center justify-between border-t border-paper-border pt-4">
                       <span className="text-xs font-medium uppercase tracking-wide text-ink-faint">Connect</span>
                       <div className="flex items-center gap-2">
@@ -190,7 +207,6 @@ export default function AboutPage() {
             ))}
           </div>
 
-          {/* Founder quote */}
           <Reveal delay={120}>
             <figure className="mt-8 card relative overflow-hidden p-8 sm:p-10 text-center">
               <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-100/60 blur-3xl" />
@@ -199,7 +215,7 @@ export default function AboutPage() {
                 “The builder is the user. We felt this pain every month — so we’re obsessed with making it
                 <span className="text-gradient-brand"> simply disappear</span> for everyone who bills a client.”
               </blockquote>
-              <figcaption className="relative mt-5 text-sm text-ink-muted">— Anujali Technologies</figcaption>
+              <figcaption className="relative mt-5 text-sm text-ink-muted">— Anuj &amp; Anjali Yadav, Anujali Technologies</figcaption>
             </figure>
           </Reveal>
         </div>

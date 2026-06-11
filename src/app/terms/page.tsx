@@ -67,6 +67,14 @@ export default function TermsPage() {
       eyebrow="Legal" title="Terms of Service" updated="8 June 2026"
       intro="The ground rules for using Crossbill — what we provide, what you’re responsible for, and the limits that apply."
       note="This document is a template provided for transparency and should be reviewed by qualified legal counsel before you rely on it."
+      summary={[
+        'Crossbill assists with compliance — it is not tax or legal advice',
+        'You own your business content; we host it to run the Service',
+        'Paid plans bill in INR via Razorpay and renew until cancelled',
+        'Use the Service lawfully; don’t abuse or reverse-engineer it',
+        'Liability is limited; the Service is provided “as is”',
+        'Governed by the laws of India',
+      ]}
       sections={SECTIONS}
     />
   );

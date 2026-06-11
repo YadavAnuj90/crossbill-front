@@ -73,6 +73,14 @@ export default function PrivacyPage() {
       eyebrow="Legal" title="Privacy Policy" updated="8 June 2026"
       intro="Your data is yours. This policy explains what we collect, why, and the controls you have over it."
       note="This document is a template provided for transparency and should be reviewed by qualified legal counsel before you rely on it."
+      summary={[
+        'Your invoices, clients and documents are yours — we never sell your data',
+        'We collect only what’s needed to run the Service and keep it secure',
+        'Sensitive fields and uploads are encrypted and access-scoped',
+        'You can access, correct, export or delete your data anytime',
+        'Aligned with India’s DPDP Act, 2023',
+        'Trusted sub-processors only (hosting, email, Razorpay)',
+      ]}
       sections={SECTIONS}
     />
   );

@@ -56,6 +56,14 @@ export default function CompliancePage() {
     <LegalShell
       eyebrow="Trust" title="Compliance" updated="8 June 2026"
       intro="How we keep your invoicing correct and audit-ready — across GST, FEMA and data protection."
+      summary={[
+        'Compliance is the product — built to be audit-ready',
+        'Declaration wording, FX basis & export formats are CA-reviewed',
+        'Export: LUT, 0% IGST, FEMA tracking, FIRC, GSTR-1 6A',
+        'Domestic: CGST/SGST/IGST, HSN/SAC, B2B & B2C, GSTR-1',
+        'Encrypted storage, scoped document access, full audit trail',
+        'Still confirm specifics with your CA — rules change',
+      ]}
       sections={SECTIONS}
     />
   );

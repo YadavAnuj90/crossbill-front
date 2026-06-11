@@ -45,8 +45,9 @@ export default function RegisterPage() {
         <Button type="submit" loading={loading} className="w-full">Create account</Button>
       </form>
       <p className="mt-5 text-xs text-ink-faint text-center leading-relaxed">
-        By continuing you agree that Crossbill assists with documentation and calculation, and is not a
-        substitute for professional tax advice.
+        By continuing you agree to our <a href="/terms" className="text-brand-700 hover:underline">Terms</a> and{' '}
+        <a href="/privacy" className="text-brand-700 hover:underline">Privacy Policy</a>. Crossbill assists with
+        documentation and calculation, and is not a substitute for professional tax advice.
       </p>
     </AuthShell>
   );

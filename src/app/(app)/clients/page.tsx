@@ -34,6 +34,7 @@ export default function ClientsPage() {
   useEffect(() => { load(); }, []);
 
   function openCreate() { setEditing(null); setForm(emptyForm); setOpen(true); }
+  function openCreateType(t: 'foreign' | 'domestic') { setEditing(null); setForm({ ...emptyForm, type: t }); setOpen(true); }
   function openEdit(c: Client) {
     setEditing(c);
     setForm({
@@ -87,7 +88,25 @@ export default function ClientsPage() {
           {clients === null ? (
             <div className="p-5 space-y-3">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
           ) : clients.length === 0 ? (
-            <EmptyState icon={<Users className="h-6 w-6" />} title="No clients yet" description="Add a foreign or domestic client to start invoicing." action={<Button onClick={openCreate}><Plus className="h-4 w-4" /> Add client</Button>} />
+            <EmptyState icon={<Users className="h-6 w-6" />} title="Add your first client" description="Choose who you’re billing — Crossbill applies the right compliance for each.">
+              <div className="mt-7 grid w-full max-w-xl gap-4 sm:grid-cols-2">
+                {([
+                  { t: 'foreign' as const, icon: Globe, title: 'Foreign client', tag: 'Export', desc: 'Bill in USD/EUR — LUT, FEMA & FIRC handled.', tone: 'from-brand-400 to-emerald-600' },
+                  { t: 'domestic' as const, icon: Building2, title: 'Indian client', tag: 'Domestic GST', desc: 'Bill in INR — CGST/SGST or IGST, auto.', tone: 'from-cyan-400 to-teal-600' },
+                ]).map((o) => (
+                  <button key={o.t} onClick={() => openCreateType(o.t)}
+                    className="group relative overflow-hidden rounded-2xl border border-paper-border bg-white p-5 text-left transition-all hover:-translate-y-0.5 hover:shadow-lift hover:border-brand-200">
+                    <span className={cn('absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br opacity-0 blur-2xl transition-opacity group-hover:opacity-20', o.tone)} />
+                    <div className="flex items-center justify-between">
+                      <span className={cn('grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-sm', o.tone)}><o.icon className="h-5 w-5" /></span>
+                      <span className="badge bg-paper text-ink-muted border border-paper-border">{o.tag}</span>
+                    </div>
+                    <h4 className="mt-4 font-semibold text-ink flex items-center gap-1">{o.title} <Plus className="h-3.5 w-3.5 text-ink-faint opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" /></h4>
+                    <p className="mt-1 text-sm text-ink-muted leading-snug">{o.desc}</p>
+                  </button>
+                ))}
+              </div>
+            </EmptyState>
           ) : (
             <Table>
               <THead><TH>Client</TH><TH>Type</TH><TH>Location</TH><TH>Tax ID</TH><TH>Added</TH><TH /></THead>
@@ -127,7 +146,6 @@ export default function ClientsPage() {
         </>}
       >
         <form id="client-form" onSubmit={onSubmit} className="space-y-4">
-          {/* Type segmented control */}
           <div>
             <label className="label">Client type</label>
             <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-paper border border-paper-border">

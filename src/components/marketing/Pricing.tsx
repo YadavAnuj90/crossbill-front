@@ -14,37 +14,36 @@ export function Pricing() {
     <section id="pricing" className="py-24">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="text-center max-w-2xl mx-auto">
-          <span className="badge bg-brand-50 text-brand-700 mb-4">Pricing</span>
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-ink">Simple, honest pricing</h2>
+          <span className="chip-soft mb-4">Pricing</span>
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.02em] text-ink">Simple, honest pricing</h2>
           <p className="mt-3 text-ink-muted text-lg">Start free. Upgrade when invoicing foreign clients becomes a habit.</p>
         </Reveal>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-3 items-start">
           {PLANS.map((p, i) => (
             <Reveal key={p.name} delay={i * 90}>
-              <div className={cn('relative h-full', p.highlight && 'gborder shadow-glow')}>
               <div className={cn(
-                'relative rounded-3xl p-7 h-full',
-                p.highlight ? 'bg-gradient-to-b from-ink to-[#0f1620] text-white bg-noise overflow-hidden' : 'card',
+                'relative h-full overflow-hidden rounded-3xl p-7 bg-white shadow-card ring-1 ring-black/[0.02]',
+                p.highlight ? 'border-2 border-brand-400 shadow-[0_24px_60px_-24px_rgba(5,150,105,0.45)]' : 'border border-black/[0.06]',
               )}>
-                {p.highlight && <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge bg-brand-500 text-white shadow">Most popular</span>}
-                <p className={cn('text-sm', p.highlight ? 'text-brand-200' : 'text-ink-muted')}>{p.tag}</p>
-                <h3 className={cn('mt-1 text-lg font-semibold', p.highlight ? 'text-white' : 'text-ink')}>{p.name}</h3>
-                <p className="mt-4 flex items-end gap-1">
-                  <span className={cn('text-4xl font-semibold tracking-tight', p.highlight ? 'text-white' : 'text-ink')}>{p.price}</span>
-                  <span className={cn('mb-1 text-sm', p.highlight ? 'text-white/50' : 'text-ink-faint')}>/mo</span>
+                {p.highlight && <span className="absolute -top-px left-1/2 -translate-x-1/2 rounded-b-lg bg-brand-500 px-3 py-1 text-[11px] font-semibold text-white shadow">Most popular</span>}
+                {p.highlight && <span className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-400/15 blur-3xl" />}
+                <p className="relative text-sm text-ink-faint">{p.tag}</p>
+                <h3 className="relative mt-1 text-lg font-semibold text-ink">{p.name}</h3>
+                <p className="relative mt-4 flex items-end gap-1">
+                  <span className="text-4xl font-semibold tracking-tight text-ink">{p.price}</span>
+                  <span className="mb-1 text-sm text-ink-faint">/mo</span>
                 </p>
-                <ul className="mt-6 space-y-3">
+                <ul className="relative mt-6 space-y-3">
                   {p.features.map((f) => (
-                    <li key={f} className={cn('flex items-center gap-2.5 text-sm', p.highlight ? 'text-white/80' : 'text-ink-soft')}>
-                      <Check className={cn('h-4 w-4 shrink-0', p.highlight ? 'text-brand-300' : 'text-brand-600')} /> {f}
+                    <li key={f} className="flex items-center gap-2.5 text-sm text-ink-soft">
+                      <Check className="h-4 w-4 shrink-0 text-brand-600" /> {f}
                     </li>
                   ))}
                 </ul>
-                <Link href="/register" className={cn('mt-7 w-full', p.highlight ? 'btn-primary' : 'btn-secondary')}>
+                <Link href="/register" className={cn('relative mt-7 w-full', p.highlight ? 'btn-primary' : 'btn-secondary')}>
                   Get started <ArrowRight className="h-4 w-4" />
                 </Link>
-              </div>
               </div>
             </Reveal>
           ))}

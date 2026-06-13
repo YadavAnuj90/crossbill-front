@@ -22,10 +22,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex min-h-screen">
       {/* Ambient app background */}
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-dots opacity-[0.6]" />
-        <div className="absolute right-0 top-0 h-[32rem] w-[32rem] rounded-full bg-brand-300/15 blur-[130px]" />
-        <div className="absolute left-40 bottom-0 h-[28rem] w-[28rem] rounded-full bg-emerald-200/10 blur-[120px]" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-white via-paper to-[#f3f6f4]">
+        <div className="absolute inset-0 bg-dots opacity-[0.5] [mask-image:radial-gradient(120%_80%_at_50%_0%,#000,transparent_75%)]" />
+        <div className="absolute right-[-6rem] top-[-4rem] h-[34rem] w-[34rem] rounded-full bg-brand-300/20 blur-[140px]" />
+        <div className="absolute left-24 bottom-[-6rem] h-[30rem] w-[30rem] rounded-full bg-cyan-200/15 blur-[130px]" />
+        <div className="absolute left-1/2 top-1/3 h-[24rem] w-[40rem] -translate-x-1/2 rounded-full bg-emerald-100/20 blur-[140px]" />
       </div>
 
       <Sidebar />

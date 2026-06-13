@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import { ShieldCheck, Check, ArrowLeft, Star, Sparkles } from 'lucide-react';
-import { Aurora } from '@/components/motion/Aurora';
 
 const FEATURES = [
   'Auto-filled GST & FEMA compliance',
@@ -45,23 +44,24 @@ export function AuthShell({ title, subtitle, children, footer }: {
         <p className="relative text-center text-xs text-ink-faint">Built by Anujali Technologies · Made in India 🇮🇳</p>
       </div>
 
-      {/* Right: brand showpiece */}
-      <div className="relative hidden lg:flex flex-col justify-center overflow-hidden bg-ink px-12 bg-noise">
-        <Aurora className="opacity-80" />
-        <div className="absolute inset-0 bg-grid-light mask-fade-b opacity-[0.12]" />
-        <div className="absolute inset-0 spotlight" />
+      {/* Right: brand showpiece — airy periwinkle sky */}
+      <div className="relative hidden lg:flex flex-col justify-center overflow-hidden px-12">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#c8cdf4] via-[#a9b4ee] to-[#8e9cea]" />
+        <div className="absolute left-1/3 top-1/4 h-[34rem] w-[40rem] -translate-x-1/2 rounded-full bg-[#e7eafb]/70 blur-[130px]" />
+        <div className="absolute -right-16 bottom-10 h-[26rem] w-[28rem] rounded-full bg-[#7c8bff]/40 blur-[140px]" />
+        <div className="absolute inset-0 bg-grid mask-fade-b opacity-[0.05]" />
 
         <div className="relative max-w-md">
-          <span className="glow-chip"><ShieldCheck className="h-3.5 w-3.5 text-brand-300" /> Export-compliant invoicing</span>
-          <blockquote className="mt-6 text-[2rem] font-semibold text-white leading-[1.15] tracking-tight">
+          <span className="chip-soft"><ShieldCheck className="h-3.5 w-3.5 text-brand-600" /> Export-compliant invoicing</span>
+          <blockquote className="mt-6 text-[2rem] font-semibold text-[#11131c] leading-[1.15] tracking-tight">
             Invoice anyone, anywhere, and stay
-            <span className="text-gradient-vivid animate-gradient-x"> compliant</span> — in under a minute.
+            <span className="text-gradient-brand"> compliant</span> — in under a minute.
           </blockquote>
 
           <ul className="mt-8 space-y-3.5">
             {FEATURES.map((t) => (
-              <li key={t} className="flex items-center gap-3 text-white/80">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-brand-500/20 text-brand-300 ring-1 ring-brand-400/20"><Check className="h-3.5 w-3.5" /></span>
+              <li key={t} className="flex items-center gap-3 text-[#2a2d3d]/85 font-medium">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-white text-brand-600 ring-1 ring-brand-200 shadow-sm"><Check className="h-3.5 w-3.5" /></span>
                 {t}
               </li>
             ))}
@@ -70,14 +70,14 @@ export function AuthShell({ title, subtitle, children, footer }: {
           {/* mini stats */}
           <div className="mt-9 grid grid-cols-3 gap-3">
             {[['60s', 'to a compliant invoice'], ['2-in-1', 'export + domestic'], ['0%', 'IGST on exports']].map(([v, l]) => (
-              <div key={l} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
-                <p className="text-xl font-semibold text-gradient-vivid tabular-nums">{v}</p>
-                <p className="mt-0.5 text-[11px] text-white/45 leading-tight">{l}</p>
+              <div key={l} className="rounded-2xl border border-black/[0.06] bg-white/80 px-3 py-3 shadow-card backdrop-blur-sm">
+                <p className="text-xl font-semibold text-gradient-brand tabular-nums">{v}</p>
+                <p className="mt-0.5 text-[11px] text-ink-muted leading-tight">{l}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 flex items-center gap-3 text-xs text-white/45">
+          <div className="mt-8 flex items-center gap-3 text-xs text-[#2a2d3d]/70">
             <span className="flex items-center gap-1">{[...Array(5)].map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />)}</span>
             <span>Loved by Indian devs &amp; agencies</span>
           </div>

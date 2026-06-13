@@ -20,13 +20,22 @@ function recentFYs(): string[] {
 export default function ReportsPage() {
   const { notify } = useToast();
   const [fy, setFy] = useState(financialYearOf(new Date()));
+  const [bundleFy, setBundleFy] = useState(financialYearOf(new Date()));
   const [busy, setBusy] = useState(false);
+  const [busyBundle, setBusyBundle] = useState(false);
 
   async function exportGstr() {
     setBusy(true);
     try { const { url } = await api.reports.gstr6a(fy); notify('success', 'GSTR-1 6A statement generated'); window.open(url, '_blank'); }
     catch (err) { notify('error', err instanceof Error ? err.message : 'Could not generate export'); }
     finally { setBusy(false); }
+  }
+
+  async function downloadBundle() {
+    setBusyBundle(true);
+    try { await api.reports.downloadBundle(bundleFy); notify('success', 'Document bundle downloaded'); }
+    catch (err) { notify('error', err instanceof Error ? err.message : 'Could not generate the bundle'); }
+    finally { setBusyBundle(false); }
   }
 
   return (
@@ -49,11 +58,11 @@ export default function ReportsPage() {
           <Card className="h-full">
             <CardHeader title={<span className="flex items-center gap-2"><Package className="h-4 w-4 text-brand-600" /> Document bundle</span>} subtitle="Invoices + FIRC/e-FIRA + LUT reference, zipped for your CA." />
             <CardBody className="space-y-4">
-              <div className="rounded-xl bg-paper border border-paper-border p-4 text-sm text-ink-muted flex items-center gap-3">
-                <FileBarChart className="h-5 w-5 text-ink-faint" />
-                Bundle assembly arrives with the Filing phase — it packages every export document for a financial year into one download.
-              </div>
-              <Button variant="secondary" disabled className="w-full">Coming soon</Button>
+              <Select label="Financial year" value={bundleFy} onChange={(e) => setBundleFy(e.target.value)}>
+                {recentFYs().map((y) => <option key={y} value={y}>{y}</option>)}
+              </Select>
+              <Button onClick={downloadBundle} loading={busyBundle} className="w-full"><Download className="h-4 w-4" /> Download bundle (.zip)</Button>
+              <p className="hint">Packages every invoice PDF, captured FIRC files, a CSV manifest and your LUT reference for the year into one download.</p>
             </CardBody>
           </Card>
         </Reveal>

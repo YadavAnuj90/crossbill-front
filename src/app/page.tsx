@@ -1,6 +1,6 @@
+import { Backdrop } from '@/components/marketing/Backdrop';
 import { LandingNav } from '@/components/marketing/LandingNav';
 import { Hero } from '@/components/marketing/Hero';
-import { LogoCloud } from '@/components/marketing/LogoCloud';
 import { Features } from '@/components/marketing/Features';
 import { HowItWorks } from '@/components/marketing/HowItWorks';
 import { Stats } from '@/components/marketing/Stats';
@@ -11,11 +11,11 @@ import { LandingFooter } from '@/components/marketing/LandingFooter';
 
 export default function Landing() {
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="relative min-h-screen overflow-x-hidden text-ink selection:bg-brand-200">
+      <Backdrop />
       <LandingNav />
       <main>
         <Hero />
-        <LogoCloud />
         <Features />
         <HowItWorks />
         <Stats />

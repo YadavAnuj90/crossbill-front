@@ -13,15 +13,15 @@ export function Stats() {
     <section className="py-20">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ink to-[#0f1620] px-6 py-12 sm:px-12 bg-noise">
-            <div className="absolute inset-0 bg-grid-light mask-fade-b opacity-40" />
+          <div className="relative overflow-hidden rounded-3xl border border-black/[0.06] bg-white px-6 py-12 shadow-card ring-1 ring-black/[0.02] sm:px-12">
+            <div className="absolute inset-0 bg-grid mask-fade-b opacity-[0.04]" />
             <div className="relative grid grid-cols-2 gap-8 md:grid-cols-4">
               {STATS.map((s) => (
                 <div key={s.label} className="text-center">
-                  <div className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-vivid tabular-nums">
+                  <div className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-brand tabular-nums">
                     <AnimatedCounter value={s.v} suffix={s.suffix} prefix={s.prefix} />
                   </div>
-                  <p className="mt-2 text-sm text-white/55">{s.label}</p>
+                  <p className="mt-2 text-sm text-ink-muted">{s.label}</p>
                 </div>
               ))}
             </div>

@@ -180,6 +180,29 @@ export const remittances = {
 export const reports = {
   gstr6a: (financialYear: string) =>
     request<{ url: string }>(`/reports/gstr-6a?financialYear=${encodeURIComponent(financialYear)}`),
+
+  /** Downloads the document bundle ZIP for a financial year (triggers a browser download). */
+  async downloadBundle(financialYear: string): Promise<void> {
+    const res = await fetch(`${BASE}/reports/bundle?financialYear=${encodeURIComponent(financialYear)}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+    });
+    if (!res.ok) {
+      let message = 'Could not generate the bundle';
+      try { const j = await res.json(); message = j.error?.message || message; } catch { /* binary or empty */ }
+      throw new ApiError(res.status, message);
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `crossbill-bundle-${financialYear}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  },
 };
 
 const api = { auth, profile, clients, invoices, remittances, reports, setAccessToken, getAccessToken, ApiError };

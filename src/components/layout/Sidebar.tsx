@@ -3,29 +3,36 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Users, FileText, FileBarChart, Building2, UsersRound, Settings,
-  CalendarClock, Sparkles, ArrowUpRight,
+  CalendarClock, Sparkles, ArrowUpRight, ScrollText, Wallet, QrCode, Blocks, CreditCard,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 const NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/invoices', label: 'Invoices', icon: FileText },
-  { href: '/fema', label: 'FEMA tracker', icon: CalendarClock },
+  { href: '/notes', label: 'Credit/Debit Notes', icon: ScrollText },
   { href: '/clients', label: 'Clients', icon: Users },
+  { href: '/payments', label: 'Payments', icon: Wallet, soon: true },
+  { href: '/fema', label: 'FEMA tracker', icon: CalendarClock },
   { href: '/reports', label: 'Filing & reports', icon: FileBarChart },
+  { href: '/einvoicing', label: 'e-Invoicing', icon: QrCode, soon: true },
   { href: '/team', label: 'Team', icon: UsersRound },
 ];
 
 const SECONDARY = [
   { href: '/profile', label: 'Business profile', icon: Building2 },
+  { href: '/integrations', label: 'Integrations', icon: Blocks, soon: true },
+  { href: '/billing', label: 'Billing & subscription', icon: CreditCard, soon: true },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
+
+type NavItem = { href: string; label: string; icon: any; soon?: boolean };
 
 export function Sidebar() {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
-  const Item = ({ href, label, icon: Icon }: { href: string; label: string; icon: any }) => {
+  const Item = ({ href, label, icon: Icon, soon }: NavItem) => {
     const active = isActive(href);
     return (
       <Link
@@ -42,7 +49,8 @@ export function Sidebar() {
           </>
         )}
         <Icon className={cn('relative h-[18px] w-[18px] transition-transform', active ? 'text-brand-600' : 'group-hover:scale-110')} />
-        <span className="relative">{label}</span>
+        <span className="relative flex-1">{label}</span>
+        {soon && <span className="relative rounded-full bg-paper px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-ink-faint ring-1 ring-inset ring-paper-border">Soon</span>}
       </Link>
     );
   };
@@ -70,14 +78,14 @@ export function Sidebar() {
       </nav>
 
       {/* Plan card */}
-      <Link href="/settings" className="group mt-auto relative block overflow-hidden rounded-2xl border border-paper-border bg-gradient-to-br from-ink to-[#16202b] p-4 shadow-card transition-shadow hover:shadow-lift">
-        <span className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-brand-500/20 blur-2xl" />
+      <Link href="/billing" className="group mt-auto relative block overflow-hidden rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-4 shadow-card transition-shadow hover:shadow-lift">
+        <span className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-brand-400/20 blur-2xl" />
         <div className="relative flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-brand-300" />
-          <span className="text-sm font-semibold text-white">Free plan</span>
+          <Sparkles className="h-4 w-4 text-brand-600" />
+          <span className="text-sm font-semibold text-ink">Free plan</span>
         </div>
-        <p className="relative mt-1.5 text-xs text-white/55 leading-snug">Upgrade to Pro for unlimited invoices, the FEMA tracker &amp; GSTR-1 export.</p>
-        <span className="relative mt-2.5 inline-flex items-center gap-1 text-xs font-semibold text-brand-300">Upgrade <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></span>
+        <p className="relative mt-1.5 text-xs text-ink-muted leading-snug">Upgrade to Pro for unlimited invoices, the FEMA tracker &amp; GSTR-1 export.</p>
+        <span className="relative mt-2.5 inline-flex items-center gap-1 text-xs font-semibold text-brand-700">Upgrade <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></span>
       </Link>
     </aside>
   );

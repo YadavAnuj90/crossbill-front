@@ -19,6 +19,7 @@ import { PageLoader } from '@/components/ui/Spinner';
 import { Table, THead, TH, TR, TD } from '@/components/ui/Table';
 import { Reveal } from '@/components/motion/Reveal';
 import { RecordPaymentModal } from '@/components/invoices/RecordPaymentModal';
+import { NotesPanel } from '@/components/invoices/NotesPanel';
 
 export default function InvoiceDetailPage() {
   const params = useParams<{ id: string }>();
@@ -157,6 +158,10 @@ export default function InvoiceDetailPage() {
               </Card>
             </Reveal>
           )}
+
+          <Reveal delay={domestic ? 60 : 120}>
+            <NotesPanel invoice={inv} />
+          </Reveal>
         </div>
 
         {/* Compliance side card */}

@@ -17,7 +17,6 @@ import { StatusBadge } from '@/components/ui/Badge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Table, THead, TH, TR, TD } from '@/components/ui/Table';
 import { Reveal } from '@/components/motion/Reveal';
-import { Aurora } from '@/components/motion/Aurora';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -40,17 +39,18 @@ export default function DashboardPage() {
     <div>
       {/* Hero header */}
       <Reveal>
-        <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-ink to-[#16202b] px-6 py-8 sm:px-9 mb-6 shadow-lift">
-          <Aurora className="opacity-70" />
-          <div className="absolute inset-0 bg-grid-light mask-fade-b opacity-25" />
+        <div className="relative overflow-hidden rounded-3xl border border-black/[0.06] bg-gradient-to-br from-white via-[#f4f7f6] to-[#eef0fb] px-6 py-8 sm:px-9 mb-6 shadow-card ring-1 ring-black/[0.02]">
+          <div className="absolute -right-12 -top-12 h-56 w-56 rounded-full bg-brand-300/25 blur-[90px]" />
+          <div className="absolute -left-10 bottom-[-4rem] h-48 w-48 rounded-full bg-[#bcc6ff]/30 blur-[90px]" />
+          <div className="absolute inset-0 bg-grid mask-fade-b opacity-[0.04]" />
           <div className="relative flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <span className="badge bg-white/10 text-brand-200"><ShieldCheck className="h-3.5 w-3.5" /> Export-compliant invoicing</span>
-                <span className="badge bg-white/5 text-white/55"><CalendarDays className="h-3.5 w-3.5" /> {today} · FY {financialYearOf(new Date())}</span>
+                <span className="badge bg-brand-50 text-brand-700 ring-1 ring-brand-200/60"><ShieldCheck className="h-3.5 w-3.5" /> Export-compliant invoicing</span>
+                <span className="badge bg-white text-ink-muted ring-1 ring-black/[0.05]"><CalendarDays className="h-3.5 w-3.5" /> {today} · FY {financialYearOf(new Date())}</span>
               </div>
-              <h1 className="text-2xl sm:text-[30px] font-semibold tracking-tight text-white">Welcome back, {firstName}</h1>
-              <p className="mt-1.5 text-sm text-white/60 max-w-md">Here’s the state of your export invoicing and FEMA compliance.</p>
+              <h1 className="text-2xl sm:text-[30px] font-semibold tracking-tight text-ink">Welcome back, {firstName}</h1>
+              <p className="mt-1.5 text-sm text-ink-muted max-w-md">Here’s the state of your export invoicing and FEMA compliance.</p>
             </div>
             <Link href="/invoices/new" className="btn-primary px-5 py-3 text-[15px] shrink-0 self-start sm:self-auto">
               <Plus className="h-4 w-4" /> New invoice

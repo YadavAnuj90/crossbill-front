@@ -6,7 +6,7 @@
 
 import type {
   Profile, Client, Invoice, Paginated, CreateInvoiceInput, CreateClientInput,
-  Remittance, CreateRemittanceInput, AgingInvoice,
+  Remittance, CreateRemittanceInput, AgingInvoice, Note, CreateNoteInput,
 } from './types';
 
 const BASE = '/api/v1';
@@ -176,6 +176,17 @@ export const remittances = {
   fircUrl: (remittanceId: string) => `${BASE}/remittances/${remittanceId}/firc`,
 };
 
+// ─────────────────────────── Credit / Debit Notes ───────────────────────────
+export const notes = {
+  listForInvoice: (invoiceId: string) =>
+    request<Note[]>(`/notes?invoiceId=${invoiceId}`),
+  list: (page = 1, limit = 50) =>
+    request<Paginated<Note>>(`/notes?page=${page}&limit=${limit}`),
+  create: (input: CreateNoteInput) =>
+    request<Note>('/notes', { method: 'POST', body: JSON.stringify(input) }),
+  pdf: (id: string) => request<{ url: string }>(`/notes/${id}/pdf`),
+};
+
 // ─────────────────────────── Reports ───────────────────────────
 export const reports = {
   gstr6a: (financialYear: string) =>
@@ -205,5 +216,5 @@ export const reports = {
   },
 };
 
-const api = { auth, profile, clients, invoices, remittances, reports, setAccessToken, getAccessToken, ApiError };
+const api = { auth, profile, clients, invoices, remittances, notes, reports, setAccessToken, getAccessToken, ApiError };
 export default api;

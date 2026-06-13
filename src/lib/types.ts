@@ -83,6 +83,55 @@ export interface Invoice {
   updatedAt: string;
 }
 
+export type NoteKind = 'credit' | 'debit';
+
+export interface Note {
+  id: string;
+  orgId: string;
+  kind: NoteKind;
+  number: string;
+  financialYear: string;
+  noteDate: string;
+  invoiceId: string;
+  invoiceNumber: string;
+  invoiceDate: string;
+  clientId: string;
+  invoiceType: InvoiceType;
+  currency: string;
+  fxRate: string;
+  fxRateSource: string;
+  fxRateDate: string;
+  reason: string;
+  subtotal: string;
+  taxType: InvoiceTaxType;
+  cgstAmount: string;
+  sgstAmount: string;
+  igstAmount: string;
+  taxTotal: string;
+  grandTotal: string;
+  placeOfSupply: string;
+  placeOfSupplyState: string | null;
+  pdfUrl: string | null;
+  items: InvoiceItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateNoteItemInput {
+  description: string;
+  sacCode?: string;
+  quantity: number;
+  unitAmount: number;
+  gstRate?: number;
+}
+
+export interface CreateNoteInput {
+  invoiceId: string;
+  kind: NoteKind;
+  reason: string;
+  items: CreateNoteItemInput[];
+}
+
 export interface Paginated<T> {
   items: T[];
   meta: { page: number; limit: number; total: number; totalPages: number };

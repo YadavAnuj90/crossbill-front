@@ -201,6 +201,87 @@ export interface BillingOverview {
   plans: Plan[];
 }
 
+
+export type AgreementStatus = 'draft' | 'sent' | 'viewed' | 'signed' | 'declined' | 'voided';
+export const AGREEMENT_CATEGORIES = ['nda', 'msa', 'sow', 'engagement', 'custom'] as const;
+export type AgreementCategory = typeof AGREEMENT_CATEGORIES[number];
+
+export interface AuditEvent { at: string; event: string; detail: string | null; }
+
+export interface Agreement {
+  id: string;
+  orgId: string;
+  clientId: string | null;
+  title: string;
+  category: string;
+  body: string;
+  sellerName: string | null;
+  clientName: string | null;
+  status: AgreementStatus;
+  signerName: string | null;
+  signerEmail: string | null;
+  otpRequired: boolean;
+  signatureImage: string | null;
+  signedName: string | null;
+  signedPdfUrl: string | null;
+  signerIp: string | null;
+  sentAt: string | null;
+  viewedAt: string | null;
+  signedAt: string | null;
+  declinedAt: string | null;
+  auditTrail: AuditEvent[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateAgreementInput {
+  title: string;
+  category?: string;
+  body?: string;
+  clientId?: string;
+}
+export interface SendAgreementInput { signerName: string; signerEmail: string; }
+export interface SignAgreementInput { signedName: string; signatureImage: string; consent: boolean; otp?: string; }
+
+export interface SigningView {
+  id: string;
+  title: string;
+  category: string;
+  body: string;
+  sellerName: string | null;
+  signerName: string | null;
+  otpRequired: boolean;
+  status: AgreementStatus;
+  signedPdfUrl: string | null;
+}
+
+export interface EsignStatus { aadhaarEsign: boolean; eStamp: boolean; provider: string | null; }
+
+export type ConsentBasis = 'consent' | 'contract' | 'legal_obligation' | 'legitimate_use';
+export type ConsentStatus = 'active' | 'withdrawn' | 'expired';
+export interface Consent {
+  id: string;
+  orgId: string;
+  clientId: string | null;
+  dataPrincipal: string | null;
+  purpose: string;
+  basis: ConsentBasis;
+  status: ConsentStatus;
+  grantedAt: string;
+  expiresAt: string | null;
+  withdrawnAt: string | null;
+  notes: string | null;
+  createdAt: string;
+}
+export interface CreateConsentInput {
+  clientId?: string;
+  dataPrincipal?: string;
+  purpose: string;
+  basis?: string;
+  expiresAt?: string;
+  notes?: string;
+}
+
 export const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'CAD', 'SGD', 'AED'] as const;
 
 export interface SacCode {

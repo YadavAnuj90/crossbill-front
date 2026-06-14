@@ -8,6 +8,8 @@ import type {
   Profile, Client, Invoice, Paginated, CreateInvoiceInput, CreateClientInput,
   Remittance, CreateRemittanceInput, AgingInvoice, Note, CreateNoteInput,
   Payment, Plan, BillingOverview,
+  Agreement, CreateAgreementInput, SendAgreementInput, SignAgreementInput, SigningView, EsignStatus,
+  Consent, CreateConsentInput,
 } from './types';
 
 const BASE = '/api/v1';
@@ -204,6 +206,31 @@ export const billing = {
     request<{ shortUrl: string; paymentId: string; plan: Plan }>('/billing/checkout', { method: 'POST', body: JSON.stringify({ planId }) }),
 };
 
+// ─────────────────────────── Agreements + eSign ───────────────────────────
+export const agreements = {
+  list: (page = 1, limit = 100) => request<Paginated<Agreement>>(`/agreements?page=${page}&limit=${limit}`),
+  get: (id: string) => request<Agreement>(`/agreements/${id}`),
+  create: (input: CreateAgreementInput) =>
+    request<Agreement>('/agreements', { method: 'POST', body: JSON.stringify(input) }),
+  send: (id: string, input: SendAgreementInput) =>
+    request<Agreement & { signUrl: string }>(`/agreements/${id}/send`, { method: 'POST', body: JSON.stringify(input) }),
+  esignStatus: () => request<EsignStatus>('/agreements/esign/status'),
+  // public signer flow
+  forSigning: (token: string) => request<SigningView>(`/agreements/sign/${token}`),
+  resendOtp: (token: string) => request<{ otpRequired: boolean; sent?: boolean }>(`/agreements/sign/${token}/otp`, { method: 'POST' }),
+  sign: (token: string, input: SignAgreementInput) =>
+    request<{ status: string; signedPdfUrl: string | null }>(`/agreements/sign/${token}`, { method: 'POST', body: JSON.stringify(input) }),
+  decline: (token: string) => request<{ status: string }>(`/agreements/sign/${token}/decline`, { method: 'POST' }),
+};
+
+// ─────────────────────────── Consents (DPDP) ───────────────────────────
+export const consents = {
+  list: (page = 1, limit = 100) => request<Paginated<Consent>>(`/consents?page=${page}&limit=${limit}`),
+  create: (input: CreateConsentInput) =>
+    request<Consent>('/consents', { method: 'POST', body: JSON.stringify(input) }),
+  withdraw: (id: string) => request<Consent>(`/consents/${id}/withdraw`, { method: 'POST' }),
+};
+
 // ─────────────────────────── Reports ───────────────────────────
 export const reports = {
   gstr6a: (financialYear: string) =>
@@ -233,5 +260,5 @@ export const reports = {
   },
 };
 
-const api = { auth, profile, clients, invoices, remittances, notes, payments, billing, reports, setAccessToken, getAccessToken, ApiError };
+const api = { auth, profile, clients, invoices, remittances, notes, payments, billing, agreements, consents, reports, setAccessToken, getAccessToken, ApiError };
 export default api;

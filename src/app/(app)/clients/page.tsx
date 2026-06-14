@@ -8,6 +8,7 @@ import { INDIA_STATES, stateNameOf } from '@/lib/types';
 import { countryName, flagEmoji, formatDate } from '@/lib/format';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Card } from '@/components/ui/Card';
+import { SpotlightCard } from '@/components/ui/SpotlightCard';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
@@ -91,19 +92,17 @@ export default function ClientsPage() {
             <EmptyState icon={<Users className="h-6 w-6" />} title="Add your first client" description="Choose who you’re billing — Crossbill applies the right compliance for each.">
               <div className="mt-7 grid w-full max-w-xl gap-4 sm:grid-cols-2">
                 {([
-                  { t: 'foreign' as const, icon: Globe, title: 'Foreign client', tag: 'Export', desc: 'Bill in USD/EUR — LUT, FEMA & FIRC handled.', tone: 'from-brand-400 to-emerald-600' },
-                  { t: 'domestic' as const, icon: Building2, title: 'Indian client', tag: 'Domestic GST', desc: 'Bill in INR — CGST/SGST or IGST, auto.', tone: 'from-cyan-400 to-teal-600' },
+                  { t: 'foreign' as const, icon: Globe, title: 'Foreign client', tag: 'Export', desc: 'Bill in USD/EUR — LUT, FEMA & FIRC handled.', tone: 'from-brand-400 to-emerald-600', glow: 'brand' as const },
+                  { t: 'domestic' as const, icon: Building2, title: 'Indian client', tag: 'Domestic GST', desc: 'Bill in INR — CGST/SGST or IGST, auto.', tone: 'from-cyan-400 to-teal-600', glow: 'blue' as const },
                 ]).map((o) => (
-                  <button key={o.t} onClick={() => openCreateType(o.t)}
-                    className="group relative overflow-hidden rounded-2xl border border-paper-border bg-white p-5 text-left transition-all hover:-translate-y-0.5 hover:shadow-lift hover:border-brand-200">
-                    <span className={cn('absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br opacity-0 blur-2xl transition-opacity group-hover:opacity-20', o.tone)} />
+                  <SpotlightCard key={o.t} glow={o.glow} onClick={() => openCreateType(o.t)} className="cursor-pointer p-5 text-left">
                     <div className="flex items-center justify-between">
-                      <span className={cn('grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-sm', o.tone)}><o.icon className="h-5 w-5" /></span>
+                      <span className={cn('grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6', o.tone)}><o.icon className="h-5 w-5" /></span>
                       <span className="badge bg-paper text-ink-muted border border-paper-border">{o.tag}</span>
                     </div>
                     <h4 className="mt-4 font-semibold text-ink flex items-center gap-1">{o.title} <Plus className="h-3.5 w-3.5 text-ink-faint opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" /></h4>
                     <p className="mt-1 text-sm text-ink-muted leading-snug">{o.desc}</p>
-                  </button>
+                  </SpotlightCard>
                 ))}
               </div>
             </EmptyState>

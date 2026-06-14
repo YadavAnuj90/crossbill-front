@@ -47,12 +47,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     await api.auth.login({ email, password });
     await loadProfile();
+    try { sessionStorage.setItem('cb_welcome', 'returning'); } catch {}
     router.push('/dashboard');
   }, [loadProfile, router]);
 
   const register = useCallback(async (email: string, password: string, legalName?: string) => {
     await api.auth.register({ email, password, legalName });
     await loadProfile();
+    try { sessionStorage.setItem('cb_welcome', 'new'); } catch {}
     router.push('/dashboard');
   }, [loadProfile, router]);
 

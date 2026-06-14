@@ -1,14 +1,15 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
+import { SpotlightCard } from '@/components/ui/SpotlightCard';
 
 type Tone = 'brand' | 'amber' | 'red' | 'gray' | 'blue';
 
-const toneMap: Record<Tone, { icon: string; bar: string; glow: string }> = {
-  brand: { icon: 'bg-brand-50 text-brand-600', bar: 'from-brand-400 to-brand-600', glow: 'bg-brand-200/40' },
-  amber: { icon: 'bg-amber-50 text-amber-600', bar: 'from-amber-300 to-amber-500', glow: 'bg-amber-200/40' },
-  red: { icon: 'bg-red-50 text-red-600', bar: 'from-red-300 to-red-500', glow: 'bg-red-200/40' },
-  blue: { icon: 'bg-blue-50 text-blue-600', bar: 'from-blue-300 to-blue-500', glow: 'bg-blue-200/40' },
-  gray: { icon: 'bg-paper text-ink-muted', bar: 'from-paper-border to-ink-faint/40', glow: 'bg-paper-border/40' },
+const toneMap: Record<Tone, { tile: string; bar: string; glow: string }> = {
+  brand: { tile: 'from-brand-400 to-brand-600', bar: 'from-brand-400 to-brand-600', glow: 'bg-brand-300/40' },
+  amber: { tile: 'from-amber-400 to-amber-600', bar: 'from-amber-300 to-amber-500', glow: 'bg-amber-300/40' },
+  red: { tile: 'from-red-400 to-red-600', bar: 'from-red-300 to-red-500', glow: 'bg-red-300/40' },
+  blue: { tile: 'from-blue-400 to-blue-600', bar: 'from-blue-300 to-blue-500', glow: 'bg-blue-300/40' },
+  gray: { tile: 'from-slate-400 to-slate-600', bar: 'from-slate-300 to-slate-500', glow: 'bg-slate-300/40' },
 };
 
 export function StatCard({ label, value, icon, tone = 'brand', hint }: {
@@ -16,18 +17,24 @@ export function StatCard({ label, value, icon, tone = 'brand', hint }: {
 }) {
   const t = toneMap[tone];
   return (
-    <div className="card card-hover group relative overflow-hidden p-5">
-      <span className={cn('absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r', t.bar)} />
-      {/* soft corner glow on hover */}
-      <span className={cn('absolute -right-8 -top-8 h-24 w-24 rounded-full blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100', t.glow)} />
-      {/* watermark icon */}
-      <span className="pointer-events-none absolute -right-3 bottom-[-1.25rem] opacity-[0.04] [&>*]:h-28 [&>*]:w-28">{icon}</span>
-      <div className="relative flex items-start justify-between">
-        <p className="text-sm font-medium text-ink-muted">{label}</p>
-        <span className={cn('grid h-9 w-9 place-items-center rounded-xl ring-1 ring-black/5', t.icon)}>{icon}</span>
+    <SpotlightCard glow={tone}>
+      {/* glowing tone accent bar */}
+      <span className={cn('absolute inset-x-0 top-0 z-[2] h-[3px] bg-gradient-to-r', t.bar)} />
+      {/* corner tone glow */}
+      <span className={cn('pointer-events-none absolute -right-10 -top-10 z-0 h-28 w-28 rounded-full blur-2xl opacity-60 transition-opacity duration-300 group-hover:opacity-100', t.glow)} />
+
+      <div className="relative z-[1] min-h-[132px] p-5">
+        <div className="flex items-start justify-between">
+          <p className="text-sm font-medium text-ink-muted">{label}</p>
+          <span className={cn('grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br text-white shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 [&>*]:h-[18px] [&>*]:w-[18px]', t.tile)}>{icon}</span>
+        </div>
+        <p className="mt-4 text-[32px] leading-none font-bold tracking-tight text-ink tabular-nums">{value}</p>
+        {hint && (
+          <p className="mt-2.5 flex items-center gap-1.5 text-xs text-ink-faint">
+            <span className={cn('h-1.5 w-1.5 rounded-full bg-gradient-to-br', t.tile)} /> {hint}
+          </p>
+        )}
       </div>
-      <p className="relative mt-3 text-[28px] leading-none font-semibold tracking-tight text-ink tabular-nums">{value}</p>
-      {hint && <p className="relative mt-2 text-xs text-ink-faint">{hint}</p>}
-    </div>
+    </SpotlightCard>
   );
 }

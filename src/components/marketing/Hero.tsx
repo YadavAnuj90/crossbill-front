@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Reveal } from '@/components/motion/Reveal';
 import { HeroAmbience } from '@/components/marketing/HeroAmbience';
+import { LogoMark } from '@/components/brand/Logo';
 
 const TRUSTED = ['Wise', 'Razorpay', 'Stripe', 'Upwork', 'Toptal'];
 
@@ -26,13 +27,8 @@ export function Hero() {
       <div className="relative mx-auto max-w-4xl px-5 pt-44 pb-48 text-center">
         {/* App icon — squircle tile */}
         <Reveal>
-          <div className="mx-auto grid h-28 w-28 place-items-center rounded-[1.75rem] bg-white shadow-[0_30px_60px_-15px_rgba(60,72,170,0.55)] ring-1 ring-black/5">
-            <div className="grid h-[5.2rem] w-[5.2rem] place-items-center rounded-[1.3rem] bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 shadow-inner">
-              <svg width="44" height="44" viewBox="0 0 32 32" fill="none">
-                <path d="M9 11.5L16 16L9 20.5" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M23 11.5L16 16L23 20.5" stroke="#d1fae5" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
+          <div className="mx-auto grid h-28 w-28 place-items-center rounded-[1.85rem] bg-white shadow-[0_30px_60px_-15px_rgba(60,72,170,0.55)] ring-1 ring-black/5">
+            <LogoMark className="h-16 w-auto" flip="always" />
           </div>
         </Reveal>
 

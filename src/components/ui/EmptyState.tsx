@@ -12,14 +12,14 @@ export function EmptyState({ icon, title, description, action, children }: {
       </div>
 
       {icon && (
-        <div className="relative mb-5">
-          <span className="absolute inset-0 rounded-2xl bg-brand-400/40 blur-lg" />
+        <div className="relative mb-5 animate-float-tiny">
+          <span className="absolute inset-0 rounded-2xl bg-brand-400/40 blur-lg animate-glow-breathe" />
           <span className="relative grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-glow ring-1 ring-white/20 [&>*]:h-7 [&>*]:w-7">
             {icon}
           </span>
         </div>
       )}
-      <h3 className="text-lg font-semibold tracking-tight text-ink">{title}</h3>
+      <h3 className="text-lg font-semibold tracking-tight text-ink animate-pop-in">{title}</h3>
       {description && <p className="mt-1.5 text-sm text-ink-muted max-w-sm leading-relaxed">{description}</p>}
       {action && <div className="mt-6">{action}</div>}
       {children}

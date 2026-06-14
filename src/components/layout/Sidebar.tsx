@@ -2,28 +2,29 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard, Users, FileText, FileBarChart, Building2, UsersRound, Settings,
-  CalendarClock, Sparkles, ArrowUpRight, ScrollText, Wallet, QrCode, Blocks, CreditCard,
+  LayoutGrid, Contact, Receipt, FileSpreadsheet, BriefcaseBusiness, UsersRound, Settings2,
+  AlarmClock, Sparkles, ArrowUpRight, ScrollText, Banknote, QrCode, Puzzle, CreditCard,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { LogoMark } from '@/components/brand/Logo';
 
 const NAV = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/invoices', label: 'Invoices', icon: FileText },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
+  { href: '/invoices', label: 'Invoices', icon: Receipt },
   { href: '/notes', label: 'Credit/Debit Notes', icon: ScrollText },
-  { href: '/clients', label: 'Clients', icon: Users },
-  { href: '/payments', label: 'Payments', icon: Wallet, soon: true },
-  { href: '/fema', label: 'FEMA tracker', icon: CalendarClock },
-  { href: '/reports', label: 'Filing & reports', icon: FileBarChart },
+  { href: '/clients', label: 'Clients', icon: Contact },
+  { href: '/payments', label: 'Payments', icon: Banknote },
+  { href: '/fema', label: 'FEMA tracker', icon: AlarmClock },
+  { href: '/reports', label: 'Filing & reports', icon: FileSpreadsheet },
   { href: '/einvoicing', label: 'e-Invoicing', icon: QrCode, soon: true },
   { href: '/team', label: 'Team', icon: UsersRound },
 ];
 
 const SECONDARY = [
-  { href: '/profile', label: 'Business profile', icon: Building2 },
-  { href: '/integrations', label: 'Integrations', icon: Blocks, soon: true },
-  { href: '/billing', label: 'Billing & subscription', icon: CreditCard, soon: true },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/profile', label: 'Business profile', icon: BriefcaseBusiness },
+  { href: '/integrations', label: 'Integrations', icon: Puzzle, soon: true },
+  { href: '/billing', label: 'Billing & subscription', icon: CreditCard },
+  { href: '/settings', label: 'Settings', icon: Settings2 },
 ];
 
 type NavItem = { href: string; label: string; icon: any; soon?: boolean };
@@ -56,15 +57,10 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-paper-border/70 bg-white/60 backdrop-blur-xl px-3 py-5">
+    <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-black/[0.07] bg-gradient-to-b from-white/85 via-white/70 to-[#e6e9f7]/70 backdrop-blur-xl px-3 py-5 sticky top-0 h-screen overflow-y-auto overscroll-contain shadow-[6px_0_28px_-18px_rgba(60,72,170,0.30)]">
       <Link href="/dashboard" className="flex items-center gap-2.5 px-2 mb-7 group">
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 shadow-glow transition-transform group-hover:scale-105">
-          <svg width="19" height="19" viewBox="0 0 32 32" fill="none">
-            <path d="M9 11.5L16 16L9 20.5" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M23 11.5L16 16L23 20.5" stroke="#a7f3d0" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </span>
-        <span className="font-semibold text-ink text-[15px] tracking-tight">Crossbill</span>
+        <LogoMark className="h-7 w-auto transition-transform group-hover:scale-105" />
+        <span className="font-semibold text-ink text-[1.05rem] tracking-[-0.03em]">Cross<span className="text-brand-600">bill</span></span>
       </Link>
 
       <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-faint">Workspace</p>

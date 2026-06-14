@@ -16,6 +16,7 @@ import { CardHeader } from '@/components/ui/Card';
 import { StatusBadge } from '@/components/ui/Badge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Table, THead, TH, TR, TD } from '@/components/ui/Table';
+import { SpotlightCard } from '@/components/ui/SpotlightCard';
 import { Reveal } from '@/components/motion/Reveal';
 
 export default function DashboardPage() {
@@ -118,14 +119,17 @@ export default function DashboardPage() {
           { href: '/profile', title: 'Business profile', desc: 'GSTIN, LUT & bank details', icon: <ShieldCheck className="h-5 w-5" /> },
         ].map((q, i) => (
           <Reveal key={q.href} delay={i * 70}>
-            <Link href={q.href} className="card card-hover group p-5 flex items-center gap-4">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-black/5 transition group-hover:scale-105">{q.icon}</span>
-              <div className="min-w-0">
-                <h3 className="font-medium text-ink truncate">{q.title}</h3>
-                <p className="text-sm text-ink-muted truncate">{q.desc}</p>
+            <SpotlightCard glow="brand">
+              <Link href={q.href} className="absolute inset-0 z-[3]" aria-label={q.title} />
+              <div className="relative flex items-center gap-4 p-5">
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">{q.icon}</span>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-ink truncate">{q.title}</h3>
+                  <p className="text-sm text-ink-muted truncate">{q.desc}</p>
+                </div>
+                <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-ink-faint transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-600" />
               </div>
-              <ArrowUpRight className="h-4 w-4 text-ink-faint ml-auto shrink-0 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>

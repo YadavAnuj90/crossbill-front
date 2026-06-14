@@ -20,6 +20,7 @@ import { Table, THead, TH, TR, TD } from '@/components/ui/Table';
 import { Reveal } from '@/components/motion/Reveal';
 import { RecordPaymentModal } from '@/components/invoices/RecordPaymentModal';
 import { NotesPanel } from '@/components/invoices/NotesPanel';
+import { PaymentLinkButton } from '@/components/invoices/PaymentLinkButton';
 
 export default function InvoiceDetailPage() {
   const params = useParams<{ id: string }>();
@@ -70,6 +71,7 @@ export default function InvoiceDetailPage() {
             {inv.status !== 'paid' && (domestic
               ? <Button variant="secondary" onClick={markPaid} loading={busy}><CheckCircle2 className="h-4 w-4" /> Mark paid</Button>
               : <Button variant="secondary" onClick={() => setPayOpen(true)}><Wallet className="h-4 w-4" /> Record payment</Button>)}
+            <PaymentLinkButton invoice={inv} />
             <Button onClick={getPdf} loading={busy}><Download className="h-4 w-4" /> Download PDF</Button>
           </div>
         }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {
   ArrowRight, ArrowUp, Github, Twitter, Linkedin, ShieldCheck, MapPin, Mail, Sparkles, Check,
 } from 'lucide-react';
+import { LogoMark } from '@/components/brand/Logo';
 
 const COLS: { h: string; items: [string, string][] }[] = [
   { h: 'Product', items: [['Features', '/features'], ['How it works', '/how-it-works'], ['Pricing', '/#pricing']] },
@@ -48,13 +49,8 @@ export function LandingFooter() {
           {/* Brand */}
           <div>
             <Link href="/" className="inline-flex items-center gap-2.5">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 shadow-sm">
-                <svg width="18" height="18" viewBox="0 0 32 32" fill="none">
-                  <path d="M9 11.5L16 16L9 20.5" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M23 11.5L16 16L23 20.5" stroke="#a7f3d0" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              <span className="font-semibold tracking-tight text-ink">Crossbill</span>
+              <LogoMark className="h-7 w-auto" />
+              <span className="font-semibold text-ink text-[1.05rem] tracking-[-0.03em]">Cross<span className="text-brand-600">bill</span></span>
             </Link>
             <p className="mt-2.5 text-sm text-ink-muted leading-snug max-w-xs">
               Invoicing &amp; GST/FEMA compliance — foreign clients in USD, Indian clients in INR.

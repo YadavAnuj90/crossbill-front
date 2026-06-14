@@ -8,12 +8,18 @@ import { FEMA_BUCKETS, agingProgress } from '@/lib/compliance';
 import { formatMoney, formatDate } from '@/lib/format';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Card } from '@/components/ui/Card';
+import { SpotlightCard } from '@/components/ui/SpotlightCard';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Reveal } from '@/components/motion/Reveal';
 import { cn } from '@/lib/cn';
 
 const ORDER: FemaBucket[] = ['overdue', 'critical', 'urgent', 'watch', 'ontrack'];
+
+type Glow = 'brand' | 'amber' | 'red' | 'blue' | 'gray' | 'violet';
+const BUCKET_GLOW: Record<FemaBucket, Glow> = {
+  overdue: 'red', critical: 'red', urgent: 'amber', watch: 'blue', ontrack: 'brand',
+};
 
 export default function FemaTrackerPage() {
   const [rows, setRows] = useState<AgingInvoice[] | null>(null);
@@ -41,20 +47,22 @@ export default function FemaTrackerPage() {
       {/* Bucket summary */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
         <Reveal>
-          <button onClick={() => setActive('all')} className={cn('w-full card card-hover p-4 text-left', active === 'all' && 'ring-2 ring-brand-400')}>
+          <SpotlightCard glow="brand" onClick={() => setActive('all')} className="cursor-pointer p-4 text-left">
+            {active === 'all' && <span aria-hidden className="pointer-events-none absolute inset-0 z-[2] rounded-2xl ring-2 ring-inset ring-brand-400" />}
             <p className="text-sm text-ink-muted">All unpaid</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight text-ink tabular-nums">{rows ? counts.all : '—'}</p>
-          </button>
+          </SpotlightCard>
         </Reveal>
         {ORDER.map((b, i) => (
           <Reveal key={b} delay={(i + 1) * 60}>
-            <button onClick={() => setActive(b)} className={cn('w-full card card-hover p-4 text-left', active === b && 'ring-2 ring-brand-400')}>
+            <SpotlightCard glow={BUCKET_GLOW[b]} onClick={() => setActive(b)} className="cursor-pointer p-4 text-left">
+              {active === b && <span aria-hidden className="pointer-events-none absolute inset-0 z-[2] rounded-2xl ring-2 ring-inset ring-brand-400" />}
               <span className="flex items-center gap-2">
                 <span className={cn('h-2 w-2 rounded-full', FEMA_BUCKETS[b].dot)} />
                 <p className="text-sm text-ink-muted">{FEMA_BUCKETS[b].label}</p>
               </span>
               <p className="mt-1 text-2xl font-semibold tracking-tight text-ink tabular-nums">{rows ? counts[b] : '—'}</p>
-            </button>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>
@@ -75,8 +83,8 @@ export default function FemaTrackerPage() {
                 const meta = FEMA_BUCKETS[r.aging.bucket];
                 const pct = Math.round(agingProgress(r.aging.daysToDue) * 100);
                 return (
-                  <Link key={r.id} href={`/invoices/${r.id}`} className="group flex items-center gap-4 px-5 py-4 hover:bg-paper/60 transition-colors">
-                    <span className={cn('hidden sm:grid h-10 w-10 shrink-0 place-items-center rounded-xl border', meta.tone)}>
+                  <Link key={r.id} href={`/invoices/${r.id}`} className="group flex items-center gap-4 px-5 py-4 transition-all duration-200 hover:bg-brand-50/40 hover:shadow-[inset_2px_0_0_0_#34d399]">
+                    <span className={cn('hidden sm:grid h-10 w-10 shrink-0 place-items-center rounded-xl border transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3', meta.tone)}>
                       <CalendarClock className="h-5 w-5" />
                     </span>
                     <div className="min-w-0 flex-1">

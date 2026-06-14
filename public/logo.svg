@@ -1,5 +1,22 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="8" fill="#059669"/>
-  <path d="M9 11.5L16 16L9 20.5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M23 11.5L16 16L23 20.5" stroke="#6ee7b7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Crossbill">
+  <defs>
+    <linearGradient id="cb-a" x1="2" y1="8" x2="22" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6ee7b7"/>
+      <stop offset="0.5" stop-color="#34d399"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="cb-b" x1="14" y1="8" x2="36" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5eead4"/>
+      <stop offset="0.5" stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="cb-lens" x1="20" y1="11" x2="20" y2="29" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0d9488"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <rect width="40" height="40" rx="10" fill="#ffffff"/>
+  <circle cx="15" cy="20" r="10" fill="url(#cb-a)"/>
+  <circle cx="25" cy="20" r="10" fill="url(#cb-b)"/>
+  <path d="M20 11.34 A10 10 0 0 1 20 28.66 A10 10 0 0 1 20 11.34 Z" fill="url(#cb-lens)"/>
 </svg>

@@ -7,6 +7,7 @@
 import type {
   Profile, Client, Invoice, Paginated, CreateInvoiceInput, CreateClientInput,
   Remittance, CreateRemittanceInput, AgingInvoice, Note, CreateNoteInput,
+  Payment, Plan, BillingOverview,
 } from './types';
 
 const BASE = '/api/v1';
@@ -187,6 +188,22 @@ export const notes = {
   pdf: (id: string) => request<{ url: string }>(`/notes/${id}/pdf`),
 };
 
+// ─────────────────────────── Payments (Razorpay) ───────────────────────────
+export const payments = {
+  status: () => request<{ configured: boolean; provider: string }>('/payments/status'),
+  listForInvoice: (invoiceId: string) => request<Payment[]>(`/payments?invoiceId=${invoiceId}`),
+  list: (page = 1, limit = 50) => request<Paginated<Payment>>(`/payments?page=${page}&limit=${limit}`),
+  createLink: (invoiceId: string) =>
+    request<Payment>('/payments/links', { method: 'POST', body: JSON.stringify({ invoiceId }) }),
+};
+
+// ─────────────────────────── Billing / Subscription ───────────────────────────
+export const billing = {
+  overview: () => request<BillingOverview>('/billing'),
+  checkout: (planId: string) =>
+    request<{ shortUrl: string; paymentId: string; plan: Plan }>('/billing/checkout', { method: 'POST', body: JSON.stringify({ planId }) }),
+};
+
 // ─────────────────────────── Reports ───────────────────────────
 export const reports = {
   gstr6a: (financialYear: string) =>
@@ -216,5 +233,5 @@ export const reports = {
   },
 };
 
-const api = { auth, profile, clients, invoices, remittances, notes, reports, setAccessToken, getAccessToken, ApiError };
+const api = { auth, profile, clients, invoices, remittances, notes, payments, billing, reports, setAccessToken, getAccessToken, ApiError };
 export default api;

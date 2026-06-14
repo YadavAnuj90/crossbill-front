@@ -35,7 +35,7 @@ export function Topbar() {
   const name = user?.legalName || user?.email?.split('@')[0] || 'Your workspace';
 
   return (
-    <header className="sticky top-0 z-30 border-b border-paper-border/60 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/55">
+    <header className="sticky top-0 z-30 border-b border-black/[0.07] bg-white/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/75 shadow-[0_1px_3px_-1px_rgba(12,17,22,0.07)]">
       <div className="flex items-center gap-3 px-4 sm:px-5 py-2.5">
         {/* Search / command bar */}
         <div className="group relative hidden sm:block w-full max-w-sm">

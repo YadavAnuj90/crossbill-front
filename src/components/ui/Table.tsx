@@ -27,7 +27,11 @@ export function TR({ children, className, onClick }: { children: ReactNode; clas
   return (
     <tr
       onClick={onClick}
-      className={cn('border-b border-paper-border/70 last:border-0', onClick && 'cursor-pointer hover:bg-paper/70 transition-colors', className)}
+      className={cn(
+        'border-b border-paper-border/70 last:border-0 transition-all duration-200',
+        onClick && 'cursor-pointer hover:bg-brand-50/40 hover:shadow-[inset_2px_0_0_0_#34d399]',
+        className,
+      )}
     >
       {children}
     </tr>

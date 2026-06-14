@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import { ShieldCheck, Check, ArrowLeft, Star, Sparkles } from 'lucide-react';
+import { LogoMark } from '@/components/brand/Logo';
 
 const FEATURES = [
   'Auto-filled GST & FEMA compliance',
@@ -20,13 +21,8 @@ export function AuthShell({ title, subtitle, children, footer }: {
         <div className="pointer-events-none absolute -top-20 -left-20 h-72 w-72 rounded-full bg-brand-200/30 blur-[110px]" />
         <div className="relative flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 shadow-sm">
-              <svg width="18" height="18" viewBox="0 0 32 32" fill="none">
-                <path d="M9 11.5L16 16L9 20.5" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M23 11.5L16 16L23 20.5" stroke="#6ee7b7" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-            <span className="font-semibold text-ink tracking-tight">Crossbill</span>
+            <LogoMark className="h-7 w-auto" />
+            <span className="font-semibold text-ink text-[1.05rem] tracking-[-0.03em]">Cross<span className="text-brand-600">bill</span></span>
           </Link>
           <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back to home

@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Menu, X, Star } from 'lucide-react';
+import { ArrowRight, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { Logo } from '@/components/brand/Logo';
 
 const NAV = [
   { label: 'Features', href: '/features' },
@@ -10,20 +11,6 @@ const NAV = [
   { label: 'Pricing', href: '/#pricing' },
   { label: 'Contact', href: '/contact' },
 ];
-
-function Logo() {
-  return (
-    <span className="flex items-center gap-2.5">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 shadow-glow">
-        <svg width="18" height="18" viewBox="0 0 32 32" fill="none">
-          <path d="M9 11.5L16 16L9 20.5" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M23 11.5L16 16L23 20.5" stroke="#a7f3d0" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </span>
-      <span className="font-semibold tracking-tight text-ink">Crossbill</span>
-    </span>
-  );
-}
 
 export function LandingNav() {
   const [scrolled, setScrolled] = useState(false);

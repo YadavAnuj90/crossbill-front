@@ -163,6 +163,44 @@ export interface CreateClientInput {
   customerType?: CustomerType;
 }
 
+
+export type PaymentStatus = 'created' | 'paid' | 'cancelled' | 'expired' | 'failed';
+export type PaymentPurpose = 'invoice' | 'subscription';
+
+export interface Payment {
+  id: string;
+  orgId: string;
+  purpose: PaymentPurpose;
+  invoiceId: string | null;
+  invoiceNumber: string | null;
+  planId: string | null;
+  provider: string;
+  razorpayLinkId: string;
+  shortUrl: string;
+  amount: string;
+  amountPaise: number;
+  currency: string;
+  status: PaymentStatus;
+  razorpayPaymentId: string | null;
+  paidAt: string | null;
+  createdAt: string;
+}
+
+export interface Plan {
+  id: string;
+  name: string;
+  priceInr: number;
+  tagline: string;
+  features: string[];
+}
+
+export interface BillingOverview {
+  configured: boolean;
+  currentPlan: Plan;
+  planActivatedAt: string | null;
+  plans: Plan[];
+}
+
 export const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'CAD', 'SGD', 'AED'] as const;
 
 export interface SacCode {

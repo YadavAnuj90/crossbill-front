@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { ShieldCheck, ArrowUp, Heart } from 'lucide-react';
 import { financialYearOf } from '@/lib/compliance';
+import { LogoMark } from '@/components/brand/Logo';
 
 export function AppFooter() {
   const fy = financialYearOf(new Date());
@@ -12,13 +13,8 @@ export function AppFooter() {
       <div className="px-5 sm:px-8 py-5 max-w-6xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
         {/* Left */}
         <div className="flex items-center gap-3 text-xs text-ink-faint">
-          <span className="inline-flex items-center gap-2 font-medium text-ink-muted">
-            <span className="grid h-5 w-5 place-items-center rounded-md bg-gradient-to-br from-brand-500 to-brand-700">
-              <svg width="11" height="11" viewBox="0 0 32 32" fill="none">
-                <path d="M9 11.5L16 16L9 20.5" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M23 11.5L16 16L23 20.5" stroke="#a7f3d0" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
+          <span className="inline-flex items-center gap-1.5 font-medium text-ink-muted">
+            <LogoMark className="h-4 w-auto" />
             Crossbill
           </span>
           <span className="text-paper-border">·</span>

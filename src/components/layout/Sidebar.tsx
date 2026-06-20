@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutGrid, Contact, Receipt, FileSpreadsheet, BriefcaseBusiness, UsersRound, Settings2,
   AlarmClock, Sparkles, ArrowUpRight, ScrollText, Banknote, QrCode, Puzzle, CreditCard,
+  FileSignature, ShieldCheck, Users, CalendarCheck, Plane, IndianRupee, FileBadge,
+  Gauge, Building2, ClipboardCheck, LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { LogoMark } from '@/components/brand/Logo';
@@ -12,6 +14,7 @@ const NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
   { href: '/invoices', label: 'Invoices', icon: Receipt },
   { href: '/notes', label: 'Credit/Debit Notes', icon: ScrollText },
+  { href: '/agreements', label: 'Agreements', icon: FileSignature },
   { href: '/clients', label: 'Clients', icon: Contact },
   { href: '/payments', label: 'Payments', icon: Banknote },
   { href: '/fema', label: 'FEMA tracker', icon: AlarmClock },
@@ -20,10 +23,23 @@ const NAV = [
   { href: '/team', label: 'Team', icon: UsersRound },
 ];
 
+const PEOPLE = [
+  { href: '/hr', label: 'HR overview', icon: Gauge },
+  { href: '/employees', label: 'Employees', icon: Users },
+  { href: '/attendance', label: 'Attendance', icon: CalendarCheck },
+  { href: '/leave', label: 'Leave', icon: Plane },
+  { href: '/payroll', label: 'Payroll', icon: IndianRupee },
+  { href: '/letters', label: 'HR letters', icon: FileBadge },
+  { href: '/onboarding', label: 'Onboarding', icon: ClipboardCheck },
+  { href: '/exit', label: 'Exit', icon: LogOut },
+];
+
 const SECONDARY = [
   { href: '/profile', label: 'Business profile', icon: BriefcaseBusiness },
+  { href: '/company', label: 'Company verification', icon: Building2 },
   { href: '/integrations', label: 'Integrations', icon: Puzzle, soon: true },
   { href: '/billing', label: 'Billing & subscription', icon: CreditCard },
+  { href: '/consents', label: 'Consent register', icon: ShieldCheck },
   { href: '/settings', label: 'Settings', icon: Settings2 },
 ];
 
@@ -40,16 +56,16 @@ export function Sidebar() {
         href={href}
         className={cn(
           'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150',
-          active ? 'text-brand-700' : 'text-ink-muted hover:text-ink hover:bg-paper',
+          active ? 'text-brand-700 dark:text-brand-300' : 'text-ink-muted hover:text-ink hover:bg-paper',
         )}
       >
         {active && (
           <>
-            <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-brand-50 to-brand-100/40 ring-1 ring-inset ring-brand-200/50" />
-            <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-full bg-gradient-to-b from-brand-400 to-brand-600" />
+            <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-brand-50 to-brand-100/40 ring-1 ring-inset ring-brand-200/50 dark:from-brand-500/[0.18] dark:to-brand-500/[0.04] dark:ring-brand-400/25 dark:shadow-[0_8px_24px_-14px_rgba(16,185,129,0.6)]" />
+            <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-full bg-gradient-to-b from-brand-400 to-brand-600 dark:from-brand-300 dark:to-brand-500" />
           </>
         )}
-        <Icon className={cn('relative h-[18px] w-[18px] transition-transform', active ? 'text-brand-600' : 'group-hover:scale-110')} />
+        <Icon className={cn('relative h-[18px] w-[18px] transition-transform', active ? 'text-brand-600 dark:text-brand-300' : 'group-hover:scale-110')} />
         <span className="relative flex-1">{label}</span>
         {soon && <span className="relative rounded-full bg-paper px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-ink-faint ring-1 ring-inset ring-paper-border">Soon</span>}
       </Link>
@@ -57,7 +73,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-black/[0.07] bg-gradient-to-b from-white/85 via-white/70 to-[#e6e9f7]/70 backdrop-blur-xl px-3 py-5 sticky top-0 h-screen overflow-y-auto overscroll-contain shadow-[6px_0_28px_-18px_rgba(60,72,170,0.30)]">
+    <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-black/[0.07] bg-gradient-to-b from-white/85 via-white/70 to-[#e6e9f7]/70 backdrop-blur-xl px-3 py-5 sticky top-0 h-screen overflow-y-auto overscroll-contain shadow-[6px_0_28px_-18px_rgba(60,72,170,0.30)] dark:border-white/[0.06] dark:from-[#0d1220]/90 dark:via-[#0a0e1a]/85 dark:to-[#070b14]/90 dark:shadow-[6px_0_30px_-18px_rgba(0,0,0,0.8)]">
       <Link href="/dashboard" className="flex items-center gap-2.5 px-2 mb-7 group">
         <LogoMark className="h-7 w-auto transition-transform group-hover:scale-105" />
         <span className="font-semibold text-ink text-[1.05rem] tracking-[-0.03em]">Cross<span className="text-brand-600">bill</span></span>
@@ -68,13 +84,18 @@ export function Sidebar() {
         {NAV.map((n) => <Item key={n.href} {...n} />)}
       </nav>
 
+      <p className="px-3 pb-2 pt-6 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-faint">People &amp; HR</p>
+      <nav className="flex flex-col gap-1">
+        {PEOPLE.map((n) => <Item key={n.href} {...n} />)}
+      </nav>
+
       <p className="px-3 pb-2 pt-6 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-faint">Setup</p>
       <nav className="flex flex-col gap-1">
         {SECONDARY.map((n) => <Item key={n.href} {...n} />)}
       </nav>
 
       {/* Plan card */}
-      <Link href="/billing" className="group mt-auto relative block overflow-hidden rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-4 shadow-card transition-shadow hover:shadow-lift">
+      <Link href="/billing" className="group mt-auto relative block overflow-hidden rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-4 shadow-card transition-shadow hover:shadow-lift dark:border-brand-400/20 dark:from-brand-500/[0.12] dark:to-brand-500/[0.02]">
         <span className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-brand-400/20 blur-2xl" />
         <div className="relative flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-brand-600" />

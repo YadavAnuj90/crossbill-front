@@ -83,7 +83,7 @@ export function HeroAmbience() {
       {STARS.map(([x, y, s, dur, delay], i) => (
         <span
           key={`star-${i}`}
-          className="animate-twinkle absolute rounded-full bg-white"
+          className="animate-twinkle absolute rounded-full bg-paper-card"
           style={{
             left: `${x}%`, top: `${y}%`, width: s, height: s,
             boxShadow: '0 0 6px 1px rgba(255,255,255,0.8)',

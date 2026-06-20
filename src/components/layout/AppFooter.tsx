@@ -33,7 +33,7 @@ export function AppFooter() {
             <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-60 animate-ping" /><span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500" /></span>
             Operational
           </span>
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top" className="grid h-7 w-7 place-items-center rounded-lg border border-paper-border bg-white text-ink-muted hover:text-ink hover:bg-paper transition"><ArrowUp className="h-3.5 w-3.5" /></button>
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top" className="grid h-7 w-7 place-items-center rounded-lg border border-paper-border bg-paper-card text-ink-muted hover:text-ink hover:bg-paper transition"><ArrowUp className="h-3.5 w-3.5" /></button>
         </div>
       </div>
       <p className="pb-5 text-center text-[11px] text-ink-faint flex items-center justify-center gap-1.5">

@@ -1,7 +1,10 @@
 import { Backdrop } from '@/components/marketing/Backdrop';
 import { LandingNav } from '@/components/marketing/LandingNav';
 import { Hero } from '@/components/marketing/Hero';
+import { GlobeSection } from '@/components/marketing/GlobeSection';
 import { Features } from '@/components/marketing/Features';
+import { ServicesShowcase } from '@/components/marketing/ServicesShowcase';
+import { IntegrationConstellation } from '@/components/marketing/IntegrationConstellation';
 import { HowItWorks } from '@/components/marketing/HowItWorks';
 import { Stats } from '@/components/marketing/Stats';
 import { Pricing } from '@/components/marketing/Pricing';
@@ -16,7 +19,10 @@ export default function Landing() {
       <LandingNav />
       <main>
         <Hero />
+        <GlobeSection />
         <Features />
+        <ServicesShowcase />
+        <IntegrationConstellation />
         <HowItWorks />
         <Stats />
         <Pricing />

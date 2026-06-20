@@ -225,13 +225,52 @@ export interface Agreement {
   signedName: string | null;
   signedPdfUrl: string | null;
   signerIp: string | null;
+  signerLat: number | null;
+  signerLng: number | null;
+  signerGeoAccuracy: number | null;
+  geoFenceStatus: 'ok' | 'outside' | 'unknown';
+  selfieImage: string | null;
+  faceMatchStatus: string | null;
+  verifyCode: string | null;
   sentAt: string | null;
   viewedAt: string | null;
   signedAt: string | null;
   declinedAt: string | null;
   auditTrail: AuditEvent[];
+  effectiveDate: string | null;
+  renewalDate: string | null;
+  expiryDate: string | null;
+  obligations: Obligation[];
+  lifecycleRemindersSent: string[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Obligation {
+  _id?: string;
+  id?: string;
+  title: string;
+  owner: string | null;
+  dueDate: string | null;
+  done: boolean;
+}
+
+export interface SetLifecycleInput {
+  effectiveDate?: string;
+  renewalDate?: string;
+  expiryDate?: string;
+}
+
+export interface AddObligationInput {
+  title: string;
+  owner?: string;
+  dueDate?: string;
+}
+
+export interface ClauseReview {
+  results: Array<{ clause: string; present: boolean; why: string }>;
+  missing: string[];
+  score: number;
 }
 
 export interface CreateAgreementInput {
@@ -240,8 +279,35 @@ export interface CreateAgreementInput {
   body?: string;
   clientId?: string;
 }
-export interface SendAgreementInput { signerName: string; signerEmail: string; }
-export interface SignAgreementInput { signedName: string; signatureImage: string; consent: boolean; otp?: string; }
+export interface SendAgreementInput { signerName: string; signerEmail: string; aadhaarRequired?: boolean; }
+export interface SignAgreementInput {
+  signedName: string;
+  signatureImage: string;
+  consent: boolean;
+  otp?: string;
+  lat?: number;
+  lng?: number;
+  accuracy?: number;
+  selfie?: string;
+}
+
+export interface Geofence { label: string; lat: number; lng: number; radiusKm: number; }
+
+export interface VerifyResult {
+  found: boolean;
+  title?: string;
+  category?: string;
+  sellerName?: string | null;
+  signerName?: string | null;
+  signerEmail?: string | null;
+  signedAt?: string | null;
+  signerIp?: string | null;
+  otpVerified?: boolean;
+  geoFenceStatus?: 'ok' | 'outside' | 'unknown';
+  selfieCaptured?: boolean;
+  integrity?: 'valid';
+  signedPdfUrl?: string | null;
+}
 
 export interface SigningView {
   id: string;
@@ -251,6 +317,8 @@ export interface SigningView {
   sellerName: string | null;
   signerName: string | null;
   otpRequired: boolean;
+  aadhaarRequired: boolean;
+  aadhaarVerified: boolean;
   status: AgreementStatus;
   signedPdfUrl: string | null;
 }
@@ -280,6 +348,298 @@ export interface CreateConsentInput {
   basis?: string;
   expiresAt?: string;
   notes?: string;
+}
+
+export interface AgreementTemplate {
+  id: string;
+  orgId: string;
+  name: string;
+  category: string;
+  body: string;
+  fields: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateTemplateInput {
+  name: string;
+  category?: string;
+  body: string;
+}
+
+export interface BulkRecipientInput {
+  signerName: string;
+  signerEmail: string;
+  values?: Record<string, string>;
+  clientId?: string;
+  title?: string;
+}
+
+export interface BulkSendInput {
+  recipients: BulkRecipientInput[];
+}
+
+export interface BulkSendResult {
+  templateId: string;
+  sent: number;
+  total: number;
+  results: Array<{ signerEmail: string; agreementId?: string; signUrl?: string; status: string; error?: string }>;
+}
+
+// ─────────────────────────── HR · Employees ───────────────────────────
+export type EmploymentType = 'full_time' | 'contract' | 'intern';
+export type EmployeeStatus = 'onboarding' | 'active' | 'on_notice' | 'exited';
+
+export interface EmployeeDoc { _id?: string; id?: string; label: string; url: string; }
+
+export interface Employee {
+  id: string;
+  orgId: string;
+  empCode: string;
+  firstName: string;
+  lastName: string;
+  email: string | null;
+  mobile: string | null;
+  department: string | null;
+  designation: string | null;
+  joiningDate: string | null;
+  status: EmployeeStatus;
+  employmentType: EmploymentType;
+  reportingManager: string | null;
+  ctcAnnual: string;
+  dob: string | null;
+  address: string | null;
+  emergencyContact: string | null;
+  documents: EmployeeDoc[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateEmployeeInput {
+  empCode: string;
+  firstName: string;
+  lastName?: string;
+  email?: string;
+  mobile?: string;
+  department?: string;
+  designation?: string;
+  joiningDate?: string;
+  status?: string;
+  employmentType?: string;
+  reportingManager?: string;
+  ctcAnnual?: string;
+  dob?: string;
+  address?: string;
+  emergencyContact?: string;
+}
+
+export interface EmployeeStats {
+  total: number;
+  active: number;
+  onboarding: number;
+  onNotice: number;
+  exited: number;
+  byDepartment: Array<{ department: string; count: number }>;
+}
+
+// ─────────────────────────── HR · Attendance & leave ───────────────────────────
+export type AttendanceStatus = 'present' | 'absent' | 'half' | 'leave';
+
+export interface Attendance {
+  id: string;
+  orgId: string;
+  employeeId: string;
+  date: string;
+  checkInAt: string | null;
+  checkOutAt: string | null;
+  workedMinutes: number;
+  status: AttendanceStatus;
+  source: string;
+  createdAt: string;
+}
+
+export interface AttendanceSummary {
+  month: string;
+  byEmployee: Array<{ employeeId: string; present: number; half: number; leave: number; workedHours: number }>;
+  totals: { present: number; half: number; leave: number; workedHours: number };
+}
+
+export interface AttendanceStats { pendingLeaves: number; presentToday: number; }
+
+export type LeaveType = 'casual' | 'sick' | 'earned' | 'unpaid';
+export type LeaveStatus = 'pending' | 'approved' | 'rejected';
+
+export interface Leave {
+  id: string;
+  orgId: string;
+  employeeId: string;
+  type: LeaveType;
+  from: string;
+  to: string;
+  days: number;
+  reason: string | null;
+  status: LeaveStatus;
+  approverId: string | null;
+  decidedAt: string | null;
+  createdAt: string;
+}
+
+export interface CreateLeaveInput {
+  employeeId: string;
+  type: string;
+  from: string;
+  to: string;
+  reason?: string;
+}
+
+// ─────────────────────────── Company verification (§2) ───────────────────────────
+export type VerificationStatus = 'unsubmitted' | 'pending' | 'verified' | 'rejected';
+
+export interface Company {
+  id: string;
+  name: string;
+  gstin: string | null;
+  pan: string | null;
+  registeredAddress: string | null;
+  logoUrl: string | null;
+  website: string | null;
+  ownerName: string | null;
+  ownerEmail: string | null;
+  ownerMobile: string | null;
+  verificationStatus: VerificationStatus;
+  verificationNotes: string | null;
+  verificationSubmittedAt: string | null;
+  verifiedAt: string | null;
+  plan: string;
+}
+
+export interface UpdateCompanyInput {
+  name?: string;
+  gstin?: string;
+  pan?: string;
+  registeredAddress?: string;
+  logoUrl?: string;
+  website?: string;
+  ownerName?: string;
+  ownerEmail?: string;
+  ownerMobile?: string;
+}
+
+// ─────────────────────────── HR · Payroll ───────────────────────────
+export type SlipStatus = 'draft' | 'finalised' | 'shared';
+
+export interface SalarySlip {
+  id: string;
+  orgId: string;
+  employeeId: string;
+  employeeName: string;
+  empCode: string | null;
+  designation: string | null;
+  month: string;
+  basic: string; hra: string; bonus: string; allowances: string;
+  pf: string; esic: string; tds: string; otherDeductions: string;
+  gross: string; totalDeductions: string; net: string;
+  status: SlipStatus;
+  pdfUrl: string | null;
+  generatedAt: string | null;
+  createdAt: string;
+}
+
+export interface CreateSlipInput {
+  employeeId: string;
+  month: string;
+  basic?: string; hra?: string; bonus?: string; allowances?: string;
+  pf?: string; esic?: string; tds?: string; otherDeductions?: string;
+}
+
+export interface PayrollRun {
+  id: string;
+  orgId: string;
+  period: string;
+  status: 'draft' | 'finalised';
+  gross: string; deductions: string; net: string;
+  slipCount: number;
+  finalisedAt: string | null;
+  createdAt: string;
+}
+
+// ─────────────────────────── HR · Letters ───────────────────────────
+export type LetterKind = 'offer' | 'experience' | 'relieving';
+export type LetterStatus = 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired';
+
+export interface HrLetter {
+  id: string;
+  orgId: string;
+  employeeId: string;
+  employeeName: string;
+  kind: LetterKind;
+  status: LetterStatus;
+  designation: string | null;
+  department: string | null;
+  joiningDate: string | null;
+  ctc: string | null;
+  reportingManager: string | null;
+  fromDate: string | null;
+  toDate: string | null;
+  pdfUrl: string | null;
+  generatedAt: string | null;
+  sentAt: string | null;
+  decidedAt: string | null;
+  createdAt: string;
+}
+
+export interface CreateLetterInput {
+  employeeId: string;
+  kind: string;
+  designation?: string;
+  department?: string;
+  joiningDate?: string;
+  ctc?: string;
+  reportingManager?: string;
+  fromDate?: string;
+  toDate?: string;
+}
+
+// ─────────────────────────── HR · Onboarding & exit ───────────────────────────
+export interface ChecklistItem { _id?: string; id?: string; key: string; label: string; required: boolean; done: boolean; docUrl: string | null; }
+export interface Onboarding {
+  id: string;
+  orgId: string;
+  employeeId: string;
+  checklist: ChecklistItem[];
+  status: 'in_progress' | 'complete';
+  completedAt: string | null;
+}
+
+export interface AssetItem { _id?: string; id?: string; asset: string; returned: boolean; }
+export type ExitStatus = 'initiated' | 'notice' | 'cleared' | 'settled';
+export interface Exit {
+  id: string;
+  orgId: string;
+  employeeId: string;
+  employeeName: string;
+  resignationDate: string;
+  lastWorkingDate: string | null;
+  noticeDays: number;
+  reason: string | null;
+  assets: AssetItem[];
+  managerApproved: boolean;
+  hrApproved: boolean;
+  finalSettlement: string;
+  settlementNotes: string | null;
+  status: ExitStatus;
+  completedAt: string | null;
+  createdAt: string;
+}
+export interface CreateExitInput { employeeId: string; resignationDate: string; noticeDays?: number; reason?: string; }
+export interface UpdateExitInput {
+  assets?: Array<{ asset: string; returned?: boolean }>;
+  managerApproved?: boolean;
+  hrApproved?: boolean;
+  finalSettlement?: string;
+  settlementNotes?: string;
+  lastWorkingDate?: string;
+  status?: string;
 }
 
 export const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'CAD', 'SGD', 'AED'] as const;

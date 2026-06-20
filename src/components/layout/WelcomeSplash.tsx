@@ -61,13 +61,13 @@ export function WelcomeSplash() {
 
       {/* floating fintech icons */}
       {FLOATERS.map((f, i) => (
-        <span key={i} className={cn('animate-float-tiny absolute hidden sm:grid h-11 w-11 place-items-center rounded-2xl border border-white/70 bg-white/70 text-brand-600 shadow-lift backdrop-blur', f.cls)} style={{ animationDelay: f.d }}>
+        <span key={i} className={cn('animate-float-tiny absolute hidden sm:grid h-11 w-11 place-items-center rounded-2xl border border-white/70 bg-paper-card/70 text-brand-600 shadow-lift backdrop-blur', f.cls)} style={{ animationDelay: f.d }}>
           <f.icon className="h-5 w-5" />
         </span>
       ))}
 
       {/* the round welcome note */}
-      <div className="animate-pop-in relative mx-5 w-full max-w-md overflow-hidden rounded-[2.5rem] border border-white/70 bg-white/70 px-8 py-12 text-center shadow-[0_40px_100px_-35px_rgba(60,72,170,0.55)] backdrop-blur-xl">
+      <div className="animate-pop-in relative mx-5 w-full max-w-md overflow-hidden rounded-[2.5rem] border border-white/70 bg-paper-card/70 px-8 py-12 text-center shadow-[0_40px_100px_-35px_rgba(60,72,170,0.55)] backdrop-blur-xl">
         <span className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand-300/25 blur-3xl" />
         <span className="pointer-events-none absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-[#bcc6ff]/35 blur-3xl" />
 
@@ -77,7 +77,7 @@ export function WelcomeSplash() {
           <span className="absolute h-36 w-36 rounded-full border-2 border-dashed border-brand-400/40 animate-spin-slow" />
           <span className="absolute h-28 w-28 rounded-full border border-brand-200" />
           <span className="absolute h-24 w-24 rounded-full bg-brand-400/40 blur-2xl animate-glow-breathe" />
-          <span className="relative grid h-24 w-24 place-items-center rounded-full bg-white shadow-glow ring-1 ring-black/5">
+          <span className="relative grid h-24 w-24 place-items-center rounded-full bg-paper-card shadow-glow ring-1 ring-black/5">
             <LogoMark className="h-12 w-auto" flip="always" />
           </span>
         </div>
@@ -100,7 +100,7 @@ export function WelcomeSplash() {
 
         <div className="animate-pop-in mt-7 flex items-center justify-center gap-2" style={{ animationDelay: '0.34s' }}>
           {TRUST.map((t) => (
-            <span key={t.label} className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] bg-white px-2.5 py-1.5 text-[11px] font-medium text-ink-soft shadow-sm">
+            <span key={t.label} className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] bg-paper-card px-2.5 py-1.5 text-[11px] font-medium text-ink-soft shadow-sm">
               <t.icon className="h-3.5 w-3.5 text-brand-600" /> {t.label}
             </span>
           ))}

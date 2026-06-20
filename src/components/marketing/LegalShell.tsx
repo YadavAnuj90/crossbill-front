@@ -54,10 +54,10 @@ export function LegalShell({
           <h1 className="mt-5 text-4xl sm:text-5xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-4 max-w-2xl text-white/60 leading-relaxed">{intro}</p>
           <div className="mt-6 flex flex-wrap items-center gap-3 text-xs">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-white/70">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-paper-card/5 px-3 py-1.5 text-white/70">
               <ShieldCheck className="h-3.5 w-3.5 text-brand-300" /> Last updated {updated}
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-white/70">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-paper-card/5 px-3 py-1.5 text-white/70">
               Anujali Technologies Pvt. Ltd.
             </span>
           </div>

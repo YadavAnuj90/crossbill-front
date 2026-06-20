@@ -2,15 +2,26 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        ink: { DEFAULT: '#0c1116', soft: '#1a222c', muted: '#5b6573', faint: '#8a93a0' },
+        // Semantic tokens are CSS-variable driven so they re-theme in dark mode.
+        ink: {
+          DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+          soft: 'rgb(var(--ink-soft) / <alpha-value>)',
+          muted: 'rgb(var(--ink-muted) / <alpha-value>)',
+          faint: 'rgb(var(--ink-faint) / <alpha-value>)',
+        },
         brand: {
           50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399',
           500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b',
         },
-        paper: { DEFAULT: '#fbfbf9', card: '#ffffff', border: '#e9e8e3' },
+        paper: {
+          DEFAULT: 'rgb(var(--paper) / <alpha-value>)',
+          card: 'rgb(var(--surface) / <alpha-value>)',
+          border: 'rgb(var(--border) / <alpha-value>)',
+        },
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],

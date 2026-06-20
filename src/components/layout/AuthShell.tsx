@@ -57,7 +57,7 @@ export function AuthShell({ title, subtitle, children, footer }: {
           <ul className="mt-8 space-y-3.5">
             {FEATURES.map((t) => (
               <li key={t} className="flex items-center gap-3 text-[#2a2d3d]/85 font-medium">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-white text-brand-600 ring-1 ring-brand-200 shadow-sm"><Check className="h-3.5 w-3.5" /></span>
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-paper-card text-brand-600 ring-1 ring-brand-200 shadow-sm"><Check className="h-3.5 w-3.5" /></span>
                 {t}
               </li>
             ))}
@@ -66,7 +66,7 @@ export function AuthShell({ title, subtitle, children, footer }: {
           {/* mini stats */}
           <div className="mt-9 grid grid-cols-3 gap-3">
             {[['60s', 'to a compliant invoice'], ['2-in-1', 'export + domestic'], ['0%', 'IGST on exports']].map(([v, l]) => (
-              <div key={l} className="rounded-2xl border border-black/[0.06] bg-white/80 px-3 py-3 shadow-card backdrop-blur-sm">
+              <div key={l} className="rounded-2xl border border-black/[0.06] bg-paper-card/80 px-3 py-3 shadow-card backdrop-blur-sm">
                 <p className="text-xl font-semibold text-gradient-brand tabular-nums">{v}</p>
                 <p className="mt-0.5 text-[11px] text-ink-muted leading-tight">{l}</p>
               </div>

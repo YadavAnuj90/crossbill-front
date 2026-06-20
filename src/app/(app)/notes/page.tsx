@@ -86,7 +86,7 @@ export default function NotesPage() {
                     className={cn('inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition',
                       filter === t.key ? 'bg-paper text-ink shadow-card' : 'text-ink-muted hover:text-ink')}>
                     {t.label}
-                    <span className={cn('rounded-full px-1.5 text-[11px]', filter === t.key ? 'bg-white text-ink-muted' : 'bg-paper text-ink-faint')}>{t.n}</span>
+                    <span className={cn('rounded-full px-1.5 text-[11px]', filter === t.key ? 'bg-paper-card text-ink-muted' : 'bg-paper text-ink-faint')}>{t.n}</span>
                   </button>
                 ))}
               </div>

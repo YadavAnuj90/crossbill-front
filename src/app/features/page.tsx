@@ -71,7 +71,7 @@ export default function FeaturesPage() {
       </PageHero>
 
       {GROUPS.map((g, gi) => (
-        <section key={g.badge} className={gi % 2 === 1 ? 'py-20 bg-white/50 border-y border-paper-border/70' : 'py-20'}>
+        <section key={g.badge} className={gi % 2 === 1 ? 'py-20 bg-paper-card/50 border-y border-paper-border/70' : 'py-20'}>
           <div className="mx-auto max-w-6xl px-5">
             <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
               <Reveal className={gi % 2 === 1 ? 'lg:order-2' : ''}>

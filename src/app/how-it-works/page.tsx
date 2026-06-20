@@ -38,7 +38,7 @@ export default function HowItWorksPage() {
               {STEPS.map((s, i) => (
                 <Reveal key={s.n} delay={i * 70}>
                   <div className="relative flex gap-5">
-                    <div className="hidden sm:grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white border border-paper-border shadow-card text-brand-600 relative z-10">
+                    <div className="hidden sm:grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-paper-card border border-paper-border shadow-card text-brand-600 relative z-10">
                       <s.icon className="h-6 w-6" />
                     </div>
                     <div className="card card-hover flex-1 p-6">
@@ -57,7 +57,7 @@ export default function HowItWorksPage() {
       </section>
 
       {/* Two flows */}
-      <section className="py-20 bg-white/50 border-y border-paper-border/70">
+      <section className="py-20 bg-paper-card/50 border-y border-paper-border/70">
         <div className="mx-auto max-w-5xl px-5">
           <Reveal className="text-center max-w-2xl mx-auto mb-12">
             <span className="badge bg-brand-50 text-brand-700 mb-4">Two flows, one app</span>

@@ -46,7 +46,7 @@ export default function ContactPage() {
         accent="talk"
         intro="Questions, feedback, partnerships, or help getting set up — we’d genuinely love to hear from you."
       >
-        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70">
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-paper-card/5 px-4 py-2 text-sm text-white/70">
           <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-60 animate-ping" /><span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500" /></span>
           Typically replies within minutes on WhatsApp
         </span>

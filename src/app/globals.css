@@ -2,18 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { --font-inter: 'Inter', system-ui, sans-serif; }
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+  /* Light theme tokens (space-separated RGB for rgb(var()/alpha)). */
+  --ink: 12 17 22;
+  --ink-soft: 26 34 44;
+  --ink-muted: 91 101 115;
+  --ink-faint: 138 147 160;
+  --paper: 251 251 249;
+  --surface: 255 255 255;
+  --border: 233 232 227;
+  --page-bg: #eceefb;
+  --glow-a: rgba(124, 139, 255, 0.10);
+  --glow-b: rgba(16, 185, 129, 0.05);
+  color-scheme: light;
+}
+
+.dark {
+  /* Dark theme tokens — deep navy-slate base with emerald/cyan ambience. */
+  --ink: 236 240 248;
+  --ink-soft: 205 213 227;
+  --ink-muted: 150 162 182;
+  --ink-faint: 104 116 137;
+  --paper: 9 13 22;          /* recessed wells / hovers */
+  --surface: 21 27 40;       /* card faces (slight blue lift) */
+  --surface-2: 28 35 52;     /* elevated/top-of-gradient */
+  --border: 48 58 80;
+  --page-bg: #070b14;
+  --glow-a: rgba(99, 102, 241, 0.22);   /* indigo */
+  --glow-b: rgba(16, 185, 129, 0.16);   /* emerald */
+  --glow-c: rgba(34, 211, 238, 0.12);   /* cyan */
+  color-scheme: dark;
+}
+
+/* Smooth colour cross-fade while toggling (the circular reveal handles the sweep). */
+html.theming, html.theming *, html.theming *::before, html.theming *::after {
+  transition: background-color 0.45s ease, border-color 0.45s ease, color 0.3s ease, fill 0.3s ease, box-shadow 0.45s ease !important;
+}
+/* View Transition circular reveal (new theme expands over the old). */
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 9999; }
 
 @layer base {
   html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; }
   body {
     @apply text-ink font-sans antialiased;
-    background-color: #eceefb;
+    background-color: var(--page-bg);
     background-image:
-      radial-gradient(60rem 60rem at 110% -10%, rgba(124, 139, 255, 0.10), transparent 60%),
-      radial-gradient(50rem 50rem at -10% 10%, rgba(16, 185, 129, 0.05), transparent 55%);
+      radial-gradient(60rem 60rem at 110% -10%, var(--glow-a), transparent 60%),
+      radial-gradient(50rem 50rem at -10% 10%, var(--glow-b), transparent 55%);
     background-attachment: fixed;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+  .dark body {
+    background-image:
+      radial-gradient(55rem 50rem at 108% -12%, var(--glow-a), transparent 58%),
+      radial-gradient(50rem 48rem at -8% 8%, var(--glow-b), transparent 55%),
+      radial-gradient(40rem 38rem at 50% 118%, var(--glow-c), transparent 60%);
   }
   ::selection { @apply bg-brand-200 text-ink; }
   *:focus-visible { @apply outline-none ring-2 ring-brand-500/40 ring-offset-1 ring-offset-paper; }
@@ -24,7 +69,7 @@
   .card-hover { @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-paper-border; }
   .eyebrow { @apply text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-faint; }
 
-  .field { @apply w-full rounded-xl border border-paper-border bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint transition-shadow; }
+  .field { @apply w-full rounded-xl border border-paper-border bg-paper-card px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint transition-shadow; }
   .field:focus { @apply border-brand-400 shadow-focus outline-none; }
   .label { @apply block text-sm font-medium text-ink-soft mb-1.5; }
   .hint { @apply text-xs text-ink-muted mt-1.5; }
@@ -39,7 +84,7 @@
     transform: translateX(-160%);
   }
   .btn-primary:hover::after { animation: sheen 0.8s ease; }
-  .btn-secondary { @apply btn bg-white text-ink-soft border border-paper-border hover:bg-paper hover:border-ink-faint/40 shadow-sm; }
+  .btn-secondary { @apply btn bg-paper-card text-ink-soft border border-paper-border hover:bg-paper hover:border-ink-faint/40 shadow-sm; }
   .btn-ghost { @apply btn text-ink-muted hover:text-ink hover:bg-paper; }
   .btn-danger { @apply btn bg-red-50 text-red-700 border border-red-200 hover:bg-red-100; }
   /* Glass button for dark surfaces */
@@ -56,6 +101,21 @@
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(180deg, #0c1116 0%, #334155 100%);
+  }
+  .dark .text-gradient { background-image: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 100%); }
+  .dark .glass { @apply bg-white/[0.04] border-white/10; }
+  /* Keep gradient/colored buttons readable in dark; subtle card lift shadow. */
+  .dark .shadow-card {
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.05) inset,
+      0 1px 2px rgba(0,0,0,0.5),
+      0 12px 32px -16px rgba(0,0,0,0.85);
+  }
+  .dark .shadow-lift {
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.07) inset,
+      0 18px 48px -16px rgba(0,0,0,0.9),
+      0 0 0 1px rgba(99,102,241,0.10);
   }
   .text-gradient-brand {
     @apply bg-clip-text text-transparent;
@@ -134,11 +194,15 @@
 }
 @keyframes cb-flip-once { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 @keyframes cb-glint-once { 0% { transform: translateX(-180%); opacity: 0; } 45% { opacity: 0.9; } 100% { transform: translateX(520%); opacity: 0; } }
+@keyframes cb-progress { from { width: 0%; } to { width: 100%; } }
+@keyframes cb-stage-in { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
 
 @layer utilities {
   .animate-pop-in { animation: pop-in 0.55s cubic-bezier(0.16,1,0.3,1) both; }
   .animate-float-tiny { animation: float-tiny 4.5s ease-in-out infinite; }
   .animate-glow-breathe { animation: glow-breathe 4s ease-in-out infinite; }
+  .animate-cb-progress { animation: cb-progress 4200ms linear forwards; }
+  .animate-cb-stage { animation: cb-stage-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
   .cb-logo-3d { display: inline-flex; perspective: 280px; }
   /* always-on idle life */
   .cb-logo-glow { animation: cb-logo-glow 3.2s ease-in-out infinite; }
@@ -225,6 +289,148 @@
     @apply inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] bg-white/80 backdrop-blur px-3 py-1.5 text-xs font-semibold text-ink-soft;
     box-shadow: 0 6px 20px -10px rgba(60,72,170,0.35);
   }
+}
+
+/* ───────────────────────── Dark-mode glow-up ───────────────────────── */
+@layer components {
+  /* Elevated card faces: subtle top-lit gradient + crisp hairline border. */
+  .dark .card,
+  .dark .surface {
+    background-color: rgb(var(--surface));
+    background-image: linear-gradient(180deg, rgb(var(--surface-2)) 0%, rgb(var(--surface)) 42%);
+    border-color: rgb(255 255 255 / 0.07);
+  }
+  /* Recessed inputs read as inset wells against lit cards. */
+  .dark .field {
+    background-color: rgb(var(--paper) / 0.6);
+    border-color: rgb(255 255 255 / 0.08);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+  }
+  .dark .field:focus {
+    border-color: rgb(52 211 153 / 0.55);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 0 0 4px rgba(16,185,129,0.16);
+  }
+  /* Active nav: emerald glow instead of the light mint pill. */
+  .dark .nav-item-active {
+    background-image: linear-gradient(90deg, rgba(16,185,129,0.18), rgba(16,185,129,0.06));
+    color: rgb(110 231 183);
+    box-shadow: inset 0 0 0 1px rgba(16,185,129,0.28), 0 8px 24px -14px rgba(16,185,129,0.6);
+  }
+  .dark .nav-item:hover { background-color: rgb(255 255 255 / 0.04); }
+  /* Secondary / ghost buttons get a glassy face. */
+  .dark .btn-secondary {
+    background-color: rgb(255 255 255 / 0.04);
+    border-color: rgb(255 255 255 / 0.10);
+    color: rgb(var(--ink-soft));
+  }
+  .dark .btn-secondary:hover { background-color: rgb(255 255 255 / 0.08); border-color: rgb(255 255 255 / 0.18); }
+  .dark .btn-ghost:hover { background-color: rgb(255 255 255 / 0.05); }
+}
+
+@layer utilities {
+  /* Soft brand glow on hover — pairs with .card-hover/.lift for a premium feel. */
+  .dark .card-hover:hover,
+  .dark .lift:hover {
+    border-color: rgb(52 211 153 / 0.30);
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.08) inset,
+      0 22px 50px -20px rgba(0,0,0,0.92),
+      0 0 32px -10px rgba(16,185,129,0.35);
+  }
+  /* Gentle entrance for panels/cards. */
+  @keyframes rise-in { from { opacity: 0; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: none; } }
+  .animate-rise { animation: rise-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+  /* Dark scrollbar to match. */
+  .dark * { scrollbar-color: #2b3550 transparent; }
+  .dark *::-webkit-scrollbar-thumb { background: #2b3550; }
+  .dark *::-webkit-scrollbar-thumb:hover { background: #394566; }
+}
+
+/* ───────────────────────── Signature motion system ───────────────────────── */
+/* 1 ·  Theme-switch flourish: glowing wavefront ring + sparkle burst at cursor. */
+.theme-fx-layer { position: fixed; inset: 0; z-index: 2147483646; pointer-events: none; }
+.theme-fx-ring {
+  position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%;
+  mix-blend-mode: screen; filter: blur(3px);
+  animation: theme-ring 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes theme-ring {
+  0%   { transform: scale(0); opacity: 0.95; }
+  70%  { opacity: 0.5; }
+  100% { transform: scale(34); opacity: 0; }
+}
+.theme-fx-spark {
+  position: absolute; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%;
+  mix-blend-mode: screen; box-shadow: 0 0 14px 2px currentColor;
+  animation: theme-spark 1.3s cubic-bezier(0.18, 0.9, 0.32, 1) forwards;
+}
+@keyframes theme-spark {
+  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+}
+
+/* 2 ·  Route transition + 3 · staggered content cascade. */
+@keyframes page-blur-rise {
+  from { opacity: 0; transform: translateY(18px) scale(0.992); filter: blur(8px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+.page-enter > * {
+  animation: page-blur-rise 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.page-enter > *:nth-child(1)  { animation-delay: 0.00s; }
+.page-enter > *:nth-child(2)  { animation-delay: 0.10s; }
+.page-enter > *:nth-child(3)  { animation-delay: 0.20s; }
+.page-enter > *:nth-child(4)  { animation-delay: 0.30s; }
+.page-enter > *:nth-child(5)  { animation-delay: 0.40s; }
+.page-enter > *:nth-child(6)  { animation-delay: 0.50s; }
+.page-enter > *:nth-child(7)  { animation-delay: 0.60s; }
+.page-enter > *:nth-child(n+8){ animation-delay: 0.70s; }
+
+/* Opt-in: cascade direct children of any container (tables rows, card grids…). */
+.stagger > * { animation: page-blur-rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger > *:nth-child(2) { animation-delay: 0.13s; }
+.stagger > *:nth-child(3) { animation-delay: 0.21s; }
+.stagger > *:nth-child(4) { animation-delay: 0.29s; }
+.stagger > *:nth-child(5) { animation-delay: 0.37s; }
+.stagger > *:nth-child(6) { animation-delay: 0.45s; }
+.stagger > *:nth-child(n+7) { animation-delay: 0.53s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-fx-layer { display: none; }
+  .page-enter > *, .stagger > * { animation: none !important; }
+}
+
+/* 4 · In-mock micro-motion for the services-showcase live previews. */
+@keyframes mock-pop { from { opacity: 0; transform: translateY(7px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes mock-stamp { 0% { opacity: 0; transform: scale(1.7) rotate(-11deg); } 55% { opacity: 1; transform: scale(0.9) rotate(-11deg); } 100% { transform: scale(1) rotate(-11deg); } }
+@keyframes mock-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes mock-draw { from { stroke-dashoffset: 640; } to { stroke-dashoffset: 0; } }
+
+.mock-stagger > * { animation: mock-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.mock-stagger > *:nth-child(1) { animation-delay: 0.10s; }
+.mock-stagger > *:nth-child(2) { animation-delay: 0.18s; }
+.mock-stagger > *:nth-child(3) { animation-delay: 0.26s; }
+.mock-stagger > *:nth-child(4) { animation-delay: 0.34s; }
+.mock-stagger > *:nth-child(5) { animation-delay: 0.42s; }
+.mock-stagger > *:nth-child(6) { animation-delay: 0.50s; }
+.mock-stagger > *:nth-child(n+7) { animation-delay: 0.58s; }
+
+.animate-mock-stamp { animation: mock-stamp 0.55s cubic-bezier(0.2, 1.3, 0.4, 1) 0.35s both; }
+.animate-mock-bar { transform-origin: left; animation: mock-bar 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+.animate-mock-draw { stroke-dasharray: 640; animation: mock-draw 1.15s ease 0.2s both; }
+
+/* Integration constellation: dashes flow from the centre out to each node. */
+@keyframes cb-flow { to { stroke-dashoffset: -12; } }
+.cb-flow { animation: cb-flow 0.9s linear infinite; }
+
+/* HowItWorks: a glowing pulse travels along the step connector. */
+@keyframes flow-x { 0% { left: -5%; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: 105%; opacity: 0; } }
+.animate-flow-x { animation: flow-x 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mock-stagger > *, .animate-mock-stamp, .animate-mock-bar { animation: none !important; }
+  .animate-mock-draw { animation: none !important; stroke-dasharray: none; }
 }
 
 /* ───────────────────────── Legal / prose ───────────────────────── */

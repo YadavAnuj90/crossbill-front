@@ -131,7 +131,7 @@ export default function NewInvoicePage() {
                     <div key={l._id} className="rounded-xl border border-paper-border bg-paper/40 p-4 transition hover:border-brand-200">
                       <div className="flex items-center justify-between mb-3">
                         <span className="inline-flex items-center gap-2 text-xs font-medium text-ink-faint">
-                          <span className="grid h-5 w-5 place-items-center rounded-full bg-white border border-paper-border text-[10px] font-semibold text-ink-muted">{idx + 1}</span>
+                          <span className="grid h-5 w-5 place-items-center rounded-full bg-paper-card border border-paper-border text-[10px] font-semibold text-ink-muted">{idx + 1}</span>
                           Line item
                         </span>
                         {lines.length > 1 && <button type="button" onClick={() => removeLine(l._id)} className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg p-1.5 transition"><Trash2 className="h-4 w-4" /></button>}

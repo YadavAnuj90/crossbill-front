@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FileSignature, Plus, ShieldCheck } from 'lucide-react';
+import { FileSignature, Plus, ShieldCheck, LayoutTemplate, Search } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
 import type { Agreement, Client, CreateAgreementInput } from '@/lib/types';
@@ -34,9 +34,19 @@ export default function AgreementsPage() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<CreateAgreementInput>(empty);
   const [saving, setSaving] = useState(false);
+  const [q, setQ] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
-  function load() { api.agreements.list().then((p) => setRows(p.items)).catch(() => setRows([])); }
+  function load() {
+    if (q.trim() || statusFilter) {
+      api.agreements.search(q.trim(), statusFilter).then((p) => setRows(p.items)).catch(() => setRows([]));
+    } else {
+      api.agreements.list().then((p) => setRows(p.items)).catch(() => setRows([]));
+    }
+  }
   useEffect(() => { load(); api.clients.list(1, 200).then((p) => setClients(p.items)).catch(() => {}); }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { const t = setTimeout(load, 250); return () => clearTimeout(t); }, [q, statusFilter]);
 
   async function create(e: React.FormEvent) {
     e.preventDefault();
@@ -60,17 +70,32 @@ export default function AgreementsPage() {
         title="Agreements"
         subtitle="Send NDAs, MSAs and engagement letters for a legally-valid e-signature with audit trail."
         icon={<FileSignature className="h-5 w-5" />}
-        action={<Button onClick={() => { setForm(empty); setOpen(true); }}><Plus className="h-4 w-4" /> New agreement</Button>}
+        action={<div className="flex items-center gap-2"><Link href="/verify" className="btn-secondary"><ShieldCheck className="h-4 w-4" /> Verify</Link><Link href="/agreements/security" className="btn-secondary">Security</Link><Link href="/agreements/templates" className="btn-secondary"><LayoutTemplate className="h-4 w-4" /> Templates</Link><Button onClick={() => { setForm(empty); setOpen(true); }}><Plus className="h-4 w-4" /> New agreement</Button></div>}
       />
+
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-faint" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search title, client, signer, body…" className="field pl-9" />
+        </div>
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="field max-w-[180px]">
+          <option value="">All statuses</option>
+          {['draft', 'sent', 'viewed', 'signed', 'declined', 'voided'].map((s) => <option key={s} value={s}>{s}</option>)}
+        </select>
+      </div>
 
       <Reveal>
         <Card>
           {rows === null ? (
             <div className="p-5 space-y-3">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
           ) : rows.length === 0 ? (
+            (q.trim() || statusFilter) ? (
+              <EmptyState icon={<Search className="h-6 w-6" />} title="No matching agreements" description="Try a different search term or status filter." />
+            ) : (
             <EmptyState icon={<FileSignature className="h-6 w-6" />} title="Create your first agreement" description="Draft a contract, send it to your client, and collect a signed PDF with a tamper-evident audit trail.">
               <Button className="mt-6" onClick={() => setOpen(true)}><Plus className="h-4 w-4" /> New agreement</Button>
             </EmptyState>
+            )
           ) : (
             <Table>
               <THead><TH>Title</TH><TH>Type</TH><TH>Signer</TH><TH>Status</TH><TH>Updated</TH><TH /></THead>

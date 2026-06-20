@@ -73,7 +73,7 @@ export default function AboutPage() {
           <Reveal delay={240}>
             <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/register" className="inline-flex items-center gap-2 rounded-full bg-[#0d0f16] px-7 py-3.5 text-[15px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(13,15,22,0.6)] transition-transform hover:-translate-y-0.5 active:scale-[0.98]">Start free <ArrowRight className="h-4 w-4" /></Link>
-              <Link href="/contact" className="inline-flex items-center gap-2 rounded-full border border-[#11131c]/15 bg-white/40 px-7 py-3.5 text-[15px] font-semibold text-[#11131c] backdrop-blur-sm transition-colors hover:bg-white/70">Get in touch</Link>
+              <Link href="/contact" className="inline-flex items-center gap-2 rounded-full border border-[#11131c]/15 bg-paper-card/40 px-7 py-3.5 text-[15px] font-semibold text-[#11131c] backdrop-blur-sm transition-colors hover:bg-paper-card/70">Get in touch</Link>
             </div>
           </Reveal>
         </div>
@@ -93,7 +93,7 @@ export default function AboutPage() {
       </section>
 
       {/* Story timeline */}
-      <section className="py-20 bg-white/40 border-y border-black/[0.06]">
+      <section className="py-20 bg-paper-card/40 border-y border-black/[0.06]">
         <div className="mx-auto max-w-5xl px-5">
           <Reveal className="max-w-2xl">
             <span className="chip-soft mb-4">Our story</span>
@@ -122,7 +122,7 @@ export default function AboutPage() {
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal>
-            <div className="relative overflow-hidden rounded-3xl border border-black/[0.06] bg-white px-6 py-12 shadow-card ring-1 ring-black/[0.02] sm:px-12">
+            <div className="relative overflow-hidden rounded-3xl border border-black/[0.06] bg-paper-card px-6 py-12 shadow-card ring-1 ring-black/[0.02] sm:px-12">
               <div className="absolute inset-0 bg-grid mask-fade-b opacity-[0.04]" />
               <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-brand-300/20 blur-3xl" />
               <div className="pointer-events-none absolute -left-12 -bottom-12 h-48 w-48 rounded-full bg-[#bcc6ff]/30 blur-3xl" />
@@ -170,7 +170,7 @@ export default function AboutPage() {
       </section>
 
       {/* Leadership */}
-      <section className="relative py-24 bg-white/40 border-y border-black/[0.06]">
+      <section className="relative py-24 bg-paper-card/40 border-y border-black/[0.06]">
         <div className="mx-auto max-w-5xl px-5">
           <Reveal className="text-center max-w-2xl mx-auto">
             <span className="chip-soft mb-4"><Users className="h-3.5 w-3.5 text-brand-600" /> Leadership</span>
@@ -204,8 +204,8 @@ export default function AboutPage() {
                     <div className="mt-6 flex items-center justify-between border-t border-paper-border pt-4">
                       <span className="text-xs font-medium uppercase tracking-wide text-ink-faint">Connect</span>
                       <div className="flex items-center gap-2">
-                        <a href="#" className="grid h-8 w-8 place-items-center rounded-lg border border-paper-border bg-white text-ink-muted hover:text-ink hover:bg-paper transition" aria-label="LinkedIn"><Linkedin className="h-4 w-4" /></a>
-                        <a href="#" className="grid h-8 w-8 place-items-center rounded-lg border border-paper-border bg-white text-ink-muted hover:text-ink hover:bg-paper transition" aria-label="X"><Twitter className="h-4 w-4" /></a>
+                        <a href="#" className="grid h-8 w-8 place-items-center rounded-lg border border-paper-border bg-paper-card text-ink-muted hover:text-ink hover:bg-paper transition" aria-label="LinkedIn"><Linkedin className="h-4 w-4" /></a>
+                        <a href="#" className="grid h-8 w-8 place-items-center rounded-lg border border-paper-border bg-paper-card text-ink-muted hover:text-ink hover:bg-paper transition" aria-label="X"><Twitter className="h-4 w-4" /></a>
                       </div>
                     </div>
                   </div>
@@ -215,7 +215,7 @@ export default function AboutPage() {
           </div>
 
           <Reveal delay={120}>
-            <figure className="mt-8 relative overflow-hidden rounded-3xl border border-black/[0.06] bg-white p-8 sm:p-10 text-center shadow-card ring-1 ring-black/[0.02]">
+            <figure className="mt-8 relative overflow-hidden rounded-3xl border border-black/[0.06] bg-paper-card p-8 sm:p-10 text-center shadow-card ring-1 ring-black/[0.02]">
               <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-200/50 blur-3xl" />
               <div className="absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-[#bcc6ff]/40 blur-3xl" />
               <Quote className="relative mx-auto h-7 w-7 text-brand-500" />
@@ -234,18 +234,18 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl px-5">
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-500 via-brand-600 to-emerald-700 px-6 py-16 text-center shadow-[0_30px_70px_-25px_rgba(5,150,105,0.6)] sm:px-12">
-              <div className="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-white/15 blur-3xl" />
+              <div className="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-paper-card/15 blur-3xl" />
               <div className="absolute -right-10 bottom-0 h-56 w-56 rounded-full bg-teal-300/20 blur-3xl" />
               <div className="absolute inset-0 bg-grid-light mask-fade-b opacity-[0.12]" />
               <div className="relative mx-auto max-w-2xl">
-                <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white/15 text-white ring-1 ring-white/25 backdrop-blur-sm"><Rocket className="h-6 w-6" /></span>
+                <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-paper-card/15 text-white ring-1 ring-white/25 backdrop-blur-sm"><Rocket className="h-6 w-6" /></span>
                 <h2 className="mt-5 text-3xl sm:text-5xl font-semibold tracking-tight text-white leading-tight">
                   Come build a <span className="text-white/90 underline decoration-white/40 decoration-2 underline-offset-4">compliant</span> business
                 </h2>
                 <p className="mt-4 text-white/80 text-lg">Whether you bill a US client in USD or an Indian client in INR — we’ll get the paperwork right.</p>
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-                  <Link href="/register" className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-[15px] font-semibold text-brand-700 shadow-sm transition-transform hover:-translate-y-0.5 active:scale-[0.98]">Start free <ArrowRight className="h-4 w-4" /></Link>
-                  <Link href="/" className="inline-flex items-center gap-2 rounded-xl border border-white/40 bg-white/10 px-6 py-3.5 text-[15px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/20">Back to home</Link>
+                  <Link href="/register" className="inline-flex items-center gap-2 rounded-xl bg-paper-card px-6 py-3.5 text-[15px] font-semibold text-brand-700 shadow-sm transition-transform hover:-translate-y-0.5 active:scale-[0.98]">Start free <ArrowRight className="h-4 w-4" /></Link>
+                  <Link href="/" className="inline-flex items-center gap-2 rounded-xl border border-white/40 bg-paper-card/10 px-6 py-3.5 text-[15px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-paper-card/20">Back to home</Link>
                 </div>
                 <p className="mt-6 inline-flex items-center gap-1.5 text-xs text-white/70"><Heart className="h-3.5 w-3.5 text-white" /> Built with care in India</p>
               </div>

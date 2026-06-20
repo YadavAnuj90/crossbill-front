@@ -48,7 +48,7 @@ export default function DashboardPage() {
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <span className="badge bg-brand-50 text-brand-700 ring-1 ring-brand-200/60"><ShieldCheck className="h-3.5 w-3.5" /> Export-compliant invoicing</span>
-                <span className="badge bg-white text-ink-muted ring-1 ring-black/[0.05]"><CalendarDays className="h-3.5 w-3.5" /> {today} · FY {financialYearOf(new Date())}</span>
+                <span className="badge bg-paper-card text-ink-muted ring-1 ring-black/[0.05]"><CalendarDays className="h-3.5 w-3.5" /> {today} · FY {financialYearOf(new Date())}</span>
               </div>
               <h1 className="text-2xl sm:text-[30px] font-semibold tracking-tight text-ink">Welcome back, {firstName}</h1>
               <p className="mt-1.5 text-sm text-ink-muted max-w-md">Here’s the state of your export invoicing and FEMA compliance.</p>

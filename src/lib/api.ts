@@ -10,6 +10,14 @@ import type {
   Payment, Plan, BillingOverview,
   Agreement, CreateAgreementInput, SendAgreementInput, SignAgreementInput, SigningView, EsignStatus,
   Consent, CreateConsentInput,
+  AgreementTemplate, CreateTemplateInput, BulkSendInput, BulkSendResult,
+  Geofence, VerifyResult, SetLifecycleInput, AddObligationInput, ClauseReview,
+  Employee, CreateEmployeeInput, EmployeeStats,
+  Attendance, AttendanceSummary, AttendanceStats, Leave, CreateLeaveInput,
+  Company, UpdateCompanyInput,
+  SalarySlip, CreateSlipInput, PayrollRun,
+  HrLetter, CreateLetterInput,
+  Onboarding, Exit, CreateExitInput, UpdateExitInput,
 } from './types';
 
 const BASE = '/api/v1';
@@ -215,12 +223,45 @@ export const agreements = {
   send: (id: string, input: SendAgreementInput) =>
     request<Agreement & { signUrl: string }>(`/agreements/${id}/send`, { method: 'POST', body: JSON.stringify(input) }),
   esignStatus: () => request<EsignStatus>('/agreements/esign/status'),
+  getGeofences: () => request<Geofence[]>('/agreements/geofences'),
+  setGeofences: (fences: Geofence[]) =>
+    request<Geofence[]>('/agreements/geofences', { method: 'PUT', body: JSON.stringify({ fences }) }),
+  verify: (code: string) => request<VerifyResult>(`/agreements/verify/${encodeURIComponent(code)}`),
+  // lifecycle + obligations + search
+  search: (q: string, status: string, page = 1, limit = 100) =>
+    request<Paginated<Agreement>>(`/agreements/search?q=${encodeURIComponent(q)}&status=${encodeURIComponent(status)}&page=${page}&limit=${limit}`),
+  setLifecycle: (id: string, input: SetLifecycleInput) =>
+    request<Agreement>(`/agreements/${id}/lifecycle`, { method: 'PUT', body: JSON.stringify(input) }),
+  clauseReview: (id: string) => request<ClauseReview>(`/agreements/${id}/clause-review`),
+  addObligation: (id: string, input: AddObligationInput) =>
+    request<Agreement>(`/agreements/${id}/obligations`, { method: 'POST', body: JSON.stringify(input) }),
+  toggleObligation: (id: string, obId: string) =>
+    request<Agreement>(`/agreements/${id}/obligations/${obId}`, { method: 'PUT' }),
+  removeObligation: (id: string, obId: string) =>
+    request<Agreement>(`/agreements/${id}/obligations/${obId}`, { method: 'DELETE' }),
+  runReminders: () => request<{ processed: number; remindersSent: number }>('/agreements/lifecycle/run-reminders', { method: 'POST' }),
   // public signer flow
   forSigning: (token: string) => request<SigningView>(`/agreements/sign/${token}`),
   resendOtp: (token: string) => request<{ otpRequired: boolean; sent?: boolean }>(`/agreements/sign/${token}/otp`, { method: 'POST' }),
+  aadhaarInit: (token: string, aadhaar: string) =>
+    request<{ referenceId: string; otpRequired: boolean; sandbox?: boolean; devOtp?: string; alreadyVerified?: boolean }>(`/agreements/sign/${token}/aadhaar/init`, { method: 'POST', body: JSON.stringify({ aadhaar }) }),
+  aadhaarVerify: (token: string, referenceId: string, otp: string) =>
+    request<{ verified: boolean; last4: string | null }>(`/agreements/sign/${token}/aadhaar/verify`, { method: 'POST', body: JSON.stringify({ referenceId, otp }) }),
   sign: (token: string, input: SignAgreementInput) =>
-    request<{ status: string; signedPdfUrl: string | null }>(`/agreements/sign/${token}`, { method: 'POST', body: JSON.stringify(input) }),
+    request<{ status: string; signedPdfUrl: string | null; verifyCode?: string; geoFenceStatus?: string }>(`/agreements/sign/${token}`, { method: 'POST', body: JSON.stringify(input) }),
   decline: (token: string) => request<{ status: string }>(`/agreements/sign/${token}/decline`, { method: 'POST' }),
+};
+
+// ─────────────────────────── Agreement templates (automation) ───────────────────────────
+export const agreementTemplates = {
+  list: (page = 1, limit = 100) => request<Paginated<AgreementTemplate>>(`/agreement-templates?page=${page}&limit=${limit}`),
+  create: (input: CreateTemplateInput) =>
+    request<AgreementTemplate>('/agreement-templates', { method: 'POST', body: JSON.stringify(input) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/agreement-templates/${id}`, { method: 'DELETE' }),
+  use: (id: string, input: { title?: string; clientId?: string; values?: Record<string, string> }) =>
+    request<Agreement>(`/agreement-templates/${id}/use`, { method: 'POST', body: JSON.stringify(input) }),
+  bulkSend: (id: string, input: BulkSendInput) =>
+    request<BulkSendResult>(`/agreement-templates/${id}/bulk-send`, { method: 'POST', body: JSON.stringify(input) }),
 };
 
 // ─────────────────────────── Consents (DPDP) ───────────────────────────
@@ -229,6 +270,80 @@ export const consents = {
   create: (input: CreateConsentInput) =>
     request<Consent>('/consents', { method: 'POST', body: JSON.stringify(input) }),
   withdraw: (id: string) => request<Consent>(`/consents/${id}/withdraw`, { method: 'POST' }),
+};
+
+// ─────────────────────────── HR · Employees ───────────────────────────
+export const employees = {
+  list: (q = '', department = '', status = '', page = 1, limit = 100) =>
+    request<Paginated<Employee>>(`/employees?q=${encodeURIComponent(q)}&department=${encodeURIComponent(department)}&status=${encodeURIComponent(status)}&page=${page}&limit=${limit}`),
+  get: (id: string) => request<Employee>(`/employees/${id}`),
+  stats: () => request<EmployeeStats>('/employees/stats'),
+  create: (input: CreateEmployeeInput) =>
+    request<Employee>('/employees', { method: 'POST', body: JSON.stringify(input) }),
+  update: (id: string, input: Partial<CreateEmployeeInput>) =>
+    request<Employee>(`/employees/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/employees/${id}`, { method: 'DELETE' }),
+};
+
+// ─────────────────────────── Company verification (§2) ───────────────────────────
+export const company = {
+  get: () => request<Company>('/company'),
+  update: (input: UpdateCompanyInput) => request<Company>('/company', { method: 'PATCH', body: JSON.stringify(input) }),
+  submit: () => request<Company>('/company/submit', { method: 'POST' }),
+  setVerification: (status: 'verified' | 'rejected', notes?: string) =>
+    request<Company>('/company/verification', { method: 'PATCH', body: JSON.stringify({ status, notes }) }),
+};
+
+// ─────────────────────────── HR · Attendance & leave ───────────────────────────
+export const attendance = {
+  checkIn: (employeeId: string) => request<Attendance>('/attendance/check-in', { method: 'POST', body: JSON.stringify({ employeeId }) }),
+  checkOut: (employeeId: string) => request<Attendance>('/attendance/check-out', { method: 'POST', body: JSON.stringify({ employeeId }) }),
+  today: () => request<Attendance[]>('/attendance/today'),
+  list: (employeeId = '', month = '') => request<Attendance[]>(`/attendance?employeeId=${employeeId}&month=${month}`),
+  summary: (month: string) => request<AttendanceSummary>(`/attendance/summary?month=${month}`),
+  stats: () => request<AttendanceStats>('/attendance/stats'),
+};
+
+export const leaves = {
+  list: (status = '', employeeId = '') => request<Leave[]>(`/leaves?status=${status}&employeeId=${employeeId}`),
+  request: (input: CreateLeaveInput) => request<Leave>('/leaves', { method: 'POST', body: JSON.stringify(input) }),
+  decide: (id: string, decision: 'approved' | 'rejected') =>
+    request<Leave>(`/leaves/${id}/decision`, { method: 'PATCH', body: JSON.stringify({ decision }) }),
+};
+
+// ─────────────────────────── HR · Payroll ───────────────────────────
+export const payroll = {
+  listSlips: (employeeId = '', month = '') => request<SalarySlip[]>(`/payroll/slips?employeeId=${employeeId}&month=${month}`),
+  createSlip: (input: CreateSlipInput) => request<SalarySlip>('/payroll/slips', { method: 'POST', body: JSON.stringify(input) }),
+  getSlip: (id: string) => request<SalarySlip>(`/payroll/slips/${id}`),
+  removeSlip: (id: string) => request<{ deleted: boolean }>(`/payroll/slips/${id}`, { method: 'DELETE' }),
+  listRuns: () => request<PayrollRun[]>('/payroll/runs'),
+  run: (period: string) => request<PayrollRun>('/payroll/runs', { method: 'POST', body: JSON.stringify({ period }) }),
+  finalise: (period: string) => request<PayrollRun>(`/payroll/runs/${period}/finalise`, { method: 'POST' }),
+};
+
+// ─────────────────────────── HR · Letters ───────────────────────────
+export const letters = {
+  list: (kind = '', employeeId = '') => request<HrLetter[]>(`/letters?kind=${kind}&employeeId=${employeeId}`),
+  create: (input: CreateLetterInput) => request<HrLetter>('/letters', { method: 'POST', body: JSON.stringify(input) }),
+  get: (id: string) => request<HrLetter>(`/letters/${id}`),
+  setStatus: (id: string, status: 'sent' | 'accepted' | 'rejected' | 'expired') =>
+    request<HrLetter>(`/letters/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/letters/${id}`, { method: 'DELETE' }),
+};
+
+// ─────────────────────────── HR · Onboarding & exit ───────────────────────────
+export const onboarding = {
+  get: (employeeId: string) => request<Onboarding>(`/onboarding/${employeeId}`),
+  toggle: (employeeId: string, itemId: string, done: boolean, docUrl?: string) =>
+    request<Onboarding>(`/onboarding/${employeeId}/items/${itemId}`, { method: 'PATCH', body: JSON.stringify({ done, docUrl }) }),
+};
+
+export const exits = {
+  list: (status = '') => request<Exit[]>(`/exits?status=${status}`),
+  create: (input: CreateExitInput) => request<Exit>('/exits', { method: 'POST', body: JSON.stringify(input) }),
+  get: (id: string) => request<Exit>(`/exits/${id}`),
+  update: (id: string, input: UpdateExitInput) => request<Exit>(`/exits/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
 };
 
 // ─────────────────────────── Reports ───────────────────────────
@@ -260,5 +375,5 @@ export const reports = {
   },
 };
 
-const api = { auth, profile, clients, invoices, remittances, notes, payments, billing, agreements, consents, reports, setAccessToken, getAccessToken, ApiError };
+const api = { auth, profile, clients, invoices, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, reports, setAccessToken, getAccessToken, ApiError };
 export default api;

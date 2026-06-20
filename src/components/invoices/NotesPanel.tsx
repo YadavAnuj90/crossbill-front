@@ -147,7 +147,7 @@ export function NotesPanel({ invoice }: { invoice: Invoice }) {
           <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-paper border border-paper-border">
             {([['credit', 'Credit · reduce', FileMinus], ['debit', 'Debit · increase', FilePlus]] as [NoteKind, string, any][]).map(([k, lbl, Icon]) => (
               <button key={k} type="button" onClick={() => setKind(k)}
-                className={cn('inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition', kind === k ? 'bg-white shadow-card text-ink' : 'text-ink-muted hover:text-ink')}>
+                className={cn('inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition', kind === k ? 'bg-paper-card shadow-card text-ink' : 'text-ink-muted hover:text-ink')}>
                 <Icon className="h-4 w-4" /> {lbl}
               </button>
             ))}

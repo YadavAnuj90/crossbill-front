@@ -61,7 +61,7 @@ export default function InvoicesPage() {
       </Reveal>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
-        <div className="flex gap-1 p-1 rounded-xl bg-white border border-paper-border shadow-card">
+        <div className="flex gap-1 p-1 rounded-xl bg-paper-card border border-paper-border shadow-card">
           {FILTERS.map((f) => (
             <button key={f} onClick={() => setFilter(f)} className={cn('inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium capitalize transition-colors', filter === f ? 'bg-brand-50 text-brand-700' : 'text-ink-muted hover:text-ink')}>
               {f}

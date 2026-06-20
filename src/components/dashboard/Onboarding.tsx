@@ -89,8 +89,8 @@ export function Onboarding({ user, hasClients, hasInvoices }: {
                   s.done
                     ? 'bg-gradient-to-br from-brand-500 to-brand-700 text-white ring-brand-600 shadow-sm'
                     : current
-                      ? 'bg-white text-brand-700 ring-brand-300 shadow-sm'
-                      : 'bg-white text-ink-faint ring-paper-border',
+                      ? 'bg-paper-card text-brand-700 ring-brand-300 shadow-sm'
+                      : 'bg-paper-card text-ink-faint ring-paper-border',
                 )}>
                   {s.done ? <Check className="h-4 w-4" /> : i + 1}
                 </span>

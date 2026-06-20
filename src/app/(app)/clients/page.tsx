@@ -150,7 +150,7 @@ export default function ClientsPage() {
             <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-paper border border-paper-border">
               {([['foreign', 'Foreign · Export', Globe], ['domestic', 'Indian · GST', Building2]] as [ClientType, string, any][]).map(([t, lbl, Icon]) => (
                 <button key={t} type="button" onClick={() => setForm({ ...form, type: t })}
-                  className={cn('inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition', form.type === t ? 'bg-white shadow-card text-ink' : 'text-ink-muted hover:text-ink')}>
+                  className={cn('inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition', form.type === t ? 'bg-paper-card shadow-card text-ink' : 'text-ink-muted hover:text-ink')}>
                   <Icon className="h-4 w-4" /> {lbl}
                 </button>
               ))}

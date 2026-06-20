@@ -60,7 +60,7 @@ export default function BillingPage() {
             <Reveal>
               <Card className="mb-6 border-amber-200 bg-amber-50/60 p-4 flex items-start gap-3">
                 <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
-                <p className="text-sm text-ink-muted">Razorpay isn’t connected yet — add your keys to the API <code className="font-mono text-xs bg-white px-1 py-0.5 rounded">.env</code> to enable paid upgrades.</p>
+                <p className="text-sm text-ink-muted">Razorpay isn’t connected yet — add your keys to the API <code className="font-mono text-xs bg-paper-card px-1 py-0.5 rounded">.env</code> to enable paid upgrades.</p>
               </Card>
             </Reveal>
           )}

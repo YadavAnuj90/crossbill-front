@@ -15,7 +15,7 @@ export function Features() {
 
         <div className="mt-12 grid gap-4 md:grid-cols-3 md:grid-rows-2 md:auto-rows-fr">
           <Reveal className="md:col-span-2 md:row-span-2">
-            <div className="relative h-full overflow-hidden rounded-3xl border border-black/[0.06] bg-white p-7 shadow-card ring-1 ring-black/[0.02]">
+            <div className="relative h-full overflow-hidden rounded-3xl border border-black/[0.06] bg-paper-card p-7 shadow-card ring-1 ring-black/[0.02] dark:border-white/[0.08] dark:bg-white/[0.03] dark:ring-white/[0.04]">
               <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-brand-400/20 blur-3xl" />
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 text-white shadow-[0_10px_24px_-8px_rgba(5,150,105,0.5)]"><ShieldCheck className="h-6 w-6" /></div>
               <h3 className="mt-5 text-xl font-semibold text-ink">One engine, every tax rule</h3>
@@ -27,8 +27,8 @@ export function Features() {
                   { i: Globe2, t: 'Export & domestic' },
                   { i: FileCheck2, t: 'LUT & GST declarations' },
                 ].map((x) => (
-                  <div key={x.t} className="flex items-center gap-2 rounded-xl border border-black/[0.06] bg-paper px-3 py-2.5">
-                    <x.i className="h-4 w-4 text-brand-600" /><span className="text-sm text-ink-soft">{x.t}</span>
+                  <div key={x.t} className="flex items-center gap-2 rounded-xl border border-black/[0.06] bg-paper px-3 py-2.5 dark:border-white/[0.08] dark:bg-white/[0.04]">
+                    <x.i className="h-4 w-4 text-brand-600 dark:text-brand-300" /><span className="text-sm text-ink-soft">{x.t}</span>
                   </div>
                 ))}
               </div>
@@ -49,9 +49,9 @@ export function Features() {
 
 function FeatureTile({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
-    <div className="group relative h-full overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-6 shadow-card ring-1 ring-black/[0.02] transition-all hover:-translate-y-0.5 hover:shadow-lift">
+    <div className="group relative h-full overflow-hidden rounded-2xl border border-black/[0.06] bg-paper-card p-6 shadow-card ring-1 ring-black/[0.02] transition-all hover:-translate-y-0.5 hover:shadow-lift dark:border-white/[0.08] dark:bg-white/[0.03] dark:ring-white/[0.04]">
       <span className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-brand-400/20 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200">{icon}</div>
+      <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200 dark:bg-brand-500/15 dark:text-brand-300 dark:ring-brand-400/25">{icon}</div>
       <h3 className="mt-4 font-semibold text-ink flex items-center gap-1">{title}<ArrowUpRight className="h-4 w-4 text-ink-faint opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" /></h3>
       <p className="mt-2 text-sm text-ink-muted leading-relaxed">{body}</p>
     </div>

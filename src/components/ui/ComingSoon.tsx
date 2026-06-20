@@ -31,17 +31,17 @@ export function ComingSoon({
 
       <Reveal>
         <Card className={`relative overflow-hidden border-0 bg-gradient-to-br ${tone} p-7 sm:p-9 text-white`}>
-          <span className="absolute -right-10 -top-10 h-44 w-44 rounded-full bg-white/15 blur-3xl" />
-          <span className="absolute -bottom-12 left-1/3 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
+          <span className="absolute -right-10 -top-10 h-44 w-44 rounded-full bg-paper-card/15 blur-3xl" />
+          <span className="absolute -bottom-12 left-1/3 h-40 w-40 rounded-full bg-paper-card/10 blur-3xl" />
           <div className="relative max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold backdrop-blur">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-paper-card/15 px-3 py-1 text-xs font-semibold backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" /> Coming soon
             </span>
             <h2 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight leading-tight">{tagline}</h2>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <button
                 onClick={() => notify('success', `Thanks — we'll notify you the moment ${title} goes live.`)}
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-card transition hover:shadow-lift"
+                className="inline-flex items-center gap-2 rounded-xl bg-paper-card px-5 py-2.5 text-sm font-semibold text-ink shadow-card transition hover:shadow-lift"
               >
                 <Bell className="h-4 w-4" /> Notify me when it's ready
               </button>

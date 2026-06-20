@@ -1,11 +1,12 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Wallet, Link2, Copy, Check, ExternalLink, AlertTriangle, RefreshCcw } from 'lucide-react';
+import { Wallet, Link2, Copy, Check, ExternalLink, AlertTriangle, RefreshCcw, MessageCircle } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
 import type { Invoice, Payment, Client } from '@/lib/types';
 import { formatDate } from '@/lib/format';
+import { waShareUrl } from '@/lib/share';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Card, CardHeader } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -80,7 +81,7 @@ export default function PaymentsPage() {
             <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
             <div className="text-sm">
               <p className="font-semibold text-ink">Razorpay isn’t connected yet</p>
-              <p className="text-ink-muted mt-0.5">Add <code className="font-mono text-xs bg-white px-1 py-0.5 rounded">RAZORPAY_KEY_ID</code> and <code className="font-mono text-xs bg-white px-1 py-0.5 rounded">RAZORPAY_KEY_SECRET</code> to the API <code className="font-mono text-xs bg-white px-1 py-0.5 rounded">.env</code> and restart the backend. Set the webhook to <code className="font-mono text-xs bg-white px-1 py-0.5 rounded">/api/v1/payments/webhook</code> for auto-reconcile.</p>
+              <p className="text-ink-muted mt-0.5">Add <code className="font-mono text-xs bg-paper-card px-1 py-0.5 rounded">RAZORPAY_KEY_ID</code> and <code className="font-mono text-xs bg-paper-card px-1 py-0.5 rounded">RAZORPAY_KEY_SECRET</code> to the API <code className="font-mono text-xs bg-paper-card px-1 py-0.5 rounded">.env</code> and restart the backend. Set the webhook to <code className="font-mono text-xs bg-paper-card px-1 py-0.5 rounded">/api/v1/payments/webhook</code> for auto-reconcile.</p>
             </div>
           </Card>
         </Reveal>
@@ -115,6 +116,7 @@ export default function PaymentsPage() {
                           <div className="inline-flex items-center gap-1.5">
                             <button onClick={() => copy(link.shortUrl, inv.id)} className="btn-ghost text-sm py-1.5">{copied === inv.id ? <><Check className="h-4 w-4" /> Copied</> : <><Copy className="h-4 w-4" /> Copy</>}</button>
                             <a href={link.shortUrl} target="_blank" rel="noreferrer" className="btn-ghost text-sm py-1.5"><ExternalLink className="h-4 w-4" /> Open</a>
+                            <a href={waShareUrl(`Payment link for invoice ${inv.number}: ${link.shortUrl}`)} target="_blank" rel="noreferrer" className="btn-ghost text-sm py-1.5"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
                           </div>
                         ) : (
                           <Button variant="secondary" loading={busy === inv.id} onClick={() => createLink(inv)}><Link2 className="h-4 w-4" /> Create link</Button>

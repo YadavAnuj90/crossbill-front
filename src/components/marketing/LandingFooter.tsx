@@ -26,16 +26,16 @@ export function LandingFooter() {
   const [done, setDone] = useState(false);
 
   return (
-    <footer className="relative overflow-hidden border-t border-black/[0.06] bg-white/70 text-ink backdrop-blur-xl">
+    <footer className="relative overflow-hidden border-t border-black/[0.06] bg-paper-card/70 text-ink backdrop-blur-xl dark:border-white/[0.08] dark:bg-[#0b1020]/80">
       <div className="h-px w-full bg-gradient-to-r from-transparent via-brand-400/60 to-transparent" />
-      <div className="absolute -top-28 right-10 h-80 w-80 rounded-full bg-brand-300/20 blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-20 left-1/4 h-72 w-72 rounded-full bg-[#bcc6ff]/30 blur-[120px] pointer-events-none" />
+      <div className="absolute -top-28 right-10 h-80 w-80 rounded-full bg-brand-300/20 blur-[120px] pointer-events-none dark:bg-emerald-500/15" />
+      <div className="absolute -bottom-20 left-1/4 h-72 w-72 rounded-full bg-[#bcc6ff]/30 blur-[120px] pointer-events-none dark:bg-indigo-500/15" />
 
       <div className="relative mx-auto max-w-6xl px-5 pt-7 pb-3">
         {/* CTA band */}
-        <div className="mb-6 rounded-2xl border border-brand-200 bg-brand-50/70 px-5 py-3.5 sm:px-7 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-card">
+        <div className="mb-6 rounded-2xl border border-brand-200 bg-brand-50/70 px-5 py-3.5 sm:px-7 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-card dark:border-emerald-400/25 dark:bg-emerald-500/10">
           <div>
-            <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700"><Sparkles className="h-3.5 w-3.5" /> Get started in a minute</p>
+            <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 dark:text-brand-300"><Sparkles className="h-3.5 w-3.5" /> Get started in a minute</p>
             <h3 className="mt-1 text-lg sm:text-xl font-semibold tracking-tight text-ink">Invoice the <span className="text-gradient-brand">right way</span>, today.</h3>
           </div>
           <div className="flex items-center gap-3 shrink-0">
@@ -45,7 +45,7 @@ export function LandingFooter() {
         </div>
 
         {/* Main grid */}
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_1.4fr_1.1fr] pb-5 border-b border-black/[0.06]">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_1.4fr_1.1fr] pb-5 border-b border-black/[0.06] dark:border-white/[0.08]">
           {/* Brand */}
           <div>
             <Link href="/" className="inline-flex items-center gap-2.5">
@@ -57,14 +57,14 @@ export function LandingFooter() {
             </p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               {TRUST.map((t) => (
-                <span key={t} className="inline-flex items-center gap-1 rounded-full border border-black/[0.06] bg-white px-2 py-1 text-[11px] text-ink-muted shadow-sm">
-                  <Check className="h-3 w-3 text-brand-600" /> {t}
+                <span key={t} className="inline-flex items-center gap-1 rounded-full border border-black/[0.06] bg-paper-card px-2 py-1 text-[11px] text-ink-muted shadow-sm dark:border-white/[0.08] dark:bg-white/[0.04]">
+                  <Check className="h-3 w-3 text-brand-600 dark:text-brand-300" /> {t}
                 </span>
               ))}
             </div>
             <div className="mt-3 flex items-center gap-2">
               {SOCIALS.map(({ icon: Icon, label, hover }) => (
-                <a key={label} href="#" aria-label={label} className={`grid h-8 w-8 place-items-center rounded-lg border border-black/[0.06] bg-white text-ink-muted shadow-sm transition ${hover}`}><Icon className="h-4 w-4" /></a>
+                <a key={label} href="#" aria-label={label} className={`grid h-8 w-8 place-items-center rounded-lg border border-black/[0.06] bg-paper-card text-ink-muted shadow-sm transition dark:border-white/[0.08] dark:bg-white/[0.04] ${hover}`}><Icon className="h-4 w-4" /></a>
               ))}
             </div>
           </div>
@@ -93,13 +93,13 @@ export function LandingFooter() {
             <p className="text-sm font-medium text-ink">Stay compliant, effortlessly</p>
             <p className="mt-1 text-xs text-ink-faint">GST &amp; FEMA updates &amp; product news. No spam.</p>
             {done ? (
-              <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-brand-50 border border-brand-200 px-3 py-2 text-sm text-brand-700"><ShieldCheck className="h-4 w-4" /> You're on the list!</div>
+              <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-brand-50 border border-brand-200 px-3 py-2 text-sm text-brand-700 dark:bg-brand-500/15 dark:border-brand-400/25 dark:text-brand-300"><ShieldCheck className="h-4 w-4" /> You're on the list!</div>
             ) : (
               <form onSubmit={(e) => { e.preventDefault(); if (email.includes('@')) setDone(true); }} className="mt-3 flex gap-2">
                 <div className="relative flex-1">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-faint" />
                   <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@studio.com"
-                    className="w-full rounded-lg border border-paper-border bg-white pl-9 pr-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-brand-400 focus:shadow-focus outline-none transition" />
+                    className="w-full rounded-lg border border-paper-border bg-paper-card pl-9 pr-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-brand-400 focus:shadow-focus outline-none transition dark:border-white/10 dark:bg-white/[0.04]" />
                 </div>
                 <button type="submit" aria-label="Subscribe" className="btn-primary px-3.5 py-2 text-sm shrink-0"><ArrowRight className="h-4 w-4" /></button>
               </form>
@@ -108,7 +108,7 @@ export function LandingFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-black/[0.06] text-xs text-ink-faint">
+        <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-black/[0.06] dark:border-white/[0.08] text-xs text-ink-faint">
           <div className="flex items-center gap-4">
             <span>© {year} Anujali Technologies Pvt. Ltd.</span>
             <span className="hidden sm:inline-flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Made in India 🇮🇳</span>
@@ -119,7 +119,7 @@ export function LandingFooter() {
               All systems operational
             </span>
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top"
-              className="grid h-7 w-7 place-items-center rounded-lg border border-black/[0.06] bg-white text-ink-muted shadow-sm hover:text-ink hover:border-ink/20 transition"><ArrowUp className="h-3.5 w-3.5" /></button>
+              className="grid h-7 w-7 place-items-center rounded-lg border border-black/[0.06] bg-paper-card text-ink-muted shadow-sm hover:text-ink hover:border-ink/20 transition dark:border-white/[0.08] dark:bg-white/[0.04]"><ArrowUp className="h-3.5 w-3.5" /></button>
           </div>
         </div>
       </div>

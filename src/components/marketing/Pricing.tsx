@@ -23,8 +23,8 @@ export function Pricing() {
           {PLANS.map((p, i) => (
             <Reveal key={p.name} delay={i * 90}>
               <div className={cn(
-                'relative h-full overflow-hidden rounded-3xl p-7 bg-white shadow-card ring-1 ring-black/[0.02]',
-                p.highlight ? 'border-2 border-brand-400 shadow-[0_24px_60px_-24px_rgba(5,150,105,0.45)]' : 'border border-black/[0.06]',
+                'relative h-full overflow-hidden rounded-3xl p-7 bg-paper-card shadow-card ring-1 ring-black/[0.02] dark:bg-white/[0.03] dark:ring-white/[0.04]',
+                p.highlight ? 'border-2 border-brand-400 shadow-[0_24px_60px_-24px_rgba(5,150,105,0.45)] dark:border-brand-400 dark:bg-gradient-to-b dark:from-white/[0.07] dark:to-white/[0.02]' : 'border border-black/[0.06] dark:border-white/[0.08]',
               )}>
                 {p.highlight && <span className="absolute -top-px left-1/2 -translate-x-1/2 rounded-b-lg bg-brand-500 px-3 py-1 text-[11px] font-semibold text-white shadow">Most popular</span>}
                 {p.highlight && <span className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-400/15 blur-3xl" />}
@@ -37,7 +37,7 @@ export function Pricing() {
                 <ul className="relative mt-6 space-y-3">
                   {p.features.map((f) => (
                     <li key={f} className="flex items-center gap-2.5 text-sm text-ink-soft">
-                      <Check className="h-4 w-4 shrink-0 text-brand-600" /> {f}
+                      <Check className="h-4 w-4 shrink-0 text-brand-600 dark:text-brand-300" /> {f}
                     </li>
                   ))}
                 </ul>

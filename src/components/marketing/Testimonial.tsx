@@ -6,9 +6,9 @@ export function Testimonial() {
     <section className="py-20">
       <div className="mx-auto max-w-3xl px-5">
         <Reveal>
-          <figure className="relative overflow-hidden rounded-3xl border border-black/[0.06] bg-white p-8 sm:p-12 text-center shadow-card ring-1 ring-black/[0.02]">
+          <figure className="relative overflow-hidden rounded-3xl border border-black/[0.06] bg-paper-card p-8 sm:p-12 text-center shadow-card ring-1 ring-black/[0.02] dark:border-white/[0.08] dark:bg-gradient-to-b dark:from-white/[0.06] dark:to-white/[0.02] dark:ring-white/[0.04]">
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-400/15 blur-3xl" />
-            <Quote className="relative mx-auto h-7 w-7 text-brand-500" />
+            <Quote className="relative mx-auto h-7 w-7 text-brand-500 dark:text-brand-300" />
             <p className="relative mt-4 text-2xl sm:text-[1.7rem] font-medium leading-snug tracking-tight text-ink">
               “I billed a US client in USD and Crossbill made the whole GST &amp; FEMA trail
               <span className="text-gradient-brand"> correct on the first try</span> — no CA, no spreadsheet, no second-guessing.”

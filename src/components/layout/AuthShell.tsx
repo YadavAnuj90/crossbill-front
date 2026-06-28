@@ -1,14 +1,8 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
-import { ShieldCheck, Check, ArrowLeft, Star, Sparkles } from 'lucide-react';
+import { ArrowLeft, Sparkles } from 'lucide-react';
 import { LogoMark } from '@/components/brand/Logo';
-
-const FEATURES = [
-  'Auto-filled GST & FEMA compliance',
-  'Export + domestic invoicing in one app',
-  'FEMA realisation tracking & reminders',
-  'GSTR-ready exports for your CA',
-];
+import { AuthShowcase } from '@/components/layout/AuthShowcase';
 
 export function AuthShell({ title, subtitle, children, footer }: {
   title: string; subtitle: string; children: ReactNode; footer: ReactNode;
@@ -47,37 +41,7 @@ export function AuthShell({ title, subtitle, children, footer }: {
         <div className="absolute -right-16 bottom-10 h-[26rem] w-[28rem] rounded-full bg-[#7c8bff]/40 blur-[140px]" />
         <div className="absolute inset-0 bg-grid mask-fade-b opacity-[0.05]" />
 
-        <div className="relative max-w-md">
-          <span className="chip-soft"><ShieldCheck className="h-3.5 w-3.5 text-brand-600" /> Export-compliant invoicing</span>
-          <blockquote className="mt-6 text-[2rem] font-semibold text-[#11131c] leading-[1.15] tracking-tight">
-            Invoice anyone, anywhere, and stay
-            <span className="text-gradient-brand"> compliant</span> — in under a minute.
-          </blockquote>
-
-          <ul className="mt-8 space-y-3.5">
-            {FEATURES.map((t) => (
-              <li key={t} className="flex items-center gap-3 text-[#2a2d3d]/85 font-medium">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-paper-card text-brand-600 ring-1 ring-brand-200 shadow-sm"><Check className="h-3.5 w-3.5" /></span>
-                {t}
-              </li>
-            ))}
-          </ul>
-
-          {/* mini stats */}
-          <div className="mt-9 grid grid-cols-3 gap-3">
-            {[['60s', 'to a compliant invoice'], ['2-in-1', 'export + domestic'], ['0%', 'IGST on exports']].map(([v, l]) => (
-              <div key={l} className="rounded-2xl border border-black/[0.06] bg-paper-card/80 px-3 py-3 shadow-card backdrop-blur-sm">
-                <p className="text-xl font-semibold text-gradient-brand tabular-nums">{v}</p>
-                <p className="mt-0.5 text-[11px] text-ink-muted leading-tight">{l}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 flex items-center gap-3 text-xs text-[#2a2d3d]/70">
-            <span className="flex items-center gap-1">{[...Array(5)].map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />)}</span>
-            <span>Loved by Indian devs &amp; agencies</span>
-          </div>
-        </div>
+        <AuthShowcase />
       </div>
     </div>
   );

@@ -67,11 +67,11 @@ export default function ProfilePage() {
           <Card>
             <CardHeader title={<span className="flex items-center gap-2"><Building2 className="h-4 w-4 text-brand-600" /> Identity</span>} subtitle="Your registered legal entity and GST identity." />
             <CardBody className="grid gap-4 sm:grid-cols-2">
-              <Input label="Legal / business name" value={form.legalName ?? ''} onChange={(e) => set('legalName', e.target.value)} placeholder="Acme Dev Studio LLP" />
+              <Input label="Legal / business name" value={form.legalName ?? ''} onChange={(e) => set('legalName', e.target.value)} placeholder="Acme Dev Studio LLP" maxLength={200} />
               <Input label="GSTIN" value={form.gstin ?? ''} onChange={(e) => set('gstin', e.target.value.toUpperCase())} placeholder="27ABCDE1234F1Z5" hint="15-character GST identification number." />
               <div className="sm:col-span-2">
                 <label className="label">Registered address</label>
-                <textarea className="field min-h-[80px] resize-y" value={form.address ?? ''} onChange={(e) => set('address', e.target.value)} placeholder="Street, city, state, PIN" />
+                <textarea className="field min-h-[80px] resize-y" value={form.address ?? ''} onChange={(e) => set('address', e.target.value)} placeholder="Street, city, state, PIN" maxLength={400} />
               </div>
               <Select label="Default SAC code" value={form.defaultSac ?? ''} onChange={(e) => set('defaultSac', e.target.value)} hint="Applied to new invoice items; overridable per line.">
                 <option value="">Select a SAC code…</option>

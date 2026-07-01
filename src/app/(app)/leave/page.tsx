@@ -134,7 +134,7 @@ export default function LeavePage() {
           </div>
           <div>
             <label className="label">Reason</label>
-            <textarea className="field min-h-[64px] resize-y" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} placeholder="Optional note" />
+            <textarea className="field min-h-[64px] resize-y" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} placeholder="Optional note" maxLength={500} />
           </div>
         </form>
       </Modal>

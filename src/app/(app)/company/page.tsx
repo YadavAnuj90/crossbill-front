@@ -88,7 +88,7 @@ export default function CompanyPage() {
             </div>
             <div>
               <label className="label">Registered address</label>
-              <textarea className="field min-h-[64px] resize-y" value={form.registeredAddress} onChange={(e) => setForm({ ...form, registeredAddress: e.target.value })} placeholder="Street, city, state, PIN" />
+              <textarea className="field min-h-[64px] resize-y" value={form.registeredAddress} onChange={(e) => setForm({ ...form, registeredAddress: e.target.value })} placeholder="Street, city, state, PIN" maxLength={600} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Input label="Website" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder="https://acme.com" />

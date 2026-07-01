@@ -215,7 +215,7 @@ export default function EmployeesPage() {
           </div>
           <div>
             <label className="label">Address</label>
-            <textarea className="field min-h-[64px] resize-y" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Residential address" />
+            <textarea className="field min-h-[64px] resize-y" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Residential address" maxLength={400} />
           </div>
         </form>
       </Modal>

@@ -83,6 +83,32 @@ export interface Invoice {
   updatedAt: string;
 }
 
+export type EInvoiceStatus = 'generated' | 'cancelled';
+
+export interface EInvoice {
+  id: string;
+  orgId: string;
+  invoiceId: string;
+  invoiceNumber: string;
+  invoiceDate: string;
+  totalValue: string;
+  currency: string;
+  irn: string;
+  ackNo: string | null;
+  ackDate: string | null;
+  signedInvoice: string | null;
+  signedQr: string | null;
+  qrImage: string | null;
+  status: EInvoiceStatus;
+  provider: string;
+  sandbox: boolean;
+  generatedAt: string | null;
+  cancelledAt: string | null;
+  cancelReason: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type NoteKind = 'credit' | 'debit';
 
 export interface Note {

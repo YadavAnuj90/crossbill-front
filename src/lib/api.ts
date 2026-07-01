@@ -6,7 +6,7 @@
 
 import type {
   Profile, Client, Invoice, Paginated, CreateInvoiceInput, CreateClientInput,
-  Remittance, CreateRemittanceInput, AgingInvoice, Note, CreateNoteInput,
+  Remittance, CreateRemittanceInput, AgingInvoice, Note, CreateNoteInput, EInvoice,
   Payment, Plan, BillingOverview,
   Agreement, CreateAgreementInput, SendAgreementInput, SignAgreementInput, SigningView, EsignStatus,
   Consent, CreateConsentInput,
@@ -160,6 +160,17 @@ export const invoices = {
   updateStatus: (id: string, status: string) =>
     request<Invoice>(`/invoices/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) }),
   pdf: (id: string) => request<{ url: string; status: string }>(`/invoices/${id}/pdf`),
+};
+
+// ─────────────────────────── e-Invoicing (GST IRN + signed QR) ───────────────────────────
+export const einvoice = {
+  status: () => request<{ provider: string; sandbox: boolean }>('/einvoice/status'),
+  list: (page = 1, limit = 50) =>
+    request<Paginated<EInvoice>>(`/einvoice?page=${page}&limit=${limit}`),
+  get: (invoiceId: string) => request<EInvoice | null>(`/einvoice/${invoiceId}`),
+  generate: (invoiceId: string) => request<EInvoice>(`/einvoice/${invoiceId}/generate`, { method: 'POST' }),
+  cancel: (invoiceId: string, reason: string) =>
+    request<EInvoice>(`/einvoice/${invoiceId}/cancel`, { method: 'POST', body: JSON.stringify({ reason }) }),
 };
 
 // ─────────────────────────── Remittances / FIRC ───────────────────────────
@@ -375,5 +386,5 @@ export const reports = {
   },
 };
 
-const api = { auth, profile, clients, invoices, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, reports, setAccessToken, getAccessToken, ApiError };
+const api = { auth, profile, clients, invoices, einvoice, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, reports, setAccessToken, getAccessToken, ApiError };
 export default api;

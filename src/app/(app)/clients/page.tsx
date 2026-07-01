@@ -185,7 +185,7 @@ export default function ClientsPage() {
 
           <div>
             <label className="label">Address</label>
-            <textarea className="field min-h-[64px] resize-y" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Street, city, state, PIN" />
+            <textarea className="field min-h-[64px] resize-y" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Street, city, state, PIN" maxLength={400} />
           </div>
         </form>
       </Modal>

@@ -19,7 +19,7 @@ const NAV = [
   { href: '/payments', label: 'Payments', icon: Banknote },
   { href: '/fema', label: 'FEMA tracker', icon: AlarmClock },
   { href: '/reports', label: 'Filing & reports', icon: FileSpreadsheet },
-  { href: '/einvoicing', label: 'e-Invoicing', icon: QrCode, soon: true },
+  { href: '/einvoicing', label: 'e-Invoicing', icon: QrCode },
   { href: '/team', label: 'Team', icon: UsersRound },
 ];
 

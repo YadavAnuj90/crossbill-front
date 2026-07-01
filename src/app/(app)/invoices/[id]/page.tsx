@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
   ArrowLeft, Download, CheckCircle2, ShieldCheck, Globe, CalendarClock, RefreshCw, Coins,
-  Wallet, FileCheck2, Plus, Building2, MapPin, Receipt,
+  Wallet, FileCheck2, Plus, Building2, MapPin, Receipt, QrCode, Ban,
 } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
-import type { Invoice, Remittance } from '@/lib/types';
+import type { Invoice, Remittance, EInvoice } from '@/lib/types';
 import { stateNameOf } from '@/lib/types';
 import { formatMoney, formatDate, daysUntil } from '@/lib/format';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -28,12 +28,15 @@ export default function InvoiceDetailPage() {
   const { notify } = useToast();
   const [inv, setInv] = useState<Invoice | null>(null);
   const [remittances, setRemittances] = useState<Remittance[]>([]);
+  const [einv, setEinv] = useState<EInvoice | null>(null);
   const [busy, setBusy] = useState(false);
+  const [eBusy, setEBusy] = useState(false);
   const [payOpen, setPayOpen] = useState(false);
 
   const load = useCallback(() => {
     api.invoices.get(id).then(setInv).catch(() => notify('error', 'Invoice not found'));
     api.remittances.listForInvoice(id).then(setRemittances).catch(() => {});
+    api.einvoice.get(id).then(setEinv).catch(() => {});
   }, [id, notify]);
   useEffect(() => { load(); }, [load]);
 
@@ -51,6 +54,22 @@ export default function InvoiceDetailPage() {
     try { const u = await api.invoices.updateStatus(inv.id, 'paid'); setInv(u); notify('success', 'Marked as paid'); }
     catch (err) { notify('error', err instanceof Error ? err.message : 'Could not update'); }
     finally { setBusy(false); }
+  }
+
+  async function generateIrn() {
+    setEBusy(true);
+    try { const e = await api.einvoice.generate(id); setEinv(e); notify('success', 'IRN generated'); }
+    catch (err) { notify('error', err instanceof Error ? err.message : 'Could not generate IRN'); }
+    finally { setEBusy(false); }
+  }
+
+  async function cancelIrn() {
+    const reason = window.prompt('Reason for cancelling this IRN?');
+    if (!reason || !reason.trim()) return;
+    setEBusy(true);
+    try { const e = await api.einvoice.cancel(id, reason.trim()); setEinv(e); notify('success', 'IRN cancelled'); }
+    catch (err) { notify('error', err instanceof Error ? err.message : 'Could not cancel IRN'); }
+    finally { setEBusy(false); }
   }
 
   if (!inv) return <PageLoader />;
@@ -187,6 +206,42 @@ export default function InvoiceDetailPage() {
                   <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Export declaration</p><p className="text-ink-soft mt-0.5 leading-snug">{inv.declarationText}</p></div>
                   <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><Coins className="h-3.5 w-3.5" /> Rate captured</p><p className="text-ink-soft mt-0.5 font-mono">1 {inv.currency} = ₹{parseFloat(inv.fxRate).toFixed(4)} · {formatDate(inv.fxRateDate)}</p></div>
                   <div><p className="text-xs text-ink-faint flex items-center gap-1.5"><CalendarClock className="h-3.5 w-3.5" /> FEMA realisation due</p><p className={`mt-0.5 ${atRisk ? 'text-red-600 font-medium' : 'text-ink-soft'}`}>{inv.femaDueDate ? formatDate(inv.femaDueDate) : '—'}{inv.status !== 'paid' && inv.femaDueDate && <span className="text-ink-faint"> · {d > 0 ? `${d} days left` : 'overdue'}</span>}</p></div>
+                </>
+              )}
+            </CardBody>
+          </Card>
+        </Reveal>
+
+        <Reveal delay={140}>
+          <Card className="h-fit">
+            <CardHeader title="E-Invoice (IRN)" subtitle="GST IRP registration & signed QR." />
+            <CardBody className="space-y-4">
+              {!einv || einv.status === 'cancelled' ? (
+                <>
+                  {einv?.status === 'cancelled' && <Badge tone="red"><Ban className="h-3.5 w-3.5" /> Previous IRN cancelled</Badge>}
+                  <p className="text-sm text-ink-muted leading-snug">Register this invoice on the IRP to get a GST-valid IRN + signed QR.</p>
+                  <Button onClick={generateIrn} loading={eBusy}><QrCode className="h-4 w-4" /> Generate IRN</Button>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge tone="green"><ShieldCheck className="h-3.5 w-3.5" /> Generated</Badge>
+                    {einv.sandbox && <span className="rounded-full bg-paper px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-ink-faint ring-1 ring-inset ring-paper-border">Sandbox</span>}
+                  </div>
+                  <div>
+                    <p className="text-xs text-ink-faint">IRN</p>
+                    <p className="mt-0.5 font-mono text-xs text-ink-soft break-all">{einv.irn}</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><p className="text-xs text-ink-faint">Ack No</p><p className="mt-0.5 font-mono text-xs text-ink-soft">{einv.ackNo ?? '—'}</p></div>
+                    <div><p className="text-xs text-ink-faint">Ack Date</p><p className="mt-0.5 text-ink-soft">{einv.ackDate ? formatDate(einv.ackDate) : '—'}</p></div>
+                  </div>
+                  {einv.qrImage ? (
+                    <img src={einv.qrImage} alt="e-invoice QR" className="h-36 w-36 rounded-lg border border-paper-border bg-white p-1" />
+                  ) : (
+                    <p className="text-xs text-ink-muted">QR image unavailable — run <code>npm install qrcode</code> in the API.</p>
+                  )}
+                  <button onClick={cancelIrn} disabled={eBusy} className="inline-flex items-center gap-1.5 text-sm text-red-500 hover:underline disabled:opacity-50"><Ban className="h-3.5 w-3.5" /> Cancel IRN</button>
                 </>
               )}
             </CardBody>

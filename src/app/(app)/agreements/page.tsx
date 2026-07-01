@@ -131,7 +131,7 @@ export default function AgreementsPage() {
           </div>
           <div>
             <label className="label">Body / terms</label>
-            <textarea className="field min-h-[160px] resize-y" value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Paste or write the agreement text. It will be rendered into the signed PDF." />
+            <textarea className="field min-h-[160px] resize-y" value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Paste or write the agreement text. It will be rendered into the signed PDF." maxLength={100000} />
           </div>
         </form>
       </Modal>

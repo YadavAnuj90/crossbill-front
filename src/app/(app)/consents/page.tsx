@@ -106,11 +106,11 @@ export default function ConsentsPage() {
               <option value="legitimate_use">Legitimate use</option>
             </Select>
           </div>
-          <Input label="Data principal (if not a client)" value={form.dataPrincipal} onChange={(e) => setForm({ ...form, dataPrincipal: e.target.value })} placeholder="Name or email" />
-          <Input label="Purpose" required value={form.purpose} onChange={(e) => setForm({ ...form, purpose: e.target.value })} placeholder="Invoicing & GST/FEMA compliance" />
+          <Input label="Data principal (if not a client)" value={form.dataPrincipal} onChange={(e) => setForm({ ...form, dataPrincipal: e.target.value })} placeholder="Name or email" maxLength={200} />
+          <Input label="Purpose" required value={form.purpose} onChange={(e) => setForm({ ...form, purpose: e.target.value })} placeholder="Invoicing & GST/FEMA compliance" maxLength={300} />
           <div>
             <label className="label">Notes</label>
-            <textarea className="field min-h-[72px] resize-y" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Retention period, scope, how consent was obtained…" />
+            <textarea className="field min-h-[72px] resize-y" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Retention period, scope, how consent was obtained…" maxLength={2000} />
           </div>
         </form>
       </Modal>

@@ -132,7 +132,7 @@ export default function TemplatesPage() {
           </div>
           <div>
             <label className="label">Body</label>
-            <textarea className="field min-h-[200px] resize-y font-mono text-sm" value={body} onChange={(e) => setBody(e.target.value)} placeholder={'Use {{client_name}}, {{amount}}, {{date}} as merge fields.\n\nThis NDA is entered into between {{seller}} and {{client_name}} on {{date}}...'} />
+            <textarea className="field min-h-[200px] resize-y font-mono text-sm" value={body} onChange={(e) => setBody(e.target.value)} placeholder={'Use {{client_name}}, {{amount}}, {{date}} as merge fields.\n\nThis NDA is entered into between {{seller}} and {{client_name}} on {{date}}...'} maxLength={100000} />
             <p className="hint mt-1.5">Wrap merge fields in double braces, e.g. <code className="font-mono">{'{{client_name}}'}</code>.</p>
           </div>
           {detected.length > 0 && (

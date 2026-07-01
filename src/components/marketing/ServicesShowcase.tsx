@@ -73,7 +73,7 @@ const GROUPS: Group[] = [
     label: 'Connect everything', short: 'Connect', tone: 'cyan', items: [
       { icon: <MessageCircle className="h-full w-full" />, title: 'WhatsApp delivery', desc: 'Share invoices, pay links and signing links over WhatsApp in a tap.' },
       { icon: <Stamp className="h-full w-full" />, title: 'Digital eStamping', desc: 'Pay state stamp duty and affix it to agreements without leaving Crossbill.', soon: true },
-      { icon: <QrCode className="h-full w-full" />, title: 'e-Invoicing (IRN/QR)', desc: 'IRN registration and a signed QR for B2B invoices.', soon: true },
+      { icon: <QrCode className="h-full w-full" />, title: 'e-Invoicing (IRN/QR)', desc: 'IRN registration and a signed QR for B2B invoices.', isNew: true },
       { icon: <Blocks className="h-full w-full" />, title: 'Integrations', desc: 'Zoho Books, Tally, QuickBooks, Stripe, GST Portal and Email.', soon: true },
     ],
   },

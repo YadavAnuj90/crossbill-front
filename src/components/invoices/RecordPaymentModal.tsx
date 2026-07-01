@@ -94,7 +94,7 @@ export function RecordPaymentModal({ invoice, open, onClose, onRecorded }: {
 
         <div>
           <label className="label">Notes <span className="text-ink-faint font-normal">(optional)</span></label>
-          <textarea className="field min-h-[64px] resize-y" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Bank ref, UTR, etc." />
+          <textarea className="field min-h-[64px] resize-y" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Bank ref, UTR, etc." maxLength={500} />
         </div>
       </form>
     </Modal>

@@ -96,7 +96,7 @@ export default function ExitPage() {
             <Input label="Resignation date" type="date" value={form.resignationDate} onChange={(e) => setForm({ ...form, resignationDate: e.target.value })} />
             <Input label="Notice (days)" type="number" value={String(form.noticeDays ?? 30)} onChange={(e) => setForm({ ...form, noticeDays: parseInt(e.target.value || '0', 10) })} />
           </div>
-          <div><label className="label">Reason</label><textarea className="field min-h-[64px] resize-y" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} placeholder="Optional" /></div>
+          <div><label className="label">Reason</label><textarea className="field min-h-[64px] resize-y" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} placeholder="Optional" maxLength={500} /></div>
         </form>
       </Modal>
 

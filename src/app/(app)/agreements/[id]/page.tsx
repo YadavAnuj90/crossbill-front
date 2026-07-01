@@ -170,7 +170,7 @@ export default function AgreementDetailPage() {
       <Modal open={open} onClose={() => setOpen(false)} title="Send for signature"
         footer={<><Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button><Button form="send-form" type="submit" loading={busy}>Send</Button></>}>
         <form id="send-form" onSubmit={send} className="space-y-4">
-          <p className="text-sm text-ink-muted flex items-start gap-2"><AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" /> The signer gets a secure link. If email is configured they'll also receive a one-time passcode.</p>
+          <p className="text-sm text-ink-muted flex items-start gap-2"><AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" /> The signer gets a secure link. If email is configured they&apos;ll also receive a one-time passcode.</p>
           <Input label="Signer name" required value={signerName} onChange={(e) => setSignerName(e.target.value)} placeholder="Anita Rao" />
           <Input label="Signer email" type="email" required value={signerEmail} onChange={(e) => setSignerEmail(e.target.value)} placeholder="anita@foo.com" />
           <label className="flex items-start gap-2.5 text-sm text-ink-soft cursor-pointer rounded-xl border border-paper-border p-3">

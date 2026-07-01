@@ -17,7 +17,7 @@ export default function VerifyEntryPage() {
           <span className="font-semibold text-ink">Crossbill · eSign verifier</span>
         </div>
         <h1 className="text-xl font-semibold tracking-tight text-ink">Verify a signed document</h1>
-        <p className="mt-1 text-sm text-ink-muted">Enter the verification code printed on the signed PDF to confirm it's authentic.</p>
+        <p className="mt-1 text-sm text-ink-muted">Enter the verification code printed on the signed PDF to confirm it&apos;s authentic.</p>
         <form onSubmit={(e) => { e.preventDefault(); if (code.trim()) router.push(`/verify/${code.trim().toUpperCase()}`); }} className="mt-5 flex gap-2">
           <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="e.g. 9F2A4C7E10" className="field font-mono tracking-widest uppercase" />
           <button type="submit" className="btn-primary shrink-0"><Search className="h-4 w-4" /> Verify</button>

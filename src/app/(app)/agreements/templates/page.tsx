@@ -62,7 +62,7 @@ export default function TemplatesPage() {
     finally { setSaving(false); }
   }
 
-  async function useTemplate(t: AgreementTemplate) {
+  async function applyTemplate(t: AgreementTemplate) {
     try {
       const a = await api.agreementTemplates.use(t.id, {});
       notify('success', 'Draft created from template');
@@ -107,7 +107,7 @@ export default function TemplatesPage() {
                     <TD>{formatDate(t.createdAt)}</TD>
                     <TD>
                       <div className="flex items-center justify-end gap-1">
-                        <button onClick={() => useTemplate(t)} className="btn-ghost text-sm py-1.5" title="Create a draft"><FilePlus2 className="h-4 w-4" /> Use</button>
+                        <button onClick={() => applyTemplate(t)} className="btn-ghost text-sm py-1.5" title="Create a draft"><FilePlus2 className="h-4 w-4" /> Use</button>
                         <button onClick={() => setBulkFor(t)} className="btn-ghost text-sm py-1.5" title="Send to many"><Send className="h-4 w-4" /> Bulk send</button>
                         <button onClick={() => remove(t)} className="btn-ghost p-2 text-red-500 hover:bg-red-50"><Trash2 className="h-4 w-4" /></button>
                       </div>

@@ -86,7 +86,7 @@ export function RecordPaymentModal({ invoice, open, onClose, onRecorded }: {
             </div>
           ) : (
             <button type="button" onClick={() => fileRef.current?.click()} className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-paper-border bg-paper/50 px-3.5 py-4 text-sm text-ink-muted hover:border-brand-300 hover:bg-brand-50/40 transition">
-              <Upload className="h-4 w-4" /> Click to attach the bank's remittance proof
+              <Upload className="h-4 w-4" /> Click to attach the bank&apos;s remittance proof
             </button>
           )}
           <input ref={fileRef} type="file" accept=".pdf,.png,.jpg,.jpeg,image/*,application/pdf" className="hidden" onChange={(e) => pickFile(e.target.files?.[0] ?? null)} />

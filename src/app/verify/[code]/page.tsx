@@ -39,7 +39,7 @@ export default function VerifyResultPage() {
           <div className="rounded-2xl bg-paper-card p-10 text-center shadow-card">
             <span className="grid h-14 w-14 mx-auto place-items-center rounded-2xl bg-red-50 text-red-600 mb-4"><ShieldX className="h-7 w-7" /></span>
             <h1 className="text-lg font-semibold text-ink">No signed document found</h1>
-            <p className="mt-1.5 text-sm text-ink-muted">Code <span className="font-mono">{code}</span> doesn't match any signed agreement. Double-check the code on the PDF.</p>
+            <p className="mt-1.5 text-sm text-ink-muted">Code <span className="font-mono">{code}</span> doesn&apos;t match any signed agreement. Double-check the code on the PDF.</p>
           </div>
         ) : (
           <div className="rounded-2xl bg-paper-card p-7 shadow-card">
@@ -65,7 +65,7 @@ export default function VerifyResultPage() {
             </dl>
 
             {res.geoFenceStatus === 'outside' && (
-              <p className="mt-4 flex items-start gap-2 rounded-lg bg-amber-50 p-3 text-xs text-amber-700"><AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" /> This document was signed from outside the sender's allowed signing area — review before relying on it.</p>
+              <p className="mt-4 flex items-start gap-2 rounded-lg bg-amber-50 p-3 text-xs text-amber-700"><AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" /> This document was signed from outside the sender&apos;s allowed signing area — review before relying on it.</p>
             )}
 
             {res.signedPdfUrl && <a href={res.signedPdfUrl} target="_blank" rel="noreferrer" className="btn-primary mt-5 inline-flex"><FileText className="h-4 w-4" /> View signed PDF</a>}

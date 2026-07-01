@@ -26,7 +26,7 @@ export default function SecurityPage() {
   function add() { setFences((fs) => [...fs, { label: '', lat: 0, lng: 0, radiusKm: 50 }]); }
   function remove(i: number) { setFences((fs) => fs.filter((_, idx) => idx !== i)); }
 
-  function useMyLocation(i: number) {
+  function applyMyLocation(i: number) {
     if (!('geolocation' in navigator)) { notify('error', 'Geolocation not available'); return; }
     navigator.geolocation.getCurrentPosition(
       (p) => set(i, { lat: +p.coords.latitude.toFixed(5), lng: +p.coords.longitude.toFixed(5) }),
@@ -73,7 +73,7 @@ export default function SecurityPage() {
                     <input className="field py-2 text-sm" type="number" step="0.00001" placeholder="Longitude" value={f.lng} onChange={(e) => set(i, { lng: parseFloat(e.target.value) })} />
                     <input className="field py-2 text-sm" type="number" step="1" placeholder="Radius km" value={f.radiusKm} onChange={(e) => set(i, { radiusKm: parseFloat(e.target.value) })} />
                     <div className="flex items-center gap-1">
-                      <button onClick={() => useMyLocation(i)} title="Use my location" className="btn-ghost p-2"><Crosshair className="h-4 w-4" /></button>
+                      <button onClick={() => applyMyLocation(i)} title="Use my location" className="btn-ghost p-2"><Crosshair className="h-4 w-4" /></button>
                       <button onClick={() => remove(i)} className="btn-ghost p-2 text-red-500"><Trash2 className="h-4 w-4" /></button>
                     </div>
                   </div>

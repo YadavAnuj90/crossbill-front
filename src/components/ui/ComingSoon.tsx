@@ -43,7 +43,7 @@ export function ComingSoon({
                 onClick={() => notify('success', `Thanks — we'll notify you the moment ${title} goes live.`)}
                 className="inline-flex items-center gap-2 rounded-xl bg-paper-card px-5 py-2.5 text-sm font-semibold text-ink shadow-card transition hover:shadow-lift"
               >
-                <Bell className="h-4 w-4" /> Notify me when it's ready
+                <Bell className="h-4 w-4" /> Notify me when it&apos;s ready
               </button>
               <a href="/contact" className="inline-flex items-center gap-1.5 text-sm font-medium text-white/90 hover:text-white">
                 Talk to us <ArrowUpRight className="h-4 w-4" />

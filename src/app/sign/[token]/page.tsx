@@ -253,7 +253,7 @@ export default function SignPage() {
                 ) : (
                   <button type="button" onClick={openCam} className="btn-secondary text-sm"><Camera className="h-4 w-4" /> Take a selfie</button>
                 )}
-                <p className="hint mt-1.5">Your location and a selfie strengthen the signature's authenticity. Both are optional.</p>
+                <p className="hint mt-1.5">Your location and a selfie strengthen the signature&apos;s authenticity. Both are optional.</p>
               </div>
 
               {view.otpRequired && (

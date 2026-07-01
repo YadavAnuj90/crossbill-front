@@ -93,7 +93,7 @@ export function LandingFooter() {
             <p className="text-sm font-medium text-ink">Stay compliant, effortlessly</p>
             <p className="mt-1 text-xs text-ink-faint">GST &amp; FEMA updates &amp; product news. No spam.</p>
             {done ? (
-              <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-brand-50 border border-brand-200 px-3 py-2 text-sm text-brand-700 dark:bg-brand-500/15 dark:border-brand-400/25 dark:text-brand-300"><ShieldCheck className="h-4 w-4" /> You're on the list!</div>
+              <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-brand-50 border border-brand-200 px-3 py-2 text-sm text-brand-700 dark:bg-brand-500/15 dark:border-brand-400/25 dark:text-brand-300"><ShieldCheck className="h-4 w-4" /> You&apos;re on the list!</div>
             ) : (
               <form onSubmit={(e) => { e.preventDefault(); if (email.includes('@')) setDone(true); }} className="mt-3 flex gap-2">
                 <div className="relative flex-1">

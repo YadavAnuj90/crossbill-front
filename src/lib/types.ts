@@ -220,10 +220,28 @@ export interface Plan {
   features: string[];
 }
 
+export type SubscriptionStatus = 'none' | 'active' | 'past_due' | 'cancelled';
+
+export interface PlanLimits {
+  invoicesPerMonth: number | null; // null = unlimited
+  teamMembers: number | null;      // null = unlimited
+  eInvoicing: boolean;
+  reminders: boolean;
+  caAccess: boolean;
+}
+
+export interface PlanUsage {
+  invoicesThisMonth: number;
+}
+
 export interface BillingOverview {
   configured: boolean;
   currentPlan: Plan;
   planActivatedAt: string | null;
+  currentPeriodEnd: string | null;
+  subscriptionStatus: SubscriptionStatus;
+  limits: PlanLimits;
+  usage: PlanUsage;
   plans: Plan[];
 }
 
@@ -666,6 +684,87 @@ export interface UpdateExitInput {
   settlementNotes?: string;
   lastWorkingDate?: string;
   status?: string;
+}
+
+// ─────────────────────────── HR · Assets ───────────────────────────
+export type AssetCategory = 'laptop' | 'desktop' | 'phone' | 'monitor' | 'sim' | 'id_card' | 'access_card' | 'other';
+export type AssetCondition = 'new' | 'good' | 'fair' | 'poor';
+export type AssetStatus = 'in_stock' | 'allocated' | 'retired' | 'lost';
+
+export interface AssetHistory {
+  employeeId: string;
+  employeeName: string | null;
+  assignedAt: string;
+  returnedAt: string | null;
+  returnCondition: string | null;
+}
+
+export interface Asset {
+  id: string;
+  orgId: string;
+  tag: string;
+  name: string;
+  category: AssetCategory;
+  serialNo: string | null;
+  purchaseDate: string | null;
+  cost: string;
+  condition: AssetCondition;
+  status: AssetStatus;
+  assignedToEmployeeId: string | null;
+  assignedToName: string | null;
+  assignedAt: string | null;
+  notes: string | null;
+  history: AssetHistory[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateAssetInput {
+  tag: string;
+  name: string;
+  category?: string;
+  serialNo?: string;
+  purchaseDate?: string;
+  cost?: string;
+  condition?: string;
+  notes?: string;
+}
+
+// ─────────────────────────── HR · Expenses ───────────────────────────
+export type ExpenseCategory = 'travel' | 'meals' | 'accommodation' | 'software' | 'hardware' | 'office' | 'marketing' | 'other';
+export type ExpenseStatus = 'submitted' | 'approved' | 'rejected' | 'reimbursed';
+
+export interface Expense {
+  id: string;
+  orgId: string;
+  employeeId: string;
+  employeeName: string | null;
+  category: ExpenseCategory;
+  amount: string;
+  currency: string;
+  spentOn: string;
+  description: string | null;
+  receiptUrl: string | null;
+  notes: string | null;
+  status: ExpenseStatus;
+  submittedAt: string | null;
+  decidedBy: string | null;
+  decidedAt: string | null;
+  decisionNote: string | null;
+  reimbursedAt: string | null;
+  reimbursementRef: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateExpenseInput {
+  employeeId: string;
+  category?: string;
+  amount: string;
+  currency?: string;
+  spentOn: string;
+  description?: string;
+  receiptUrl?: string;
 }
 
 export const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'CAD', 'SGD', 'AED'] as const;

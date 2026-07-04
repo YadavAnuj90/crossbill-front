@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { CreditCard, Check, Sparkles, AlertTriangle, ExternalLink } from 'lucide-react';
+import { CreditCard, Check, X, Sparkles, AlertTriangle, ExternalLink } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
 import type { BillingOverview, Plan } from '@/lib/types';
@@ -34,6 +34,11 @@ export default function BillingPage() {
   }
 
   const currentId = data?.currentPlan?.id ?? 'free';
+  const isFreePlan = (data?.currentPlan?.priceInr ?? 0) <= 0;
+  const invoiceLimit = data?.limits?.invoicesPerMonth ?? null;
+  const invoiceUsed = data?.usage?.invoicesThisMonth ?? 0;
+  const usageAtLimit = invoiceLimit !== null && invoiceUsed >= invoiceLimit;
+  const usagePct = invoiceLimit && invoiceLimit > 0 ? Math.min(100, Math.round((invoiceUsed / invoiceLimit) * 100)) : 0;
 
   return (
     <div>
@@ -44,15 +49,62 @@ export default function BillingPage() {
       ) : (
         <>
           <Reveal>
-            <Card className="mb-6 p-5 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-inset ring-brand-100"><Sparkles className="h-5 w-5" /></span>
-                <div>
-                  <p className="text-sm text-ink-muted">Current plan</p>
-                  <p className="font-semibold text-ink text-lg">{data.currentPlan?.name ?? 'Free'}{data.currentPlan && data.currentPlan.priceInr > 0 && <span className="text-ink-muted font-normal text-sm"> · ₹{data.currentPlan.priceInr}/mo</span>}</p>
+            <Card className="mb-6 p-5">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-inset ring-brand-100"><Sparkles className="h-5 w-5" /></span>
+                  <div>
+                    <p className="text-sm text-ink-muted">Your plan &amp; usage</p>
+                    <p className="font-semibold text-ink text-lg">{data.currentPlan?.name ?? 'Free'}{data.currentPlan && data.currentPlan.priceInr > 0 && <span className="text-ink-muted font-normal text-sm"> · ₹{data.currentPlan.priceInr}/mo</span>}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  {isFreePlan ? (
+                    <Badge tone="gray">Free plan — no billing</Badge>
+                  ) : data.subscriptionStatus === 'active' && data.currentPeriodEnd ? (
+                    <Badge tone="green">Renews on {formatDate(data.currentPeriodEnd)}</Badge>
+                  ) : data.subscriptionStatus === 'past_due' ? (
+                    <Badge tone="amber">Payment past due</Badge>
+                  ) : data.subscriptionStatus === 'cancelled' ? (
+                    <Badge tone="gray">Reverted to Free</Badge>
+                  ) : null}
+                  {data.planActivatedAt && <p className="mt-1 text-xs text-ink-faint">Active since {formatDate(data.planActivatedAt)}</p>}
                 </div>
               </div>
-              {data.planActivatedAt && <p className="text-xs text-ink-faint">Active since {formatDate(data.planActivatedAt)}</p>}
+
+              {/* Invoice usage meter */}
+              <div className="mt-5 border-t border-paper-border pt-4">
+                {data.limits.invoicesPerMonth === null ? (
+                  <p className="flex items-center gap-1.5 text-sm text-ink-soft"><Check className="h-4 w-4 text-brand-600" /> Unlimited invoices</p>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-ink-muted">Invoice usage</span>
+                      <span className="font-medium text-ink">{data.usage.invoicesThisMonth} / {data.limits.invoicesPerMonth} invoices this month</span>
+                    </div>
+                    <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-paper">
+                      <div
+                        className={cn('h-full rounded-full transition-all', usageAtLimit ? 'bg-amber-500' : 'bg-brand-500')}
+                        style={{ width: `${usagePct}%` }}
+                      />
+                    </div>
+                    {usageAtLimit && (
+                      <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-amber-600"><AlertTriangle className="h-3.5 w-3.5" /> Limit reached — upgrade for unlimited invoices.</p>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Feature chips */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                <FeatureChip on={data.limits.eInvoicing} label="e-Invoicing" />
+                <FeatureChip on={data.limits.reminders} label="Email reminders" />
+                <FeatureChip on={data.limits.caAccess} label="CA access" />
+                <Badge tone="gray">
+                  <span className="h-1.5 w-1.5 rounded-full bg-current opacity-70" />
+                  Team: {data.limits.teamMembers === null ? 'Unlimited' : data.limits.teamMembers}
+                </Badge>
+              </div>
             </Card>
           </Reveal>
 
@@ -105,5 +157,14 @@ export default function BillingPage() {
         </>
       )}
     </div>
+  );
+}
+
+function FeatureChip({ on, label }: { on: boolean; label: string }) {
+  return (
+    <Badge tone={on ? 'green' : 'gray'}>
+      {on ? <Check className="h-3.5 w-3.5" /> : <X className="h-3.5 w-3.5" />}
+      {label}
+    </Badge>
   );
 }

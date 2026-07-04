@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
-import { Modal } from '@/components/ui/Modal';
+import { Drawer } from '@/components/ui/Drawer';
 import { Avatar } from '@/components/ui/Avatar';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -172,10 +172,11 @@ export default function EmployeesPage() {
         </Card>
       </Reveal>
 
-      <Modal
+      <Drawer
         open={open}
         onClose={() => setOpen(false)}
         title={editing ? 'Edit employee' : 'Add employee'}
+        subtitle={editing ? 'Update this team member’s HR record.' : 'Add a new team member to your directory.'}
         footer={<>
           <Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
           <Button form="emp-form" type="submit" loading={saving}>{editing ? 'Save' : 'Add employee'}</Button>
@@ -218,7 +219,7 @@ export default function EmployeesPage() {
             <textarea className="field min-h-[64px] resize-y" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Residential address" maxLength={400} />
           </div>
         </form>
-      </Modal>
+      </Drawer>
     </div>
   );
 }

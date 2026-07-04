@@ -18,6 +18,8 @@ import type {
   SalarySlip, CreateSlipInput, PayrollRun,
   HrLetter, CreateLetterInput,
   Onboarding, Exit, CreateExitInput, UpdateExitInput,
+  Asset, CreateAssetInput,
+  Expense, CreateExpenseInput,
 } from './types';
 
 const BASE = '/api/v1';
@@ -296,6 +298,53 @@ export const employees = {
   remove: (id: string) => request<{ deleted: boolean }>(`/employees/${id}`, { method: 'DELETE' }),
 };
 
+// ─────────────────────────── HR · Assets ───────────────────────────
+export const assets = {
+  stats: () => request<{ total: number; inStock: number; allocated: number; retired: number; lost: number }>('/assets/stats'),
+  list: (q?: { status?: string; category?: string; employeeId?: string; q?: string }) => {
+    const params = new URLSearchParams();
+    if (q?.status) params.set('status', q.status);
+    if (q?.category) params.set('category', q.category);
+    if (q?.employeeId) params.set('employeeId', q.employeeId);
+    if (q?.q) params.set('q', q.q);
+    const qs = params.toString();
+    return request<Asset[]>('/assets' + (qs ? `?${qs}` : ''));
+  },
+  get: (id: string) => request<Asset>(`/assets/${id}`),
+  create: (input: CreateAssetInput) =>
+    request<Asset>('/assets', { method: 'POST', body: JSON.stringify(input) }),
+  update: (id: string, input: Partial<CreateAssetInput>) =>
+    request<Asset>(`/assets/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  assign: (id: string, employeeId: string) =>
+    request<Asset>(`/assets/${id}/assign`, { method: 'POST', body: JSON.stringify({ employeeId }) }),
+  returnAsset: (id: string, body: { condition?: string; notes?: string }) =>
+    request<Asset>(`/assets/${id}/return`, { method: 'POST', body: JSON.stringify(body) }),
+  retire: (id: string) => request<Asset>(`/assets/${id}/retire`, { method: 'POST' }),
+  lost: (id: string) => request<Asset>(`/assets/${id}/lost`, { method: 'POST' }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/assets/${id}`, { method: 'DELETE' }),
+};
+
+// ─────────────────────────── HR · Expenses ───────────────────────────
+export const expenses = {
+  stats: () => request<{ total: number; submitted: number; approved: number; reimbursed: number; rejected: number; pendingAmount: string; reimbursedAmount: string }>('/expenses/stats'),
+  list: (q?: { status?: string; category?: string; employeeId?: string }) => {
+    const params = new URLSearchParams();
+    if (q?.status) params.set('status', q.status);
+    if (q?.category) params.set('category', q.category);
+    if (q?.employeeId) params.set('employeeId', q.employeeId);
+    const qs = params.toString();
+    return request<Expense[]>('/expenses' + (qs ? `?${qs}` : ''));
+  },
+  get: (id: string) => request<Expense>(`/expenses/${id}`),
+  create: (input: CreateExpenseInput) =>
+    request<Expense>('/expenses', { method: 'POST', body: JSON.stringify(input) }),
+  decide: (id: string, body: { status: 'approved' | 'rejected'; note?: string }) =>
+    request<Expense>(`/expenses/${id}/decide`, { method: 'POST', body: JSON.stringify(body) }),
+  reimburse: (id: string, body: { reference?: string }) =>
+    request<Expense>(`/expenses/${id}/reimburse`, { method: 'POST', body: JSON.stringify(body) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/expenses/${id}`, { method: 'DELETE' }),
+};
+
 // ─────────────────────────── Company verification (§2) ───────────────────────────
 export const company = {
   get: () => request<Company>('/company'),
@@ -386,5 +435,5 @@ export const reports = {
   },
 };
 
-const api = { auth, profile, clients, invoices, einvoice, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, reports, setAccessToken, getAccessToken, ApiError };
+const api = { auth, profile, clients, invoices, einvoice, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, assets, expenses, reports, setAccessToken, getAccessToken, ApiError };
 export default api;

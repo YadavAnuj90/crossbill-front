@@ -5,7 +5,7 @@ import {
   LayoutGrid, Contact, Receipt, FileSpreadsheet, BriefcaseBusiness, UsersRound, Settings2,
   AlarmClock, Sparkles, ArrowUpRight, ScrollText, Banknote, QrCode, Puzzle, CreditCard,
   FileSignature, ShieldCheck, Users, CalendarCheck, Plane, IndianRupee, FileBadge,
-  Gauge, Building2, ClipboardCheck, LogOut,
+  Gauge, Building2, ClipboardCheck, LogOut, Laptop, Wallet,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { LogoMark } from '@/components/brand/Logo';
@@ -29,6 +29,8 @@ const PEOPLE = [
   { href: '/attendance', label: 'Attendance', icon: CalendarCheck },
   { href: '/leave', label: 'Leave', icon: Plane },
   { href: '/payroll', label: 'Payroll', icon: IndianRupee },
+  { href: '/assets', label: 'Assets', icon: Laptop },
+  { href: '/expenses', label: 'Expenses', icon: Wallet },
   { href: '/letters', label: 'HR letters', icon: FileBadge },
   { href: '/onboarding', label: 'Onboarding', icon: ClipboardCheck },
   { href: '/exit', label: 'Exit', icon: LogOut },

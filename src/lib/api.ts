@@ -20,6 +20,7 @@ import type {
   Onboarding, Exit, CreateExitInput, UpdateExitInput,
   Asset, CreateAssetInput,
   Expense, CreateExpenseInput,
+  Bill, CreateBillInput, Gstr2bEntry, Reconciliation,
 } from './types';
 
 const BASE = '/api/v1';
@@ -345,6 +346,27 @@ export const expenses = {
   remove: (id: string) => request<{ deleted: boolean }>(`/expenses/${id}`, { method: 'DELETE' }),
 };
 
+// ─────────────────────────── Purchases & ITC reconciliation ───────────────────────────
+export const purchases = {
+  listBills: (q?: { period?: string; q?: string }) => {
+    const params = new URLSearchParams();
+    if (q?.period) params.set('period', q.period);
+    if (q?.q) params.set('q', q.q);
+    const qs = params.toString();
+    return request<Bill[]>('/purchases/bills' + (qs ? `?${qs}` : ''));
+  },
+  getBill: (id: string) => request<Bill>(`/purchases/bills/${id}`),
+  createBill: (input: CreateBillInput) =>
+    request<Bill>('/purchases/bills', { method: 'POST', body: JSON.stringify(input) }),
+  updateBill: (id: string, input: Partial<CreateBillInput>) =>
+    request<Bill>(`/purchases/bills/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  removeBill: (id: string) => request<{ deleted: boolean }>(`/purchases/bills/${id}`, { method: 'DELETE' }),
+  list2b: (period: string) => request<Gstr2bEntry[]>(`/purchases/gstr2b?period=${period}`),
+  sample2b: (period: string) =>
+    request<{ period: string; imported: number }>('/purchases/gstr2b/sample', { method: 'POST', body: JSON.stringify({ period }) }),
+  reconcile: (period: string) => request<Reconciliation>(`/purchases/reconcile?period=${period}`),
+};
+
 // ─────────────────────────── Company verification (§2) ───────────────────────────
 export const company = {
   get: () => request<Company>('/company'),
@@ -435,5 +457,5 @@ export const reports = {
   },
 };
 
-const api = { auth, profile, clients, invoices, einvoice, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, assets, expenses, reports, setAccessToken, getAccessToken, ApiError };
+const api = { auth, profile, clients, invoices, einvoice, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, assets, expenses, purchases, reports, setAccessToken, getAccessToken, ApiError };
 export default api;

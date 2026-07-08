@@ -20,8 +20,8 @@ export function LogoMark({
           <stop offset="1" stopColor="#059669" />
         </linearGradient>
         <linearGradient id="cb-b" x1="15" y1="1" x2="42" y2="27" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5eead4" />
-          <stop offset="0.5" stopColor="#2dd4bf" />
+          <stop stopColor="#67e8f9" />
+          <stop offset="0.5" stopColor="#22d3ee" />
           <stop offset="1" stopColor="#0891b2" />
         </linearGradient>
         <linearGradient id="cb-lens" x1="22" y1="2" x2="22" y2="26" gradientUnits="userSpaceOnUse">
@@ -43,6 +43,8 @@ export function LogoMark({
         <circle cx="30" cy="14" r="13" fill="url(#cb-b)" />
         {/* blended overlap lens */}
         <path d="M22 3.75 A13 13 0 0 1 22 24.25 A13 13 0 0 1 22 3.75 Z" fill="url(#cb-lens)" className={animate ? 'cb-logo-lens' : undefined} />
+        {/* specular highlight — the worlds catching the light */}
+        <ellipse cx="8.5" cy="8" rx="4.2" ry="3.3" fill="#ffffff" opacity="0.3" />
         {/* glint sweep, clipped to the mark */}
         {showGlint && (
           <g clipPath="url(#cb-clip)">

@@ -13,9 +13,9 @@ import { initials } from '@/lib/format';
 import { cn } from '@/lib/cn';
 
 const NOTIFS = [
-  { icon: Sparkles, tone: 'text-brand-600 bg-brand-50', title: 'Welcome to Crossbill', body: 'Your workspace is ready. Add a client to begin.', t: 'just now' },
-  { icon: ShieldCheck, tone: 'text-blue-600 bg-blue-50', title: 'Complete your profile', body: 'Add GSTIN & LUT to unlock compliant invoices.', t: '1h' },
-  { icon: CalendarClock, tone: 'text-amber-600 bg-amber-50', title: 'FEMA reminders are on', body: 'We’ll nudge you before realisation deadlines.', t: '1d' },
+  { icon: Sparkles, tone: 'text-brand-600 bg-brand-50 dark:text-brand-300 dark:bg-brand-500/15', title: 'Welcome to Crossbill', body: 'Your workspace is ready. Add a client to begin.', t: 'just now' },
+  { icon: ShieldCheck, tone: 'text-blue-600 bg-blue-50 dark:text-blue-300 dark:bg-blue-500/15', title: 'Complete your profile', body: 'Add GSTIN & LUT to unlock compliant invoices.', t: '1h' },
+  { icon: CalendarClock, tone: 'text-amber-600 bg-amber-50 dark:text-amber-300 dark:bg-amber-500/15', title: 'FEMA reminders are on', body: 'We’ll nudge you before realisation deadlines.', t: '1d' },
 ];
 
 export function Topbar() {
@@ -74,9 +74,9 @@ export function Topbar() {
 
           {/* Notifications */}
           <div className="relative" ref={bellRef}>
-            <button onClick={() => { setBell((b) => !b); setMenu(false); }} className={cn('relative grid h-9 w-9 place-items-center rounded-xl border bg-paper-card/70 transition', bell ? 'border-brand-300 text-brand-600' : 'border-paper-border text-ink-muted hover:text-ink hover:bg-paper')} aria-label="Notifications">
+            <button onClick={() => { setBell((b) => !b); setMenu(false); }} className={cn('relative grid h-9 w-9 place-items-center rounded-xl border bg-paper-card/70 transition', bell ? 'border-brand-300 text-brand-600 dark:border-brand-400/40 dark:text-brand-300' : 'border-paper-border text-ink-muted hover:text-ink hover:bg-paper')} aria-label="Notifications">
               <Bell className="h-[18px] w-[18px]" />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-white" />
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-500 px-1 text-[9px] font-bold text-white ring-2 ring-paper-card dark:ring-[#0b1018]">{NOTIFS.length}</span>
             </button>
             {bell && (
               <>

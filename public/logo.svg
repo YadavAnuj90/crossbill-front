@@ -6,8 +6,8 @@
       <stop offset="1" stop-color="#059669"/>
     </linearGradient>
     <linearGradient id="cb-b" x1="14" y1="8" x2="36" y2="32" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#5eead4"/>
-      <stop offset="0.5" stop-color="#2dd4bf"/>
+      <stop stop-color="#67e8f9"/>
+      <stop offset="0.5" stop-color="#22d3ee"/>
       <stop offset="1" stop-color="#0891b2"/>
     </linearGradient>
     <linearGradient id="cb-lens" x1="20" y1="11" x2="20" y2="29" gradientUnits="userSpaceOnUse">
@@ -19,4 +19,5 @@
   <circle cx="15" cy="20" r="10" fill="url(#cb-a)"/>
   <circle cx="25" cy="20" r="10" fill="url(#cb-b)"/>
   <path d="M20 11.34 A10 10 0 0 1 20 28.66 A10 10 0 0 1 20 11.34 Z" fill="url(#cb-lens)"/>
+  <ellipse cx="10.5" cy="14.5" rx="3.2" ry="2.5" fill="#ffffff" opacity="0.32"/>
 </svg>

@@ -5,7 +5,7 @@ import {
   LayoutGrid, Contact, Receipt, FileSpreadsheet, BriefcaseBusiness, UsersRound, Settings2,
   AlarmClock, Sparkles, ArrowUpRight, ScrollText, Banknote, QrCode, Puzzle, CreditCard,
   FileSignature, ShieldCheck, Users, CalendarCheck, Plane, IndianRupee, FileBadge,
-  Gauge, Building2, ClipboardCheck, LogOut, Laptop, Wallet,
+  Gauge, Building2, ClipboardCheck, LogOut, Laptop, Wallet, ReceiptText,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { LogoMark } from '@/components/brand/Logo';
@@ -14,6 +14,7 @@ const NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
   { href: '/invoices', label: 'Invoices', icon: Receipt },
   { href: '/notes', label: 'Credit/Debit Notes', icon: ScrollText },
+  { href: '/purchases', label: 'Purchases & ITC', icon: ReceiptText },
   { href: '/agreements', label: 'Agreements', icon: FileSignature },
   { href: '/clients', label: 'Clients', icon: Contact },
   { href: '/payments', label: 'Payments', icon: Banknote },

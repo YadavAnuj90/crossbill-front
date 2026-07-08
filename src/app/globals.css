@@ -294,7 +294,7 @@ html.theming, html.theming *, html.theming *::before, html.theming *::after {
   }
   /* Light-theme soft chip (for the airy Codex-style landing) */
   .chip-soft {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] bg-white/80 backdrop-blur px-3 py-1.5 text-xs font-semibold text-ink-soft;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] bg-white/80 backdrop-blur px-3 py-1.5 text-xs font-semibold text-ink-soft dark:border-white/10 dark:bg-white/[0.06] dark:text-ink-soft;
     box-shadow: 0 6px 20px -10px rgba(60,72,170,0.35);
   }
 }
@@ -439,6 +439,33 @@ html.theming, html.theming *, html.theming *::before, html.theming *::after {
 /* Side drawer: panel slides in from the right edge. */
 @keyframes drawer-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
 .animate-drawer-in { animation: drawer-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ───────────────────────── Globe section FX ───────────────────────── */
+/* scrolling longitude dot-band → illusion of a rotating planet */
+@keyframes globe-rotate { from { background-position: 0 0; } to { background-position: 200px 0; } }
+.animate-globe-rotate { animation: globe-rotate 14s linear infinite; }
+/* slow reverse spin for a counter-rotating orbit */
+@keyframes spin-rev-slow { to { transform: rotate(-360deg); } }
+.animate-spin-rev-slow { animation: spin-rev-slow 30s linear infinite; }
+@keyframes spin-med { to { transform: rotate(360deg); } }
+.animate-spin-med { animation: spin-med 16s linear infinite; }
+/* expanding sonar ring for live city nodes */
+@keyframes cb-sonar { 0% { transform: scale(0.4); opacity: 0.7; } 100% { transform: scale(2.6); opacity: 0; } }
+.animate-cb-sonar { animation: cb-sonar 2.6s ease-out infinite; }
+/* twinkling starfield dot */
+@keyframes cb-twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.9; } }
+.animate-cb-twinkle { animation: cb-twinkle ease-in-out infinite; }
+/* day/night terminator drifting across the sphere */
+@keyframes cb-terminator { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.animate-cb-terminator { animation: cb-terminator 20s linear infinite; }
+/* gentle breathing atmosphere halo */
+@keyframes cb-atmos { 0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.06); } }
+.animate-cb-atmos { animation: cb-atmos 6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-globe-rotate, .animate-spin-rev-slow, .animate-spin-med, .animate-cb-sonar,
+  .animate-cb-twinkle, .animate-cb-terminator, .animate-cb-atmos { animation: none !important; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .mock-stagger > *, .animate-mock-stamp, .animate-mock-bar { animation: none !important; }

@@ -158,6 +158,91 @@ export interface CreateNoteInput {
   items: CreateNoteItemInput[];
 }
 
+// ─────────────────────────── Purchases & ITC reconciliation ───────────────────────────
+export type BillCategory = 'goods' | 'services' | 'capital_goods' | 'other';
+export type ReconStatus = 'matched' | 'mismatch' | 'missing_in_2b' | 'missing_in_books';
+
+export interface Bill {
+  id: string;
+  orgId: string;
+  vendorName: string;
+  vendorGstin: string | null;
+  billNumber: string;
+  billDate: string;
+  period: string;
+  placeOfSupplyState: string | null;
+  category: BillCategory;
+  taxableValue: string;
+  cgst: string;
+  sgst: string;
+  igst: string;
+  cess: string;
+  total: string;
+  itcEligible: boolean;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBillInput {
+  vendorName: string;
+  vendorGstin?: string;
+  billNumber: string;
+  billDate: string;
+  placeOfSupplyState?: string;
+  category?: string;
+  taxableValue: string;
+  cgst?: string;
+  sgst?: string;
+  igst?: string;
+  cess?: string;
+  itcEligible?: boolean;
+  notes?: string;
+}
+
+export interface Gstr2bEntry {
+  id: string;
+  period: string;
+  vendorGstin: string;
+  vendorName: string | null;
+  billNumber: string;
+  billDate: string | null;
+  taxableValue: string;
+  cgst: string;
+  sgst: string;
+  igst: string;
+  cess: string;
+  source: string;
+}
+
+export interface ReconRow {
+  status: ReconStatus;
+  billId: string | null;
+  vendorName: string;
+  vendorGstin: string | null;
+  billNumber: string;
+  billDate: string | null;
+  booksTax: string | null;
+  portalTax: string | null;
+  diff: string | null;
+  itcEligible: boolean | null;
+}
+
+export interface Reconciliation {
+  period: string;
+  counts: { total: number; matched: number; mismatch: number; missingIn2b: number; missingInBooks: number };
+  summary: {
+    itcAsPerBooks: string;
+    itcAsPer2B: string;
+    claimableItc: string;
+    underReviewItc: string;
+    atRiskItc: string;
+    onlyIn2bItc: string;
+    hardBlockRisk: boolean;
+  };
+  rows: ReconRow[];
+}
+
 export interface Paginated<T> {
   items: T[];
   meta: { page: number; limit: number; total: number; totalPages: number };

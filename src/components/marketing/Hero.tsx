@@ -25,10 +25,9 @@ export function Hero() {
       <HeroAmbience />
 
       <div className="relative mx-auto max-w-4xl px-5 pt-44 pb-48 text-center">
-        {/* App mark — floats cleanly on the background with a soft glow (no panel). */}
+        {/* App mark — floats cleanly on the background, no panel or glow. */}
         <Reveal>
           <div className="relative mx-auto grid h-28 w-28 place-items-center">
-            <span aria-hidden className="absolute h-24 w-24 rounded-full bg-brand-400/25 blur-2xl dark:bg-brand-400/20" />
             <LogoMark className="relative h-16 w-auto" flip="always" />
           </div>
         </Reveal>

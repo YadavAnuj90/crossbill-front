@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft, Send, ShieldCheck, FileText, Copy, Check, Clock, AlertTriangle, FileSignature,
-  MapPin, Camera, ExternalLink,
+  MapPin, Camera, ExternalLink, PenLine,
 } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
@@ -27,6 +27,7 @@ const STATUS_TONE: Record<string, 'gray' | 'blue' | 'amber' | 'green' | 'red'> =
 
 export default function AgreementDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const { notify } = useToast();
   const [a, setA] = useState<Agreement | null>(null);
   const [open, setOpen] = useState(false);
@@ -36,9 +37,41 @@ export default function AgreementDetailPage() {
   const [busy, setBusy] = useState(false);
   const [signUrl, setSignUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [esignLive, setEsignLive] = useState(false);
+  const [esignBusy, setEsignBusy] = useState(false);
 
   const load = useCallback(() => { api.agreements.get(id).then(setA).catch(() => notify('error', 'Agreement not found')); }, [id, notify]);
   useEffect(() => { load(); }, [load]);
+
+  // Is a real Aadhaar eSign provider configured on the backend?
+  useEffect(() => { api.agreements.esignStatus().then((s) => setEsignLive(Boolean(s.aadhaarEsign))).catch(() => {}); }, []);
+
+  // Poll signing status for a short window (used after initiating or returning from the provider).
+  const pollEsign = useCallback((attempts = 10) => {
+    let n = 0;
+    const tick = async () => {
+      try {
+        const s = await api.agreements.esignStatusFor(id);
+        if (s.signed) { notify('success', 'Signed via Aadhaar eSign'); load(); return; }
+      } catch { /* ignore transient errors */ }
+      if (++n < attempts) setTimeout(tick, 3000);
+    };
+    tick();
+  }, [id, notify, load]);
+
+  // Returning from the provider redirect (?esign=return) — confirm the signature landed.
+  useEffect(() => { if (searchParams.get('esign') === 'return') pollEsign(); }, [searchParams, pollEsign]);
+
+  async function startEsign() {
+    setEsignBusy(true);
+    try {
+      const r = await api.agreements.esignInitiate(id);
+      window.open(r.redirectUrl, '_blank', 'noopener');
+      notify('info', 'Opening Aadhaar eSign — complete it in the new tab.');
+      pollEsign();
+    } catch (err) { notify('error', err instanceof Error ? err.message : 'Could not start Aadhaar eSign'); }
+    finally { setEsignBusy(false); }
+  }
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
@@ -70,6 +103,9 @@ export default function AgreementDetailPage() {
         action={
           <div className="flex items-center gap-2">
             {canSend && <Button onClick={() => { setSignerName(a.clientName ?? ''); setOpen(true); }}><Send className="h-4 w-4" /> Send for signature</Button>}
+            {esignLive && a.status !== 'signed' && a.signerName && (
+              <Button variant="secondary" onClick={startEsign} loading={esignBusy}><PenLine className="h-4 w-4" /> Aadhaar eSign</Button>
+            )}
             {a.signedPdfUrl && <a href={a.signedPdfUrl} target="_blank" rel="noreferrer" className="btn-primary"><FileText className="h-4 w-4" /> Signed PDF</a>}
           </div>
         }

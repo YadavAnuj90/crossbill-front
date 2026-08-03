@@ -10,7 +10,7 @@ import { PageHero } from '@/components/marketing/PageHero';
 import { Reveal } from '@/components/motion/Reveal';
 
 const PHONE_INTL = '+918851520832';
-const EMAIL = 'ay6258147@gmail.com';
+const EMAIL = 'anujalitechnologiespvtltd@gmail.com';
 
 const METHODS = [
   { icon: MessageCircle, label: 'WhatsApp', value: '+91 88515 20832', desc: 'Quickest way to reach us — usually a reply within minutes.', href: 'https://wa.me/918851520832', cta: 'Chat on WhatsApp', tone: 'from-green-400 to-green-600', ext: true, featured: true },
@@ -90,7 +90,7 @@ export default function ContactPage() {
                 ) : (
                   <form onSubmit={onSubmit} className="mt-6 space-y-4">
                     <div className="grid sm:grid-cols-2 gap-4">
-                      <div><label className="label">Your name</label><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="field" placeholder="Anuj Yadav" /></div>
+                      <div><label className="label">Your name</label><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="field" placeholder="Your name" /></div>
                       <div><label className="label">Email</label><input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="field" placeholder="you@studio.com" /></div>
                     </div>
                     <div><label className="label">Message</label><textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="field min-h-[150px] resize-y" placeholder="How can we help?" /></div>
@@ -108,7 +108,7 @@ export default function ContactPage() {
                 <p className="text-sm text-ink-muted leading-relaxed">The team behind Crossbill — building the compliance layer for India’s service economy.</p>
               </div>
               <div className="card p-6 space-y-4">
-                <div className="flex items-start gap-3"><MapPin className="h-4 w-4 text-brand-600 mt-0.5" /><div><p className="text-sm font-medium text-ink">Devakipur, Unchadih</p><p className="text-sm text-ink-muted">Jaunpur, Uttar Pradesh – 222204, India 🇮🇳</p></div></div>
+                <div className="flex items-start gap-3"><MapPin className="h-4 w-4 text-brand-600 mt-0.5" /><div><p className="text-sm font-medium text-ink">Registered Office</p><p className="text-sm text-ink-muted">Azamgarh, Uttar Pradesh, India 🇮🇳</p></div></div>
                 <div className="flex items-start gap-3"><Clock className="h-4 w-4 text-brand-600 mt-0.5" /><div><p className="text-sm font-medium text-ink">Mon–Fri, 10am–6pm IST</p><p className="text-sm text-ink-muted">WhatsApp is fastest outside these hours.</p></div></div>
                 <div className="flex items-start gap-3"><Mail className="h-4 w-4 text-brand-600 mt-0.5" /><div><p className="text-sm font-medium text-ink">{EMAIL}</p><p className="text-sm text-ink-muted">+91 88515 20832</p></div></div>
               </div>

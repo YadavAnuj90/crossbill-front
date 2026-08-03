@@ -7,8 +7,9 @@ import {
 import { LogoMark } from '@/components/brand/Logo';
 
 const COLS: { h: string; items: [string, string][] }[] = [
-  { h: 'Product', items: [['Features', '/features'], ['How it works', '/how-it-works'], ['Purchases & ITC', '/register'], ['e-Invoicing', '/register']] },
-  { h: 'Company', items: [['About', '/about'], ['Blog', '#'], ['Contact', '/contact']] },
+  { h: 'Platform', items: [['Invoicing', '/features'], ['Payments', '/features'], ['e-Invoicing', '/features'], ['Purchases', '/features']] },
+  { h: 'People & HR', items: [['Employees', '/features'], ['Payroll', '/features'], ['Attendance', '/features'], ['Self-service', '/register']] },
+  { h: 'Company', items: [['About', '/about'], ['How it works', '/how-it-works'], ['Contact', '/contact'], ['Blog', '/blog']] },
   { h: 'Legal', items: [['Privacy', '/privacy'], ['Terms', '/terms'], ['Compliance', '/compliance']] },
 ];
 
@@ -56,15 +57,18 @@ export function LandingFooter() {
         </div>
 
         {/* Main grid */}
-        <div className="grid gap-10 border-b border-white/[0.08] pb-10 lg:grid-cols-[1.15fr_1.5fr_1.15fr]">
+        <div className="grid gap-10 border-b border-white/[0.08] pb-10 lg:grid-cols-[1fr_2.2fr_1.15fr]">
           {/* Brand */}
           <div>
             <Link href="/" className="inline-flex items-center gap-2.5">
               <LogoMark className="h-7 w-auto" />
               <span className="text-[1.05rem] font-semibold tracking-[-0.03em] text-white">Cross<span className="text-brand-400">bill</span></span>
             </Link>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/50">
-              One platform for billing, both sides of GST, contracts &amp; your team — foreign clients in USD, Indian clients in INR.
+            <p className="mt-3 max-w-xs text-[15px] font-semibold leading-snug text-white/85">
+              Bill the world. Run your team. <span className="bg-gradient-to-r from-brand-300 to-cyan-300 bg-clip-text text-transparent">Stay compliant.</span>
+            </p>
+            <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/45">
+              One login for cross-border invoicing, GST &amp; FEMA, payroll and your whole team.
             </p>
             <div className="mt-4 flex flex-wrap gap-1.5">
               {TRUST.map((t) => (
@@ -83,14 +87,14 @@ export function LandingFooter() {
           </div>
 
           {/* Link columns */}
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-4">
             {COLS.map((c) => (
               <div key={c.h}>
                 <p className="mb-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/40">{c.h}</p>
                 <ul className="space-y-2.5">
                   {c.items.map(([label, href]) => (
                     <li key={label}>
-                      <Link href={href} className="group inline-flex items-center text-sm text-white/60 transition-colors hover:text-white">
+                      <Link href={href} className="group inline-flex items-center whitespace-nowrap text-sm text-white/60 transition-colors hover:text-white">
                         <span className="mr-0 h-px w-0 bg-brand-400 transition-all duration-300 group-hover:mr-2 group-hover:w-3" />
                         {label}
                       </Link>

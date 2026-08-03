@@ -7,6 +7,7 @@ import {
   ShieldCheck, ScanFace, MapPin, Stamp,
   MessageCircle, Blocks, BadgeCheck, QrCode, ArrowUpRight,
   Users, CalendarCheck, Receipt, ClipboardList,
+  Network, Clock4, Gauge, UserCircle, Zap, Megaphone, FileCheck2, Calculator, BarChart3, Kanban,
 } from 'lucide-react';
 import { Reveal } from '@/components/motion/Reveal';
 import { StagePreview } from '@/components/marketing/StagePreview';
@@ -45,12 +46,31 @@ const GROUPS: Group[] = [
   },
   {
     label: 'People & HR', short: 'HR', tone: 'rose', items: [
-      { icon: <Users className="h-full w-full" />, title: 'Employee records', desc: 'A clean directory with roles, compensation and documents — the single source of truth for your team.', isNew: true },
+      { icon: <Users className="h-full w-full" />, title: 'Employee records', desc: 'A clean directory with roles, compensation and documents — one source of truth for your team.', isNew: true },
+      { icon: <Network className="h-full w-full" />, title: 'Departments & org chart', desc: 'Structure teams, set reporting managers and see a live org chart with headcounts.', isNew: true },
       { icon: <CalendarCheck className="h-full w-full" />, title: 'Attendance & leave', desc: 'Daily attendance, monthly summaries and a leave workflow your managers actually use.', isNew: true },
-      { icon: <Receipt className="h-full w-full" />, title: 'Payroll & salary slips', desc: 'Run payroll and generate watermarked, tamper-evident salary slips in a click.', isNew: true },
-      { icon: <FileText className="h-full w-full" />, title: 'Offer, experience & relieving letters', desc: 'Branded HR letters generated from templates and eSigned — no Word docs.', isNew: true },
+      { icon: <Clock4 className="h-full w-full" />, title: 'Shifts & scheduling', desc: 'Shifts and rosters that drive late-detection and accurate payroll working-days.', isNew: true },
       { icon: <ClipboardList className="h-full w-full" />, title: 'Onboarding & exit', desc: 'Guided onboarding and exit checklists so nothing slips through the cracks.', isNew: true },
-      { icon: <ScanFace className="h-full w-full" />, title: 'Aadhaar-verified onboarding', desc: 'Gate sensitive HR actions behind an Aadhaar OTP identity check.', isNew: true },
+      { icon: <UserCircle className="h-full w-full" />, title: 'Employee self-service', desc: 'Staff check in, view payslips, request leave and acknowledge policies on their own.', isNew: true },
+    ],
+  },
+  {
+    label: 'Payroll', short: 'Payroll', tone: 'amber', items: [
+      { icon: <Zap className="h-full w-full" />, title: 'One-click automated payroll', desc: 'Prorate every salary by attendance and auto-compute PF, ESIC and TDS in a single click.', isNew: true },
+      { icon: <Receipt className="h-full w-full" />, title: 'Salary slips & statutory', desc: 'Watermarked, tamper-evident slips with a full PF / ESIC / TDS breakup.', isNew: true },
+      { icon: <BarChart3 className="h-full w-full" />, title: 'Payroll analytics', desc: 'Month-on-month cost trends and live PF, ESIC and TDS liabilities.', isNew: true },
+      { icon: <FileText className="h-full w-full" />, title: 'Offer & relieving letters', desc: 'Branded HR letters generated from templates and eSigned — no Word docs.', isNew: true },
+      { icon: <Calculator className="h-full w-full" />, title: 'Accounting sync', desc: 'One-click journals to Tally (XML), Zoho Books or QuickBooks.', isNew: true },
+    ],
+  },
+  {
+    label: 'Workforce & engagement', short: 'Workforce', tone: 'cyan', items: [
+      { icon: <Kanban className="h-full w-full" />, title: 'Task assignment', desc: 'Assign work with priorities and due dates, and watch it move to done.', isNew: true },
+      { icon: <ListChecks className="h-full w-full" />, title: 'Task reporting & hours', desc: 'Staff log progress and hours against their tasks from anywhere.', isNew: true },
+      { icon: <Users className="h-full w-full" />, title: 'Workforce planning', desc: 'See open load, overdue work and hours per employee at a glance.', isNew: true },
+      { icon: <Gauge className="h-full w-full" />, title: 'Manager dashboard', desc: 'A per-team view of who is in today and one-tap leave approvals.', isNew: true },
+      { icon: <Megaphone className="h-full w-full" />, title: 'Company announcements', desc: 'Broadcast news org-wide or by department, with read receipts.', isNew: true },
+      { icon: <FileCheck2 className="h-full w-full" />, title: 'Policy acknowledgement', desc: 'Versioned policies with exact tracking of who has accepted each version.', isNew: true },
     ],
   },
   {
@@ -62,18 +82,18 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    label: 'Trust & security', short: 'Trust', tone: 'amber', items: [
+    label: 'Trust & security', short: 'Trust', tone: 'rose', items: [
+      { icon: <ScanFace className="h-full w-full" />, title: 'Aadhaar-verified onboarding', desc: 'Gate sensitive HR actions behind an Aadhaar OTP identity check.', isNew: true },
       { icon: <MapPin className="h-full w-full" />, title: 'Geolocation & geofencing', desc: 'Flag signatures captured outside your allowed regions, automatically.', isNew: true },
-      { icon: <ScanFace className="h-full w-full" />, title: 'Selfie & fraud checks', desc: 'Webcam selfie evidence with biometric Face Match ready to enable.', isNew: true },
       { icon: <BadgeCheck className="h-full w-full" />, title: 'Public eSign verifier', desc: 'Anyone can confirm a document is authentic by its verification code.', isNew: true },
       { icon: <ShieldCheck className="h-full w-full" />, title: 'DPDP consent register', desc: 'Record lawful basis and consent — fully audit-ready.' },
     ],
   },
   {
-    label: 'Connect everything', short: 'Connect', tone: 'cyan', items: [
+    label: 'Connect everything', short: 'Connect', tone: 'blue', items: [
       { icon: <MessageCircle className="h-full w-full" />, title: 'WhatsApp delivery', desc: 'Share invoices, pay links and signing links over WhatsApp in a tap.' },
-      { icon: <Stamp className="h-full w-full" />, title: 'Digital eStamping', desc: 'Pay state stamp duty and affix it to agreements without leaving Crossbill.', soon: true },
       { icon: <QrCode className="h-full w-full" />, title: 'e-Invoicing (IRN/QR)', desc: 'IRN registration and a signed QR for B2B invoices.', isNew: true },
+      { icon: <Stamp className="h-full w-full" />, title: 'Digital eStamping', desc: 'Pay state stamp duty and affix it to agreements without leaving Crossbill.', soon: true },
       { icon: <Blocks className="h-full w-full" />, title: 'Integrations', desc: 'Zoho Books, Tally, QuickBooks, Stripe, GST Portal and Email.', soon: true },
     ],
   },
@@ -212,7 +232,7 @@ export function ServicesShowcase() {
 
         <Reveal delay={150}>
           <p className="mt-8 text-center text-sm text-ink-faint">
-            <span className="font-medium text-ink-muted">30+ capabilities</span> · Billing · eSign · People &amp; HR · GST &amp; FEMA compliant · DPDP-ready · Made in India 🇮🇳
+            <span className="font-medium text-ink-muted">45+ capabilities</span> · Billing · eSign · People &amp; HR · Payroll · Workforce · GST &amp; FEMA compliant · DPDP-ready · Made in India 🇮🇳
           </p>
         </Reveal>
       </div>

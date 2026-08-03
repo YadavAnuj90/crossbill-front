@@ -6,7 +6,7 @@ export function PageHero({ eyebrow, title, accent, intro, children }: {
   eyebrow: ReactNode; title: string; accent?: string; intro: string; children?: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden bg-ink text-white bg-noise">
+    <section className="relative overflow-hidden bg-[#070b14] bg-gradient-to-b from-[#0b1020] via-[#080c16] to-[#06090f] text-white bg-noise">
       <Aurora className="opacity-80" />
       <div className="absolute inset-0 bg-grid-light mask-fade-b opacity-[0.14]" />
       <div className="absolute inset-0 spotlight" />

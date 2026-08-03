@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
   ArrowLeft, Download, CheckCircle2, ShieldCheck, Globe, CalendarClock, RefreshCw, Coins,
-  Wallet, FileCheck2, Plus, Building2, MapPin, Receipt, QrCode, Ban,
+  Wallet, FileCheck2, Plus, Building2, MapPin, Receipt, QrCode, Ban, AlertTriangle,
 } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
@@ -141,6 +141,12 @@ export default function InvoiceDetailPage() {
                   ) : (
                     <>
                       <div className="flex justify-between text-sm"><span className="text-ink-muted">FX rate ({inv.fxRateSource})</span><span className="font-mono">{parseFloat(inv.fxRate).toFixed(4)}</span></div>
+                      {inv.fxRateFallback && (
+                        <div className="flex items-start gap-1.5 rounded-md bg-amber-50 px-2.5 py-1.5 text-xs text-amber-700 ring-1 ring-inset ring-amber-200">
+                          <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                          <span>Live FX source was unavailable — this rate is an indicative fallback. Confirm or override it before filing.</span>
+                        </div>
+                      )}
                       <div className="flex justify-between border-t border-paper-border pt-2"><span className="text-ink-muted text-sm">INR equivalent</span><span className="font-semibold text-ink">{formatMoney(inv.inrEquivalent)}</span></div>
                     </>
                   )}

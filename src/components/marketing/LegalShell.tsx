@@ -138,7 +138,7 @@ export function LegalShell({
                 <p className="text-sm text-ink-muted">We’re happy to clarify anything.</p>
               </div>
             </div>
-            <a href="mailto:ay6258147@gmail.com" className="btn-secondary text-sm shrink-0">Contact us</a>
+            <a href="mailto:anujalitechnologiespvtltd@gmail.com" className="btn-secondary text-sm shrink-0">Contact us</a>
           </div>
         </article>
       </div>

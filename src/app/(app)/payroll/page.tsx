@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
-  IndianRupee, Plus, Download, Trash2, Play, Lock, Users,
+  IndianRupee, Plus, Download, Trash2, Play, Lock, Users, Zap,
 } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
@@ -75,6 +75,13 @@ export default function PayrollPage() {
     catch (err) { notify('error', err instanceof Error ? err.message : 'Failed'); }
     finally { setBusy(false); }
   }
+  async function autoRun() {
+    if (!confirm(`One-click payroll for ${month}? This prorates each active employee's CTC by attendance and auto-computes PF/ESIC/TDS (draft slips only).`)) return;
+    setBusy(true);
+    try { const r = await api.payroll.autoRun(month); notify('success', `Auto payroll: ${r.created} created, ${r.updated} updated, ${r.skipped} skipped`); load(); }
+    catch (err) { notify('error', err instanceof Error ? err.message : 'Failed'); }
+    finally { setBusy(false); }
+  }
   async function finalise() {
     if (!confirm(`Finalise payroll for ${month}? Slips will be locked.`)) return;
     setBusy(true);
@@ -108,6 +115,7 @@ export default function PayrollPage() {
             <div className="flex items-center gap-2">
               {run?.status === 'finalised' ? <Badge tone="green"><Lock className="h-3.5 w-3.5" /> Finalised</Badge> : (
                 <>
+                  <Button variant="secondary" loading={busy} onClick={autoRun}><Zap className="h-4 w-4" /> One-click auto-run</Button>
                   <Button variant="secondary" loading={busy} onClick={generateRun}><Play className="h-4 w-4" /> Run payroll</Button>
                   {run && <Button loading={busy} onClick={finalise}><Lock className="h-4 w-4" /> Finalise</Button>}
                 </>

@@ -6,6 +6,7 @@ import {
   AlarmClock, Sparkles, ArrowUpRight, ScrollText, Banknote, QrCode, Puzzle, CreditCard,
   FileSignature, ShieldCheck, Users, CalendarCheck, Plane, IndianRupee, FileBadge,
   Gauge, Building2, ClipboardCheck, LogOut, Laptop, Wallet, ReceiptText,
+  Network, UserCog, Calculator, ListChecks, UserCircle, Clock4, Megaphone,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { LogoMark } from '@/components/brand/Logo';
@@ -21,13 +22,20 @@ const NAV = [
   { href: '/fema', label: 'FEMA tracker', icon: AlarmClock },
   { href: '/reports', label: 'Filing & reports', icon: FileSpreadsheet },
   { href: '/einvoicing', label: 'e-Invoicing', icon: QrCode },
+  { href: '/accounting', label: 'Accounting', icon: Calculator },
   { href: '/team', label: 'Team', icon: UsersRound },
 ];
 
 const PEOPLE = [
+  { href: '/me', label: 'My workspace', icon: UserCircle },
   { href: '/hr', label: 'HR overview', icon: Gauge },
   { href: '/employees', label: 'Employees', icon: Users },
+  { href: '/departments', label: 'Departments', icon: Network },
+  { href: '/manager', label: 'Manager dashboard', icon: UserCog },
+  { href: '/announcements', label: 'Announcements & policies', icon: Megaphone },
+  { href: '/tasks', label: 'Tasks & workforce', icon: ListChecks },
   { href: '/attendance', label: 'Attendance', icon: CalendarCheck },
+  { href: '/shifts', label: 'Shifts', icon: Clock4 },
   { href: '/leave', label: 'Leave', icon: Plane },
   { href: '/payroll', label: 'Payroll', icon: IndianRupee },
   { href: '/assets', label: 'Assets', icon: Laptop },

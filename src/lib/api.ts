@@ -5,6 +5,9 @@
 // - The HttpOnly refresh cookie is sent automatically; on 401 we transparently refresh once.
 
 import type {
+  Department, OrgChartNode, ManagerDashboard, PayrollAnalytics, StatutoryPreview, JournalEntry, AccountingStatus,
+  Task, TaskProductivity, TaskWorkloadRow, PayrollAutoRunResult, EssSummary, Shift, ShiftRoster,
+  Announcement, Policy, PolicyCompliance, EssAnnouncement, EssPolicy,
   Profile, Client, Invoice, Paginated, CreateInvoiceInput, CreateClientInput,
   Remittance, CreateRemittanceInput, AgingInvoice, Note, CreateNoteInput, EInvoice,
   Payment, Plan, BillingOverview,
@@ -237,6 +240,10 @@ export const agreements = {
   send: (id: string, input: SendAgreementInput) =>
     request<Agreement & { signUrl: string }>(`/agreements/${id}/send`, { method: 'POST', body: JSON.stringify(input) }),
   esignStatus: () => request<EsignStatus>('/agreements/esign/status'),
+  esignInitiate: (id: string, reason?: string) =>
+    request<{ redirectUrl: string; requestId: string; provider: string | null }>(`/agreements/${id}/esign/initiate`, { method: 'POST', body: JSON.stringify({ reason }) }),
+  esignStatusFor: (id: string) =>
+    request<{ started: boolean; signed: boolean; status: string; requestId: string | null; signedPdfUrl?: string | null }>(`/agreements/${id}/esign/status`),
   getGeofences: () => request<Geofence[]>('/agreements/geofences'),
   setGeofences: (fences: Geofence[]) =>
     request<Geofence[]>('/agreements/geofences', { method: 'PUT', body: JSON.stringify({ fences }) }),
@@ -288,6 +295,8 @@ export const consents = {
 
 // ─────────────────────────── HR · Employees ───────────────────────────
 export const employees = {
+  orgChart: () => request<OrgChartNode[]>('/employees/org-chart'),
+  reports: (id: string) => request<any[]>(`/employees/${id}/reports`),
   list: (q = '', department = '', status = '', page = 1, limit = 100) =>
     request<Paginated<Employee>>(`/employees?q=${encodeURIComponent(q)}&department=${encodeURIComponent(department)}&status=${encodeURIComponent(status)}&page=${page}&limit=${limit}`),
   get: (id: string) => request<Employee>(`/employees/${id}`),
@@ -384,6 +393,10 @@ export const attendance = {
   list: (employeeId = '', month = '') => request<Attendance[]>(`/attendance?employeeId=${employeeId}&month=${month}`),
   summary: (month: string) => request<AttendanceSummary>(`/attendance/summary?month=${month}`),
   stats: () => request<AttendanceStats>('/attendance/stats'),
+  managerDashboard: (managerId = '') => request<ManagerDashboard>(`/attendance/manager/dashboard?managerId=${managerId}`),
+  async exportCsv(employeeId = '', month = ''): Promise<void> {
+    await downloadFile(`/attendance/export?employeeId=${employeeId}&month=${month}`, `attendance-${month || 'all'}.csv`);
+  },
 };
 
 export const leaves = {
@@ -402,6 +415,9 @@ export const payroll = {
   listRuns: () => request<PayrollRun[]>('/payroll/runs'),
   run: (period: string) => request<PayrollRun>('/payroll/runs', { method: 'POST', body: JSON.stringify({ period }) }),
   finalise: (period: string) => request<PayrollRun>(`/payroll/runs/${period}/finalise`, { method: 'POST' }),
+  analytics: () => request<PayrollAnalytics>('/payroll/analytics'),
+  autoRun: (period: string) => request<PayrollAutoRunResult>('/payroll/auto-run', { method: 'POST', body: JSON.stringify({ period }) }),
+  calcPreview: (input: Record<string, unknown>) => request<StatutoryPreview>('/payroll/calc-preview', { method: 'POST', body: JSON.stringify(input) }),
 };
 
 // ─────────────────────────── HR · Letters ───────────────────────────
@@ -457,5 +473,108 @@ export const reports = {
   },
 };
 
-const api = { auth, profile, clients, invoices, einvoice, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, assets, expenses, purchases, reports, setAccessToken, getAccessToken, ApiError };
+/** Fetch a non-JSON endpoint (CSV/XML) with auth and trigger a browser download. */
+async function downloadFile(path: string, filename: string): Promise<void> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+  });
+  if (!res.ok) throw new ApiError(res.status, 'Download failed');
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// ─────────────────────────── HR · Departments ───────────────────────────
+export const departments = {
+  list: () => request<Department[]>('/departments'),
+  tree: () => request<Department[]>('/departments/tree'),
+  get: (id: string) => request<Department>(`/departments/${id}`),
+  create: (input: Partial<Department>) => request<Department>('/departments', { method: 'POST', body: JSON.stringify(input) }),
+  update: (id: string, input: Partial<Department>) => request<Department>(`/departments/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/departments/${id}`, { method: 'DELETE' }),
+};
+
+// ─────────────────────────── Finance · Accounting ───────────────────────────
+export const accounting = {
+  status: () => request<AccountingStatus>('/accounting/status'),
+  journal: (period = '') => request<JournalEntry[]>(`/accounting/journal?period=${period}`),
+  sync: (period = '') => request<{ period: string; pushed: number; results: any[] }>('/accounting/sync', { method: 'POST', body: JSON.stringify({ period }) }),
+  async downloadTally(period = ''): Promise<void> { await downloadFile(`/accounting/tally?period=${period}`, `tally-${period || 'current'}.xml`); },
+  async downloadLedger(period = ''): Promise<void> { await downloadFile(`/accounting/ledger.csv?period=${period}`, `ledger-${period || 'current'}.csv`); },
+};
+
+
+// ─────────────────────────── Tasks & workforce ───────────────────────────
+export const tasks = {
+  list: (q = '', status = '', department = '') => request<Task[]>(`/tasks?assigneeId=${q ? '' : ''}&status=${status}&department=${encodeURIComponent(department)}`),
+  listBy: (params: { assigneeId?: string; status?: string; department?: string } = {}) => {
+    const qs = new URLSearchParams();
+    if (params.assigneeId) qs.set('assigneeId', params.assigneeId);
+    if (params.status) qs.set('status', params.status);
+    if (params.department) qs.set('department', params.department);
+    return request<Task[]>(`/tasks?${qs.toString()}`);
+  },
+  get: (id: string) => request<Task>(`/tasks/${id}`),
+  create: (input: Partial<Task>) => request<Task>('/tasks', { method: 'POST', body: JSON.stringify(input) }),
+  update: (id: string, input: Partial<Task>) => request<Task>(`/tasks/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  report: (id: string, input: { note?: string; hours?: number; status?: string }) => request<Task>(`/tasks/${id}/report`, { method: 'POST', body: JSON.stringify(input) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/tasks/${id}`, { method: 'DELETE' }),
+  productivity: () => request<TaskProductivity>('/tasks/productivity'),
+  workload: () => request<TaskWorkloadRow[]>('/tasks/workload'),
+};
+
+
+// ─────────────────────────── Employee self-service (ESS) ───────────────────────────
+export const me = {
+  profile: () => request<Employee>('/me/profile'),
+  summary: () => request<EssSummary>('/me/summary'),
+  checkIn: () => request<Attendance>('/me/attendance/check-in', { method: 'POST' }),
+  checkOut: () => request<Attendance>('/me/attendance/check-out', { method: 'POST' }),
+  attendance: (month = '') => request<Attendance[]>(`/me/attendance?month=${month}`),
+  payslips: () => request<SalarySlip[]>('/me/payslips'),
+  leaves: () => request<Leave[]>('/me/leaves'),
+  requestLeave: (input: { type: string; from: string; to: string; reason?: string }) => request<Leave>('/me/leaves', { method: 'POST', body: JSON.stringify(input) }),
+  tasks: () => request<Task[]>('/me/tasks'),
+  reportTask: (id: string, input: { note?: string; hours?: number; status?: string }) => request<Task>(`/me/tasks/${id}/report`, { method: 'POST', body: JSON.stringify(input) }),
+  announcements: () => request<EssAnnouncement[]>('/me/announcements'),
+  readAnnouncement: (id: string) => request<{ read: boolean }>(`/me/announcements/${id}/read`, { method: 'POST' }),
+  policies: () => request<EssPolicy[]>('/me/policies'),
+  acknowledgePolicy: (id: string) => request<{ acknowledged: boolean; version: number }>(`/me/policies/${id}/acknowledge`, { method: 'POST' }),
+};
+
+
+// ─────────────────────────── Shift scheduling ───────────────────────────
+export const shifts = {
+  list: () => request<Shift[]>('/shifts'),
+  roster: (date = '') => request<ShiftRoster>(`/shifts/roster?date=${date}`),
+  get: (id: string) => request<Shift>(`/shifts/${id}`),
+  create: (input: Partial<Shift>) => request<Shift>('/shifts', { method: 'POST', body: JSON.stringify(input) }),
+  update: (id: string, input: Partial<Shift>) => request<Shift>(`/shifts/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  assign: (id: string, input: { employeeIds?: string[]; department?: string }) => request<{ assigned: number }>(`/shifts/${id}/assign`, { method: 'POST', body: JSON.stringify(input) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/shifts/${id}`, { method: 'DELETE' }),
+};
+
+
+// ─────────────────────────── Announcements & policies (admin) ───────────────────────────
+export const announcements = {
+  list: () => request<Announcement[]>('/announcements'),
+  create: (input: Partial<Announcement>) => request<Announcement>('/announcements', { method: 'POST', body: JSON.stringify(input) }),
+  update: (id: string, input: Partial<Announcement>) => request<Announcement>(`/announcements/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/announcements/${id}`, { method: 'DELETE' }),
+};
+export const policies = {
+  list: () => request<Policy[]>('/policies'),
+  compliance: (id: string) => request<PolicyCompliance>(`/policies/${id}/compliance`),
+  create: (input: Partial<Policy>) => request<Policy>('/policies', { method: 'POST', body: JSON.stringify(input) }),
+  update: (id: string, input: Partial<Policy> & { bumpVersion?: boolean }) => request<Policy>(`/policies/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  remove: (id: string) => request<{ deleted: boolean }>(`/policies/${id}`, { method: 'DELETE' }),
+};
+
+
+const api = { auth, profile, clients, invoices, einvoice, remittances, notes, payments, billing, agreements, agreementTemplates, consents, employees, attendance, leaves, company, payroll, letters, onboarding, exits, assets, expenses, purchases, reports, departments, accounting, tasks, me, shifts, announcements, policies, setAccessToken, getAccessToken, ApiError };
 export default api;

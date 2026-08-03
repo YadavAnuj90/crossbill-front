@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { CalendarCheck, LogIn, LogOut, Clock, Users, Plane } from 'lucide-react';
+import { CalendarCheck, LogIn, LogOut, Clock, Users, Plane, Download } from 'lucide-react';
 import api from '@/lib/api';
 import { useToast } from '@/lib/toast-context';
 import type { Employee, Attendance, AttendanceSummary } from '@/lib/types';
@@ -66,7 +66,12 @@ export default function AttendancePage() {
         title="Attendance"
         subtitle="Mark daily attendance and review the monthly summary."
         icon={<CalendarCheck className="h-5 w-5" />}
-        action={<Link href="/leave" className="btn-secondary"><Plane className="h-4 w-4" /> Leave</Link>}
+        action={
+          <div className="flex items-center gap-2">
+            <button onClick={() => api.attendance.exportCsv('', month).catch((e) => notify('error', e instanceof Error ? e.message : 'Export failed'))} className="btn-secondary"><Download className="h-4 w-4" /> Export CSV</button>
+            <Link href="/leave" className="btn-secondary"><Plane className="h-4 w-4" /> Leave</Link>
+          </div>
+        }
       />
 
       <Reveal>

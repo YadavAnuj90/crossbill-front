@@ -64,6 +64,10 @@ export interface Invoice {
   fxRate: string;
   fxRateSource: string;
   fxRateDate: string;
+  /** Compliance basis the rate was filed under (RBI_REFERENCE / CBIC_NOTIFIED / NA). */
+  fxRateBasis?: string;
+  /** True when no live FX source was reachable and a static reference was used — warn the user. */
+  fxRateFallback?: boolean;
   subtotal: string;
   inrEquivalent: string;
   taxType: InvoiceTaxType;
@@ -452,7 +456,7 @@ export interface SigningView {
   signedPdfUrl: string | null;
 }
 
-export interface EsignStatus { aadhaarEsign: boolean; eStamp: boolean; provider: string | null; }
+export interface EsignStatus { aadhaarEsign: boolean; eStamp: boolean; provider: string | null; mode?: 'live' | 'native-only'; }
 
 export type ConsentBasis = 'consent' | 'contract' | 'legal_obligation' | 'legitimate_use';
 export type ConsentStatus = 'active' | 'withdrawn' | 'expired';
@@ -575,6 +579,9 @@ export interface EmployeeStats {
 export type AttendanceStatus = 'present' | 'absent' | 'half' | 'leave';
 
 export interface Attendance {
+  shiftId?: string | null;
+  late?: boolean;
+  lateMinutes?: number;
   id: string;
   orgId: string;
   employeeId: string;
@@ -944,3 +951,192 @@ export function stateCodeFromGstin(gstin?: string | null): string | null {
   if (!gstin || gstin.length < 2) return null;
   return gstin.slice(0, 2);
 }
+
+
+// ─────────────────────────── HR extensions (departments, hierarchy, analytics, accounting) ───────────────────────────
+export interface Department {
+  id: string;
+  orgId: string;
+  name: string;
+  code: string;
+  description: string | null;
+  headEmployeeId: string | null;
+  parentId: string | null;
+  active: boolean;
+  headcount?: number;
+  children?: Department[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface OrgChartNode {
+  id: string;
+  name: string;
+  empCode: string;
+  designation: string | null;
+  department: string | null;
+  managerId: string | null;
+  reports: OrgChartNode[];
+}
+
+export interface ManagerRosterRow {
+  employeeId: string;
+  name: string;
+  empCode: string;
+  designation: string | null;
+  department: string | null;
+  status: string;
+  today: { status: string; checkInAt: string | null; checkOutAt: string | null };
+}
+export interface ManagerDashboard {
+  teamSize: number;
+  presentToday: number;
+  onLeaveToday: number;
+  pendingLeaveCount: number;
+  roster: ManagerRosterRow[];
+  pendingLeaves: Array<{ id: string; employeeId: string; type: string; from: string; to: string; days: number; reason: string | null }>;
+}
+
+export interface PayrollAnalytics {
+  period: string;
+  monthly: Array<{ period: string; gross: string; deductions: string; net: string; slipCount: number; status: string }>;
+  currentMonth: { headcount: number; pf: string; esic: string; tds: string; statutoryTotal: string; netPayout: string; avgNet: string };
+}
+
+export interface StatutoryPreview {
+  components: { basic?: string; hra?: string; bonus?: string; allowances?: string; pf?: string; esic?: string; tds?: string; otherDeductions?: string };
+  gross: string;
+  totalDeductions: string;
+  net: string;
+}
+
+export interface JournalEntry {
+  reference: string;
+  date: string;
+  narration: string;
+  lines: Array<{ account: string; debit: number; credit: number }>;
+}
+export interface AccountingStatus { provider: string | null; configured: boolean; }
+
+
+// ─────────────────────────── Task & workforce management ───────────────────────────
+export type TaskStatus = 'todo' | 'in_progress' | 'blocked' | 'done';
+export type TaskPriority = 'low' | 'medium' | 'high';
+export interface TaskUpdateEntry { at: string; by: string | null; note: string; hours: number; status: string | null; }
+export interface Task {
+  id: string;
+  orgId: string;
+  title: string;
+  description: string;
+  assigneeId: string | null;
+  assigneeName: string | null;
+  department: string | null;
+  assignedBy: string | null;
+  status: TaskStatus;
+  priority: TaskPriority;
+  dueDate: string | null;
+  estimateHours: number;
+  loggedHours: number;
+  tags: string[];
+  updates: TaskUpdateEntry[];
+  completedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface TaskProductivity {
+  total: number;
+  counts: Record<string, number>;
+  overdue: number;
+  completed: number;
+  onTimeRate: number;
+  loggedHours: number;
+  estimateHours: number;
+}
+export interface TaskWorkloadRow {
+  employeeId: string; name: string; empCode: string; department: string | null;
+  open: number; inProgress: number; done: number; overdue: number; loggedHours: number; estimateHours: number;
+}
+export interface PayrollAutoRunResult {
+  period: string; employees: number; created: number; updated: number; skipped: number; run: PayrollRun;
+}
+
+
+// ─────────────────────────── Employee self-service (ESS) ───────────────────────────
+export interface EssSummary {
+  employee: { id: string; name: string; empCode: string; designation: string | null; department: string | null };
+  today: { status: string; checkInAt: string | null; checkOutAt: string | null } | null;
+  openTasks: number;
+  pendingLeaves: number;
+  latestPayslip: SalarySlip | null;
+  monthPresent: number;
+  unreadAnnouncements?: number;
+  pendingPolicies?: number;
+}
+
+
+// ─────────────────────────── Shift scheduling ───────────────────────────
+export interface Shift {
+  id: string;
+  orgId: string;
+  name: string;
+  code: string;
+  startTime: string;
+  endTime: string;
+  breakMinutes: number;
+  graceMinutes: number;
+  workingDays: number[];
+  active: boolean;
+  assignedCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+export interface ShiftRoster {
+  date: string;
+  weekday: number;
+  unassigned: number;
+  shifts: Array<{
+    id: string; name: string; code: string; startTime: string; endTime: string; worksToday: boolean;
+    employees: Array<{ employeeId: string; name: string; empCode: string; department: string | null }>;
+  }>;
+}
+
+
+// ─────────────────────────── Announcements & policies ───────────────────────────
+export interface Announcement {
+  id: string;
+  orgId: string;
+  title: string;
+  body: string;
+  audienceType: 'all' | 'department';
+  audienceValue: string | null;
+  pinned: boolean;
+  publishedAt: string;
+  expiresAt: string | null;
+  reads: string[];
+  readCount?: number;
+  active: boolean;
+}
+export interface Policy {
+  id: string;
+  orgId: string;
+  title: string;
+  category: string;
+  version: number;
+  effectiveDate: string | null;
+  body: string;
+  documentUrl: string | null;
+  requiresAck: boolean;
+  active: boolean;
+  ackedCount?: number;
+  pendingCount?: number;
+  headcount?: number;
+}
+export interface PolicyCompliance {
+  policy: Policy;
+  version: number;
+  headcount: number;
+  acknowledged: Array<{ employeeId: string; name: string; empCode: string; department: string | null; acknowledgedAt: string }>;
+  pending: Array<{ employeeId: string; name: string; empCode: string; department: string | null }>;
+}
+export interface EssAnnouncement { id: string; title: string; body: string; pinned: boolean; publishedAt: string; read: boolean }
+export interface EssPolicy { id: string; title: string; category: string; version: number; effectiveDate: string | null; body: string; documentUrl: string | null; requiresAck: boolean; acknowledged: boolean }

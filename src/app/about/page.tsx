@@ -15,29 +15,24 @@ export const metadata = {
 };
 
 const VALUES = [
-  { icon: Target, title: 'Ruthlessly focused', body: 'We do one thing — correct invoicing and its compliance trail — and do it better than anything generic.' },
-  { icon: ShieldCheck, title: 'Compliance you can trust', body: 'Templates and tax logic built to be audit-ready, reviewed against the law, never guessed.' },
-  { icon: Zap, title: 'Fast & delightful', body: 'A compliant invoice in under a minute. Software should feel effortless, even when the rules aren’t.' },
-  { icon: MapPin, title: 'India-first', body: 'Built in India, for Indian developers and agencies billing the world — and now, billing India too.' },
+  { icon: Target, title: 'Solve the real problem', body: 'Compliance is not a feature — it is the risk that keeps founders up at night. We remove that risk end to end, not just the paperwork around it.' },
+  { icon: ShieldCheck, title: 'Correct by default', body: 'The right tax treatment, the right filing, the right trail — computed, not remembered. If it can be automated, a human should never be liable for getting it wrong.' },
+  { icon: Zap, title: 'Time back to the business', body: 'Every hour a team spends reconciling GST or chasing FIRC proofs is an hour not spent growing. We measure success in the work we take off their plate.' },
+  { icon: MapPin, title: 'Built for how India bills', body: 'From a USD export invoice to a domestic GST bill to a payroll run — one system that speaks the exact rules Indian businesses are held to.' },
 ];
 
 const TIMELINE = [
-  { icon: Flag, tag: 'Mar 2026', title: 'The rules changed', body: 'The Finance Act deleted Section 13(8)(b) of the IGST Act — turning a huge class of Indian services into zero-rated exports. A massive group became eligible for tax-free foreign revenue overnight.' },
-  { icon: Code2, tag: 'The spark', title: 'We’d felt the pain', body: 'Raising USD invoices, chasing FIRC proofs, tracking FEMA deadlines, emailing a CA to double-check everything. So we built the tool we wished existed.' },
-  { icon: Globe, tag: 'Crossbill', title: 'Export, done right', body: 'Auto-filled export declarations, captured exchange rates, FEMA aging, and one-click GSTR-1 6A — the compliance trail, automatic.' },
-  { icon: Building2, tag: 'Today', title: 'Export + domestic', body: 'Crossbill now handles both sides — export invoices for foreign clients and domestic GST invoices for Indian ones — with the hard tax logic computed for you.' },
+  { icon: Flag, tag: 'The problem', title: 'Compliance was a tax on growth', body: 'Indian businesses billing at home and abroad were losing days to GST, FEMA and payroll rules — and still carrying the risk of a costly mistake. The cost was not the software they lacked; it was the certainty.' },
+  { icon: Code2, tag: 'The insight', title: 'The rules are knowable — so automate them', body: 'Every filing, exchange-rate capture and statutory deduction follows the law. If the logic is deterministic, no founder should be re-deriving it by hand or paying to have it re-checked each month.' },
+  { icon: Globe, tag: 'The build', title: 'One system, correct by default', body: 'Crossbill turns that logic into product: export declarations, FIRC and FEMA aging, one-click GSTR-1, and statutory payroll — the entire compliance trail generated automatically as the business operates.' },
+  { icon: Building2, tag: 'The goal', title: 'The compliance layer India runs on', body: 'From a freelancer’s first USD invoice to a growing company’s payroll, one platform that makes staying compliant the default state — so teams spend their time building, not reconciling.' },
 ];
 
 const FOUNDERS = [
   {
-    initials: 'AY', name: 'Anuj Yadav', role: 'Founder', glow: 'brand' as const,
-    accent: 'from-brand-400 to-emerald-600', focus: ['Product', 'Engineering', 'Compliance'],
-    bio: 'A developer who got tired of juggling spreadsheets, bank portals and CA emails every time a foreign client paid. Anuj started Crossbill to make export & GST compliance disappear into the background — so builders can get back to building.',
-  },
-  {
-    initials: 'AY', name: 'Anjali Yadav', role: 'CEO & Head of Operations', glow: 'blue' as const,
-    accent: 'from-cyan-400 to-teal-600', focus: ['Strategy', 'Operations', 'Customer success'],
-    bio: 'Anjali leads Anujali Technologies’ strategy and operations — turning a focused product into a dependable company, and making sure compliance is something customers never have to think about, only rely on.',
+    initials: 'AY', name: 'Anjali Yadav', role: 'Founder & CEO', glow: 'brand' as const,
+    accent: 'from-brand-400 to-emerald-600', focus: ['Strategy', 'Compliance', 'Customer success'],
+    bio: 'Anjali founded Anujali Technologies around a simple conviction: the biggest cost of compliance is not the filing fee, it is the time and risk businesses absorb to get it right. She leads product and strategy with a single goal — make the correct outcome the default one, so that GST, FEMA and payroll stop being a monthly scramble and become something teams can quietly rely on. Her north star is a market where staying compliant no longer competes with running the business.',
   },
 ];
 
@@ -49,31 +44,33 @@ export default function AboutPage() {
       {/* Hero — airy periwinkle sky */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 -z-0" aria-hidden>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#c8cdf4] via-[#aeb8ef] to-[#9aa6ec]" />
-          <div className="absolute left-[40%] top-[24%] h-[40rem] w-[56rem] -translate-x-1/2 rounded-full bg-[#e7eafb]/70 blur-[130px]" />
-          <div className="absolute right-[-8rem] top-[16%] h-[28rem] w-[30rem] rounded-full bg-[#bcc6ff]/60 blur-[140px]" />
-          <div className="absolute left-[-6rem] bottom-[18%] h-[26rem] w-[28rem] rounded-full bg-[#7c8bff]/35 blur-[140px]" />
-          <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent to-[#eceefb]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#c8cdf4] via-[#aeb8ef] to-[#9aa6ec] dark:from-[#0b1020] dark:via-[#080c16] dark:to-[#06090f]" />
+          <div className="absolute left-[40%] top-[24%] h-[40rem] w-[56rem] -translate-x-1/2 rounded-full bg-[#e7eafb]/70 blur-[130px] dark:bg-indigo-500/20" />
+          <div className="absolute right-[-8rem] top-[16%] h-[28rem] w-[30rem] rounded-full bg-[#bcc6ff]/60 blur-[140px] dark:bg-brand-500/15" />
+          <div className="absolute left-[-6rem] bottom-[18%] h-[26rem] w-[28rem] rounded-full bg-[#7c8bff]/35 blur-[140px] dark:bg-cyan-500/12" />
+          <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent to-[#eceefb] dark:to-[#080b12]" />
+          <div className="absolute inset-0 bg-grid opacity-[0.05] dark:opacity-[0.07] [mask-image:radial-gradient(120%_80%_at_50%_0%,#000,transparent_70%)]" />
         </div>
         <div className="relative mx-auto max-w-4xl px-5 pt-36 pb-32 text-center">
           <Reveal><span className="chip-soft"><Sparkles className="h-3.5 w-3.5 text-brand-600" /> Anujali Technologies Pvt. Ltd.</span></Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-7 text-[2.7rem] sm:text-6xl font-semibold tracking-[-0.02em] leading-[1.04] text-[#11131c]">
+            <h1 className="mt-7 text-[2.7rem] sm:text-6xl font-semibold tracking-[-0.02em] leading-[1.04] text-ink">
               The compliance layer for
               <br className="hidden sm:block" />{' '}
               <span className="text-gradient-brand">India’s service economy</span>
             </h1>
           </Reveal>
           <Reveal delay={160}>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-[#2a2d3d]/80 leading-relaxed">
-              We’re a small, focused team building Crossbill — the dead-simple way for Indian developers
-              and agencies to invoice anyone, anywhere, and stay GST &amp; FEMA compliant without thinking about it.
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-ink-muted leading-relaxed">
+              We build Crossbill to solve one expensive problem: the time and risk Indian businesses carry
+              just to stay compliant. Invoicing, GST &amp; FEMA, and payroll — correct by default, so the
+              paperwork runs itself and teams get back to growth.
             </p>
           </Reveal>
           <Reveal delay={240}>
             <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/register" className="inline-flex items-center gap-2 rounded-full bg-[#0d0f16] px-7 py-3.5 text-[15px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(13,15,22,0.6)] transition-transform hover:-translate-y-0.5 active:scale-[0.98]">Start free <ArrowRight className="h-4 w-4" /></Link>
-              <Link href="/contact" className="inline-flex items-center gap-2 rounded-full border border-[#11131c]/15 bg-paper-card/40 px-7 py-3.5 text-[15px] font-semibold text-[#11131c] backdrop-blur-sm transition-colors hover:bg-paper-card/70">Get in touch</Link>
+              <Link href="/register" className="inline-flex items-center gap-2 rounded-full bg-[#0d0f16] px-7 py-3.5 text-[15px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(13,15,22,0.6)] transition-transform hover:-translate-y-0.5 active:scale-[0.98] dark:bg-white dark:text-[#0d0f16]">Start free <ArrowRight className="h-4 w-4" /></Link>
+              <Link href="/contact" className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-paper-card/40 px-7 py-3.5 text-[15px] font-semibold text-ink backdrop-blur-sm transition-colors hover:bg-paper-card/70 dark:border-white/15">Get in touch</Link>
             </div>
           </Reveal>
         </div>
@@ -85,8 +82,8 @@ export default function AboutPage() {
           <Reveal>
             <p className="eyebrow mb-4 flex items-center justify-center gap-2"><span className="accent-bar" /> Our mission</p>
             <p className="text-2xl sm:text-3xl font-medium tracking-tight text-ink leading-snug">
-              To make compliance something Indian businesses <span className="text-gradient-brand">rely on, never worry about</span> —
-              so every developer and agency can bill the world with confidence.
+              To take compliance off the critical path of every Indian business — turning GST, FEMA and
+              payroll from a source of risk into <span className="text-gradient-brand">an outcome they can simply rely on</span>.
             </p>
           </Reveal>
         </div>
@@ -97,7 +94,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-5xl px-5">
           <Reveal className="max-w-2xl">
             <span className="chip-soft mb-4">Our story</span>
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-ink">Born from a real, recurring pain</h2>
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-ink">From a costly problem to a category</h2>
           </Reveal>
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
             {TIMELINE.map((t, i) => (
@@ -174,14 +171,14 @@ export default function AboutPage() {
         <div className="mx-auto max-w-5xl px-5">
           <Reveal className="text-center max-w-2xl mx-auto">
             <span className="chip-soft mb-4"><Users className="h-3.5 w-3.5 text-brand-600" /> Leadership</span>
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-ink">Meet the founders</h2>
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-ink">Meet the founder</h2>
             <p className="mt-3 text-ink-muted text-lg">
-              <span className="font-semibold text-ink">Anuj</span> &amp; <span className="font-semibold text-ink">Anjali</span> Yadav lead
-              <span className="text-gradient-brand font-semibold"> Anujali</span> Technologies — a partnership in name and in work.
+              <span className="font-semibold text-ink">Anjali Yadav</span> leads
+              <span className="text-gradient-brand font-semibold"> Anujali</span> Technologies — on a mission to make compliance the default, not the burden.
             </p>
           </Reveal>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <div className="mt-12 grid gap-6 max-w-xl mx-auto">
             {FOUNDERS.map((f, i) => (
               <Reveal key={f.name} delay={i * 90}>
                 <SpotlightCard glow={f.glow} className="h-full">
@@ -220,10 +217,10 @@ export default function AboutPage() {
               <div className="absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-[#bcc6ff]/40 blur-3xl" />
               <Quote className="relative mx-auto h-7 w-7 text-brand-500" />
               <blockquote className="relative mt-4 text-xl sm:text-2xl font-medium leading-snug tracking-tight text-ink max-w-2xl mx-auto">
-                “The builder is the user. We felt this pain every month — so we’re obsessed with making it
-                <span className="text-gradient-brand"> simply disappear</span> for everyone who bills a client.”
+                “I kept meeting founders who were great at their business but losing days — and sleep — to compliance. That is the problem worth solving. Get the rules right once, in software, and you hand every one of them back their
+                <span className="text-gradient-brand"> time, their certainty, and their focus</span>.”
               </blockquote>
-              <figcaption className="relative mt-5 text-sm text-ink-muted">— Anuj &amp; Anjali Yadav, Anujali Technologies</figcaption>
+              <figcaption className="relative mt-5 text-sm text-ink-muted">— Anjali Yadav, Founder &amp; CEO, Anujali Technologies</figcaption>
             </figure>
           </Reveal>
         </div>

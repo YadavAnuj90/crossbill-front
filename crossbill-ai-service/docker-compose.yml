@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    container_name: crossbill-ai
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=crossbill-ai
+      - APP_TITLE=CrossBill AI PDF Service
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=true
+      - LOG_LEVEL=INFO
+    volumes:
+      - .:/app
